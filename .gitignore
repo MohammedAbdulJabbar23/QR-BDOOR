@@ -1,1 +1,23 @@
-bin/\nobj/\n.vs/\n*.user\nnode_modules/\ndist/\n.env\nstorage/
+## .NET
+bin/
+obj/
+.vs/
+*.user
+*.suo
+*.DotSettings.user
+
+## Node
+node_modules/
+dist/
+.vite/
+
+## Environment
+.env
+.env.local
+
+## Storage
+storage/
+
+## OS
+.DS_Store
+Thumbs.db
