@@ -1,0 +1,155 @@
+{
+  "app": { "title": "مستشفى البدور", "subtitle": "نظام إدارة الوثائق" },
+  "nav": {
+    "dashboard": "الرئيسية", "requests": "الطلبات", "documents": "الوثائق",
+    "reports": "التقارير", "users": "المستخدمون", "audit": "سجل المراجعة",
+    "documentTypes": "أنواع الوثائق", "settings": "الإعدادات", "profile": "الملف الشخصي"
+  },
+  "auth": {
+    "login": "تسجيل الدخول", "logout": "تسجيل الخروج", "username": "اسم المستخدم",
+    "password": "كلمة المرور", "loginButton": "دخول",
+    "invalidCredentials": "اسم المستخدم أو كلمة المرور غير صحيحة",
+    "changePassword": "تغيير كلمة المرور", "currentPassword": "كلمة المرور الحالية",
+    "newPassword": "كلمة المرور الجديدة", "confirmPassword": "تأكيد كلمة المرور",
+    "loginError": "حدث خطأ أثناء تسجيل الدخول. يرجى المحاولة مرة أخرى.",
+    "welcomeBack": "مرحباً بعودتك",
+    "loginSubtitle": "سجل دخولك للمتابعة"
+  },
+  "dashboard": {
+    "totalRequests": "إجمالي الطلبات اليوم", "pending": "قيد الانتظار",
+    "documentsIssued": "الوثائق الصادرة اليوم", "archived": "الوثائق المؤرشفة",
+    "recentActivity": "آخر النشاطات", "myRequests": "طلباتي الأخيرة",
+    "pendingRequests": "الطلبات المعلقة", "createNew": "إنشاء طلب جديد",
+    "quickActions": "إجراءات سريعة", "viewAll": "عرض الكل",
+    "viewPending": "عرض الطلبات المعلقة"
+  },
+  "requests": {
+    "title": "طلبات الوثائق", "create": "إنشاء طلب", "edit": "تعديل الطلب",
+    "patientName": "اسم المريض", "patientNameEn": "اسم المريض (بالإنجليزية)",
+    "recipientEntity": "الجهة المستلمة", "documentType": "نوع الوثيقة",
+    "notes": "ملاحظات", "status": "الحالة", "date": "التاريخ", "actions": "إجراءات",
+    "accept": "قبول", "reject": "رفض", "rejectionReason": "سبب الرفض",
+    "noRequests": "لا توجد طلبات"
+  },
+  "documents": {
+    "title": "الوثائق الصادرة", "prepare": "إعداد وثيقة", "uploadPdf": "رفع ملف PDF",
+    "revoke": "إلغاء", "documentNumber": "رقم الوثيقة", "documentBody": "محتوى الوثيقة",
+    "qrCode": "رمز QR", "print": "طباعة", "revocationReason": "سبب الإلغاء",
+    "pdfUploaded": "تم رفع ملف PDF بنجاح", "noDocuments": "لا توجد وثائق"
+  },
+  "verification": {
+    "title": "التحقق من الوثيقة", "verified": "وثيقة موثقة",
+    "revoked": "وثيقة ملغاة", "invalid": "وثيقة غير موجودة",
+    "expired": "وثيقة منتهية الصلاحية",
+    "verifiedMessage": "تم التحقق من صحة هذه الوثيقة.",
+    "revokedMessage": "تم إلغاء هذه الوثيقة.",
+    "invalidMessage": "لا يمكن التحقق من هذه الوثيقة. يرجى التواصل مع مستشفى البدور.",
+    "replacementAvailable": "تم إصدار وثيقة بديلة محدثة.",
+    "issuedDate": "تاريخ الإصدار", "viewPdf": "عرض PDF", "downloadPdf": "تحميل PDF"
+  },
+  "users": {
+    "title": "إدارة المستخدمين", "create": "إنشاء مستخدم", "fullName": "الاسم الكامل",
+    "fullNameEn": "الاسم الكامل (بالإنجليزية)", "role": "الدور", "department": "القسم",
+    "active": "نشط", "inactive": "غير نشط", "deactivate": "تعطيل",
+    "edit": "تعديل المستخدم", "username": "اسم المستخدم", "name": "الاسم", "status": "الحالة",
+    "actions": "إجراءات", "password": "كلمة المرور",
+    "noUsers": "لا يوجد مستخدمون",
+    "deactivateConfirm": "هل أنت متأكد من تعطيل هذا المستخدم؟",
+    "deactivateMessage": "لن يتمكن المستخدم من تسجيل الدخول بعد ذلك.",
+    "userCreated": "تم إنشاء المستخدم بنجاح",
+    "userUpdated": "تم تحديث المستخدم بنجاح",
+    "userDeactivated": "تم تعطيل المستخدم بنجاح",
+    "createError": "فشل إنشاء المستخدم",
+    "updateError": "فشل تحديث المستخدم",
+    "deactivateError": "فشل تعطيل المستخدم",
+    "usernameAlphanumeric": "يجب أن يحتوي اسم المستخدم على أحرف وأرقام فقط",
+    "passwordMinLength": "يجب أن تكون كلمة المرور 6 أحرف على الأقل",
+    "fullNameRequired": "الاسم الكامل مطلوب",
+    "usernameRequired": "اسم المستخدم مطلوب",
+    "passwordRequired": "كلمة المرور مطلوبة",
+    "roleRequired": "الدور مطلوب",
+    "departmentRequired": "القسم مطلوب",
+    "selectRole": "اختر الدور",
+    "selectDepartment": "اختر القسم"
+  },
+  "audit": {
+    "title": "سجل المراجعة",
+    "timestamp": "التوقيت", "user": "المستخدم", "action": "الإجراء",
+    "entityType": "نوع الكيان", "entityId": "معرف الكيان", "ipAddress": "عنوان IP",
+    "details": "التفاصيل", "noLogs": "لا توجد سجلات مراجعة",
+    "from": "من", "to": "إلى", "filters": "الفلاتر",
+    "userId": "معرف المستخدم", "clearFilters": "مسح الفلاتر",
+    "applyFilters": "تطبيق"
+  },
+  "documentTypes": {
+    "title": "أنواع الوثائق", "addType": "إضافة نوع",
+    "nameAr": "الاسم (بالعربية)", "nameEn": "الاسم (بالإنجليزية)",
+    "descriptionAr": "الوصف (بالعربية)", "descriptionEn": "الوصف (بالإنجليزية)",
+    "isActive": "نشط", "createdAt": "تاريخ الإنشاء", "actions": "إجراءات",
+    "noTypes": "لا توجد أنواع وثائق",
+    "edit": "تعديل", "toggleActive": "تبديل الحالة",
+    "typeCreated": "تم إنشاء نوع الوثيقة بنجاح",
+    "typeUpdated": "تم تحديث نوع الوثيقة بنجاح",
+    "createError": "فشل إنشاء نوع الوثيقة",
+    "updateError": "فشل تحديث نوع الوثيقة",
+    "nameArRequired": "الاسم بالعربية مطلوب",
+    "nameEnRequired": "الاسم بالإنجليزية مطلوب",
+    "name": "الاسم", "description": "الوصف"
+  },
+  "reports": {
+    "title": "التقارير",
+    "dailyReport": "التقرير اليومي", "statusBreakdown": "توزيع الحالات",
+    "cancelledRejected": "الطلبات المرفوضة",
+    "dateRange": "نطاق التاريخ", "from": "من", "to": "إلى", "apply": "تطبيق",
+    "date": "التاريخ", "selectDate": "اختر تاريخاً",
+    "totalRequests": "إجمالي الطلبات", "completed": "مكتمل",
+    "pending": "قيد الانتظار", "rejected": "مرفوض", "inProgress": "قيد المعالجة",
+    "documentsIssued": "الوثائق الصادرة",
+    "status": "الحالة", "count": "العدد",
+    "requestId": "رقم الطلب", "reason": "السبب", "rejectedAt": "تاريخ الرفض",
+    "patientName": "اسم المريض",
+    "noData": "لا توجد بيانات للفترة المحددة",
+    "exportDaily": "تصدير التقرير اليومي",
+    "exportStatus": "تصدير تقرير الحالات",
+    "exportCancelled": "تصدير تقرير المرفوضات",
+    "exporting": "جاري التصدير...",
+    "exportError": "فشل تصدير التقرير"
+  },
+  "profile": {
+    "title": "الملف الشخصي",
+    "personalInfo": "المعلومات الشخصية",
+    "name": "الاسم الكامل",
+    "role": "الدور",
+    "department": "القسم",
+    "languagePreference": "تفضيل اللغة",
+    "arabic": "العربية",
+    "english": "الإنجليزية",
+    "securitySection": "الأمان",
+    "passwordMinLength": "يجب أن تكون كلمة المرور 6 أحرف على الأقل",
+    "passwordMismatch": "كلمات المرور غير متطابقة",
+    "passwordChanged": "تم تغيير كلمة المرور بنجاح",
+    "passwordChangeFailed": "فشل تغيير كلمة المرور",
+    "currentPasswordRequired": "كلمة المرور الحالية مطلوبة",
+    "newPasswordRequired": "كلمة المرور الجديدة مطلوبة"
+  },
+  "notFound": {
+    "title": "الصفحة غير موجودة",
+    "message": "الصفحة التي تبحث عنها غير موجودة أو تم نقلها.",
+    "goHome": "العودة للرئيسية"
+  },
+  "common": {
+    "save": "حفظ", "cancel": "إلغاء", "delete": "حذف", "confirm": "تأكيد",
+    "search": "بحث...", "loading": "جاري التحميل...", "noData": "لا توجد بيانات",
+    "page": "صفحة", "of": "من", "previous": "السابق", "next": "التالي",
+    "yes": "نعم", "no": "لا", "all": "الكل", "export": "تصدير",
+    "areYouSure": "هل أنت متأكد؟", "thisActionCannot": "لا يمكن التراجع عن هذا الإجراء.",
+    "error": "خطأ", "success": "تم بنجاح", "edit": "تعديل", "create": "إنشاء",
+    "back": "رجوع", "close": "إغلاق", "apply": "تطبيق", "reset": "إعادة تعيين"
+  },
+  "status": {
+    "pending": "قيد الانتظار", "inProgress": "قيد المعالجة", "rejected": "مرفوض",
+    "completed": "مكتمل", "draft": "مسودة", "archived": "مؤرشف", "revoked": "ملغى"
+  },
+  "roles": { "employee": "موظف", "supervisor": "مشرف", "admin": "مدير" },
+  "departments": { "inquiry": "الاستعلامات", "statistics": "الإحصاء", "management": "الإدارة" }
+}

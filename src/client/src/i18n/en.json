@@ -1,0 +1,154 @@
+{
+  "app": { "title": "Al-Badour Hospital", "subtitle": "Document Management System" },
+  "nav": {
+    "dashboard": "Dashboard", "requests": "Requests", "documents": "Documents",
+    "reports": "Reports", "users": "Users", "audit": "Audit Logs",
+    "documentTypes": "Document Types", "settings": "Settings", "profile": "Profile"
+  },
+  "auth": {
+    "login": "Login", "logout": "Logout", "username": "Username", "password": "Password",
+    "loginButton": "Sign In", "invalidCredentials": "Invalid username or password",
+    "changePassword": "Change Password", "currentPassword": "Current Password",
+    "newPassword": "New Password", "confirmPassword": "Confirm Password",
+    "loginError": "An error occurred during login. Please try again.",
+    "welcomeBack": "Welcome back",
+    "loginSubtitle": "Sign in to your account to continue"
+  },
+  "dashboard": {
+    "totalRequests": "Total Requests Today", "pending": "Pending",
+    "documentsIssued": "Documents Issued Today", "archived": "Archived Documents",
+    "recentActivity": "Recent Activity", "myRequests": "My Recent Requests",
+    "pendingRequests": "Pending Requests", "createNew": "Create New Request",
+    "quickActions": "Quick Actions", "viewAll": "View All",
+    "viewPending": "View Pending Requests"
+  },
+  "requests": {
+    "title": "Document Requests", "create": "Create Request", "edit": "Edit Request",
+    "patientName": "Patient Name", "patientNameEn": "Patient Name (English)",
+    "recipientEntity": "Recipient Entity", "documentType": "Document Type",
+    "notes": "Notes", "status": "Status", "date": "Date", "actions": "Actions",
+    "accept": "Accept", "reject": "Reject", "rejectionReason": "Rejection Reason",
+    "noRequests": "No requests found"
+  },
+  "documents": {
+    "title": "Issued Documents", "prepare": "Prepare Document", "uploadPdf": "Upload PDF",
+    "revoke": "Revoke", "documentNumber": "Document Number", "documentBody": "Document Content",
+    "qrCode": "QR Code", "print": "Print", "revocationReason": "Revocation Reason",
+    "pdfUploaded": "PDF uploaded successfully", "noDocuments": "No documents found"
+  },
+  "verification": {
+    "title": "Document Verification", "verified": "Document Verified",
+    "revoked": "Document Revoked", "invalid": "Document Not Found",
+    "expired": "Document Expired",
+    "verifiedMessage": "This document has been verified as authentic.",
+    "revokedMessage": "This document has been revoked.",
+    "invalidMessage": "This document could not be verified. Please contact Al-Badour Hospital.",
+    "replacementAvailable": "An updated document has been issued.",
+    "issuedDate": "Issue Date", "viewPdf": "View PDF", "downloadPdf": "Download PDF"
+  },
+  "users": {
+    "title": "User Management", "create": "Create User", "fullName": "Full Name",
+    "fullNameEn": "Full Name (English)", "role": "Role", "department": "Department",
+    "active": "Active", "inactive": "Inactive", "deactivate": "Deactivate",
+    "edit": "Edit User", "username": "Username", "name": "Name", "status": "Status",
+    "actions": "Actions", "password": "Password",
+    "noUsers": "No users found",
+    "deactivateConfirm": "Are you sure you want to deactivate this user?",
+    "deactivateMessage": "The user will no longer be able to log in.",
+    "userCreated": "User created successfully",
+    "userUpdated": "User updated successfully",
+    "userDeactivated": "User deactivated successfully",
+    "createError": "Failed to create user",
+    "updateError": "Failed to update user",
+    "deactivateError": "Failed to deactivate user",
+    "usernameAlphanumeric": "Username must contain only letters and numbers",
+    "passwordMinLength": "Password must be at least 6 characters",
+    "fullNameRequired": "Full name is required",
+    "usernameRequired": "Username is required",
+    "passwordRequired": "Password is required",
+    "roleRequired": "Role is required",
+    "departmentRequired": "Department is required",
+    "selectRole": "Select a role",
+    "selectDepartment": "Select a department"
+  },
+  "audit": {
+    "title": "Audit Logs",
+    "timestamp": "Timestamp", "user": "User", "action": "Action",
+    "entityType": "Entity Type", "entityId": "Entity ID", "ipAddress": "IP Address",
+    "details": "Details", "noLogs": "No audit logs found",
+    "from": "From", "to": "To", "filters": "Filters",
+    "userId": "User ID", "clearFilters": "Clear Filters",
+    "applyFilters": "Apply"
+  },
+  "documentTypes": {
+    "title": "Document Types", "addType": "Add Type",
+    "nameAr": "Name (Arabic)", "nameEn": "Name (English)",
+    "descriptionAr": "Description (Arabic)", "descriptionEn": "Description (English)",
+    "isActive": "Active", "createdAt": "Created", "actions": "Actions",
+    "noTypes": "No document types found",
+    "edit": "Edit", "toggleActive": "Toggle Active",
+    "typeCreated": "Document type created successfully",
+    "typeUpdated": "Document type updated successfully",
+    "createError": "Failed to create document type",
+    "updateError": "Failed to update document type",
+    "nameArRequired": "Arabic name is required",
+    "nameEnRequired": "English name is required",
+    "name": "Name", "description": "Description"
+  },
+  "reports": {
+    "title": "Reports",
+    "dailyReport": "Daily Report", "statusBreakdown": "Status Breakdown",
+    "cancelledRejected": "Rejected Requests",
+    "dateRange": "Date Range", "from": "From", "to": "To", "apply": "Apply",
+    "date": "Date", "selectDate": "Select a date",
+    "totalRequests": "Total Requests", "completed": "Completed",
+    "pending": "Pending", "rejected": "Rejected", "inProgress": "In Progress",
+    "documentsIssued": "Documents Issued",
+    "status": "Status", "count": "Count",
+    "requestId": "Request ID", "reason": "Reason", "rejectedAt": "Rejected At",
+    "patientName": "Patient Name",
+    "noData": "No data available for the selected period",
+    "exportDaily": "Export Daily Report",
+    "exportStatus": "Export Status Report",
+    "exportCancelled": "Export Rejected Report",
+    "exporting": "Exporting...",
+    "exportError": "Failed to export report"
+  },
+  "profile": {
+    "title": "Profile",
+    "personalInfo": "Personal Information",
+    "name": "Full Name",
+    "role": "Role",
+    "department": "Department",
+    "languagePreference": "Language Preference",
+    "arabic": "Arabic",
+    "english": "English",
+    "securitySection": "Security",
+    "passwordMinLength": "Password must be at least 6 characters",
+    "passwordMismatch": "Passwords do not match",
+    "passwordChanged": "Password changed successfully",
+    "passwordChangeFailed": "Failed to change password",
+    "currentPasswordRequired": "Current password is required",
+    "newPasswordRequired": "New password is required"
+  },
+  "notFound": {
+    "title": "Page Not Found",
+    "message": "The page you are looking for does not exist or has been moved.",
+    "goHome": "Go to Dashboard"
+  },
+  "common": {
+    "save": "Save", "cancel": "Cancel", "delete": "Delete", "confirm": "Confirm",
+    "search": "Search...", "loading": "Loading...", "noData": "No data available",
+    "page": "Page", "of": "of", "previous": "Previous", "next": "Next",
+    "yes": "Yes", "no": "No", "all": "All", "export": "Export",
+    "areYouSure": "Are you sure?", "thisActionCannot": "This action cannot be undone.",
+    "error": "Error", "success": "Success", "edit": "Edit", "create": "Create",
+    "back": "Back", "close": "Close", "apply": "Apply", "reset": "Reset"
+  },
+  "status": {
+    "pending": "Pending", "inProgress": "In Progress", "rejected": "Rejected",
+    "completed": "Completed", "draft": "Draft", "archived": "Archived", "revoked": "Revoked"
+  },
+  "roles": { "employee": "Employee", "supervisor": "Supervisor", "admin": "Admin" },
+  "departments": { "inquiry": "Inquiry", "statistics": "Statistics", "management": "Management" }
+}
