@@ -19,7 +19,7 @@ export default function Sidebar() {
     { to: '/', icon: LayoutDashboard, label: t('nav.dashboard'), show: true },
     { to: '/requests', icon: FileText, label: t('nav.requests'), show: true },
     { to: '/documents', icon: FolderOpen, label: t('nav.documents'), show: true },
-    { to: '/reports', icon: BarChart3, label: t('nav.reports'), show: canViewReports(user?.role || '') },
+    { to: '/reports', icon: BarChart3, label: t('nav.reports'), show: canViewReports(user?.role || '', user?.department) },
     { to: '/users', icon: Users, label: t('nav.users'), show: canManageUsers(user?.role || '') },
     { to: '/audit-logs', icon: Shield, label: t('nav.audit'), show: canViewAuditLogs(user?.role || '') },
     { to: '/settings/document-types', icon: Settings, label: t('nav.documentTypes'), show: canManageUsers(user?.role || '') },

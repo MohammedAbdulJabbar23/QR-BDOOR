@@ -123,22 +123,35 @@ export default function PrepareDocumentPage() {
           >
             {t('documents.documentBody')}
           </label>
-          <textarea
-            id="documentBody"
-            value={documentBody}
-            onChange={(e) => setDocumentBody(e.target.value)}
-            rows={12}
-            className={cn(
-              'w-full px-4 py-3 border border-neutral-300 rounded-lg text-sm resize-y',
-              'focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary',
-              'placeholder:text-neutral-400'
-            )}
-            placeholder={
-              language === 'ar'
-                ? 'أدخل محتوى الوثيقة (اختياري)...'
-                : 'Enter document content (optional)...'
-            }
-          />
+          <div className="grid">
+            <textarea
+              id="documentBody"
+              value={documentBody}
+              onChange={(e) => setDocumentBody(e.target.value)}
+              rows={6}
+              className={cn(
+                'w-full px-4 py-3 border border-neutral-300 rounded-lg text-sm',
+                'focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary',
+                'placeholder:text-neutral-400',
+                '[grid-area:1/1/2/2] resize-none overflow-hidden'
+              )}
+              placeholder={
+                language === 'ar'
+                  ? 'أدخل محتوى الوثيقة (اختياري)...'
+                  : 'Enter document content (optional)...'
+              }
+            />
+            <div
+              className={cn(
+                'w-full px-4 py-3 border border-transparent rounded-lg text-sm',
+                'whitespace-pre-wrap break-words invisible',
+                '[grid-area:1/1/2/2] min-h-[150px]'
+              )}
+              aria-hidden="true"
+            >
+              {documentBody + ' '}
+            </div>
+          </div>
         </div>
 
         {error && (

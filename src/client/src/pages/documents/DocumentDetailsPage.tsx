@@ -3,8 +3,8 @@ import { useParams, useNavigate, Link } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import {
-  ArrowLeft, ArrowRight, Upload, Printer, Ban, Trash2,
-  FileDown, ExternalLink,
+  ArrowLeft, ArrowRight, FileText, Printer, Ban, Trash2,
+  FileDown, ExternalLink, Upload,
 } from 'lucide-react';
 import { documentsApi } from '@/api/documents.api';
 import { useAuthStore } from '@/stores/authStore';
@@ -30,6 +30,7 @@ export default function DocumentDetailsPage() {
   const [showRevokeDialog, setShowRevokeDialog] = useState(false);
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [revokeReason, setRevokeReason] = useState('');
+  const [generateError, setGenerateError] = useState('');
   const [uploadError, setUploadError] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
 
@@ -59,6 +60,17 @@ export default function DocumentDetailsPage() {
     };
   }, [id]);
 
+  const generateMutation = useMutation({
+    mutationFn: () => documentsApi.generatePdf(id!),
+    onSuccess: () => {
+      setGenerateError('');
+      queryClient.invalidateQueries({ queryKey: ['document', id] });
+    },
+    onError: () => {
+      setGenerateError(t('common.error'));
+    },
+  });
+
   const uploadMutation = useMutation({
     mutationFn: (file: File) => documentsApi.uploadPdf(id!, file),
     onSuccess: () => {
@@ -69,6 +81,19 @@ export default function DocumentDetailsPage() {
       setUploadError(t('common.error'));
     },
   });
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.size > 10 * 1024 * 1024) {
+        setUploadError(t('documents.fileTooLarge'));
+        e.target.value = '';
+        return;
+      }
+      uploadMutation.mutate(file);
+    }
+    e.target.value = '';
+  };
 
   const revokeMutation = useMutation({
     mutationFn: (reason: string) => documentsApi.revoke(id!, reason),
@@ -86,15 +111,6 @@ export default function DocumentDetailsPage() {
     },
   });
 
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (file) {
-      uploadMutation.mutate(file);
-    }
-    // Reset input so the same file can be re-selected
-    e.target.value = '';
-  };
-
   const handleRevoke = () => {
     if (!revokeReason.trim()) return;
     revokeMutation.mutate(revokeReason.trim());
@@ -104,8 +120,25 @@ export default function DocumentDetailsPage() {
     deleteMutation.mutate();
   };
 
-  const handlePrint = () => {
-    window.print();
+  const handlePrint = async () => {
+    if (!document?.hasPdf) {
+      window.print();
+      return;
+    }
+    const res = await documentsApi.getPdf(document.id);
+    const blob = new Blob([res.data], { type: 'application/pdf' });
+    const url = URL.createObjectURL(blob);
+    const iframe = window.document.createElement('iframe');
+    iframe.style.display = 'none';
+    iframe.src = url;
+    window.document.body.appendChild(iframe);
+    iframe.onload = () => {
+      iframe.contentWindow?.print();
+      setTimeout(() => {
+        window.document.body.removeChild(iframe);
+        URL.revokeObjectURL(url);
+      }, 60000);
+    };
   };
 
   const BackIcon = isRtl ? ArrowRight : ArrowLeft;
@@ -131,7 +164,10 @@ export default function DocumentDetailsPage() {
     : document.documentTypeNameEn;
 
   const isRevoked = document.status === 'Revoked';
-  const showUpload = user && canUploadPdf(user.department) && !document.hasPdf && !isRevoked;
+  const isDraft = document.status === 'Draft';
+  const isStatistics = user && canUploadPdf(user.department);
+  const showGenerate = isStatistics && isDraft && !isRevoked;
+  const showUpload = isStatistics && isDraft && !isRevoked && document.hasPdf;
   const showRevoke = user && canRevokeDocument(user.role) && !isRevoked;
   const showDelete = user && canDeleteDocument(user.role);
 
@@ -200,7 +236,7 @@ export default function DocumentDetailsPage() {
               <h3 className="text-base font-semibold text-neutral-900 mb-4">
                 {t('documents.documentBody')}
               </h3>
-              <div className="p-4 bg-neutral-50 rounded-lg border border-neutral-100 whitespace-pre-wrap text-sm leading-relaxed text-neutral-800">
+              <div className="p-4 bg-neutral-50 rounded-lg border border-neutral-100 whitespace-pre-wrap break-words text-sm leading-relaxed text-neutral-800">
                 {document.documentBody}
               </div>
             </div>
@@ -296,22 +332,48 @@ export default function DocumentDetailsPage() {
               {t('requests.actions')}
             </h3>
             <div className="flex flex-col gap-2">
-              {/* Upload PDF */}
+              {/* Generate PDF */}
+              {showGenerate && (
+                <>
+                  <button
+                    onClick={() => generateMutation.mutate()}
+                    disabled={generateMutation.isPending}
+                    className={cn(
+                      'flex items-center gap-2 px-4 py-2.5 text-sm font-medium rounded-lg transition-colors w-full',
+                      'bg-primary text-white hover:bg-primary-700',
+                      'disabled:opacity-50 disabled:cursor-not-allowed'
+                    )}
+                  >
+                    <FileText size={16} />
+                    {generateMutation.isPending
+                      ? t('common.loading')
+                      : t('documents.generatePdf')}
+                  </button>
+                  {generateError && (
+                    <p className="text-xs text-red-600">{generateError}</p>
+                  )}
+                  {generateMutation.isSuccess && (
+                    <p className="text-xs text-green-600">{t('documents.pdfGenerated')}</p>
+                  )}
+                </>
+              )}
+
+              {/* Upload signed PDF (visible after generating) */}
               {showUpload && (
                 <>
                   <input
                     ref={fileInputRef}
                     type="file"
                     accept=".pdf"
-                    onChange={handleFileChange}
                     className="hidden"
+                    onChange={handleFileSelect}
                   />
                   <button
                     onClick={() => fileInputRef.current?.click()}
                     disabled={uploadMutation.isPending}
                     className={cn(
                       'flex items-center gap-2 px-4 py-2.5 text-sm font-medium rounded-lg transition-colors w-full',
-                      'bg-primary text-white hover:bg-primary-700',
+                      'bg-emerald-600 text-white hover:bg-emerald-700',
                       'disabled:opacity-50 disabled:cursor-not-allowed'
                     )}
                   >
@@ -331,15 +393,19 @@ export default function DocumentDetailsPage() {
 
               {/* View/Download PDF */}
               {document.hasPdf && (
-                <a
-                  href={`/api/documents/${document.id}/pdf`}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                <button
+                  onClick={async () => {
+                    const res = await documentsApi.getPdf(document.id);
+                    const blob = new Blob([res.data], { type: 'application/pdf' });
+                    const url = URL.createObjectURL(blob);
+                    window.open(url, '_blank');
+                    setTimeout(() => URL.revokeObjectURL(url), 60000);
+                  }}
                   className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium rounded-lg transition-colors w-full bg-blue-600 text-white hover:bg-blue-700"
                 >
                   <FileDown size={16} />
                   {language === 'ar' ? 'عرض / تحميل PDF' : 'View / Download PDF'}
-                </a>
+                </button>
               )}
 
               {/* Print */}

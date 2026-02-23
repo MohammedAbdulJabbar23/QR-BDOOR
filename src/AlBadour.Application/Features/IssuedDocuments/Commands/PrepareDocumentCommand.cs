@@ -5,6 +5,7 @@ using AlBadour.Domain.Entities;
 using AlBadour.Domain.Enums;
 using AlBadour.Domain.Interfaces;
 using MediatR;
+using Microsoft.Extensions.Configuration;
 
 namespace AlBadour.Application.Features.IssuedDocuments.Commands;
 
@@ -20,6 +21,8 @@ public class PrepareDocumentCommandHandler : IRequestHandler<PrepareDocumentComm
     private readonly IDocumentNumberService _docNumberService;
     private readonly IQrCodeService _qrCodeService;
     private readonly IFileStorageService _fileStorage;
+    private readonly IConfiguration _configuration;
+    private readonly INotificationService _notificationService;
 
     public PrepareDocumentCommandHandler(
         IDocumentRequestRepository requestRepo,
@@ -29,7 +32,9 @@ public class PrepareDocumentCommandHandler : IRequestHandler<PrepareDocumentComm
         IAuditService auditService,
         IDocumentNumberService docNumberService,
         IQrCodeService qrCodeService,
-        IFileStorageService fileStorage)
+        IFileStorageService fileStorage,
+        IConfiguration configuration,
+        INotificationService notificationService)
     {
         _requestRepo = requestRepo;
         _documentRepo = documentRepo;
@@ -39,6 +44,8 @@ public class PrepareDocumentCommandHandler : IRequestHandler<PrepareDocumentComm
         _docNumberService = docNumberService;
         _qrCodeService = qrCodeService;
         _fileStorage = fileStorage;
+        _configuration = configuration;
+        _notificationService = notificationService;
     }
 
     public async Task<Result<DocumentDto>> Handle(PrepareDocumentCommand request, CancellationToken cancellationToken)
@@ -57,7 +64,7 @@ public class PrepareDocumentCommandHandler : IRequestHandler<PrepareDocumentComm
         var documentNumber = await _docNumberService.GenerateNextAsync(cancellationToken);
 
         // Generate QR code
-        var baseUrl = "https://albadour-hospital.com"; // This should come from configuration
+        var baseUrl = _configuration["BaseUrl"]?.TrimEnd('/') ?? "https://albadour-hospital.com";
         var qrUrl = $"{baseUrl}/verify/{documentId}";
         var qrImageBytes = _qrCodeService.GenerateQrCode(qrUrl);
         var qrImagePath = await _fileStorage.SaveQrCodeAsync(qrImageBytes, $"{documentId}.png", cancellationToken);
@@ -86,6 +93,14 @@ public class PrepareDocumentCommandHandler : IRequestHandler<PrepareDocumentComm
 
         await _auditService.LogAsync("document.prepared", "document", documentId.ToString(),
             new { documentNumber, RequestId = req.Id, PatientName = req.PatientName }, cancellationToken);
+
+        await _notificationService.SendToUserAsync(
+            req.CreatedById,
+            "تم إعداد وثيقتك",
+            "Document Prepared",
+            $"تم إعداد الوثيقة رقم {documentNumber} لطلبك",
+            $"Document #{documentNumber} has been prepared for your request.",
+            "document", documentId.ToString(), cancellationToken);
 
         var dto = new DocumentDto(
             document.Id,

@@ -15,13 +15,8 @@ export const documentsApi = {
   getByRequest: (requestId: string) =>
     apiClient.get<IssuedDocument[]>(`/documents/by-request/${requestId}`).then(r => r.data),
 
-  uploadPdf: (id: string, file: File) => {
-    const formData = new FormData();
-    formData.append('file', file);
-    return apiClient.post(`/documents/${id}/upload-pdf`, formData, {
-      headers: { 'Content-Type': 'multipart/form-data' },
-    }).then(r => r.data);
-  },
+  generatePdf: (id: string) =>
+    apiClient.post(`/documents/${id}/generate-pdf`).then(r => r.data),
 
   revoke: (id: string, reason: string) =>
     apiClient.post(`/documents/${id}/revoke`, { reason }).then(r => r.data),
@@ -31,4 +26,15 @@ export const documentsApi = {
 
   getQrImage: (id: string) =>
     apiClient.get(`/documents/${id}/qr-image`, { responseType: 'blob' }).then(r => r.data),
+
+  getPdf: (id: string) =>
+    apiClient.get(`/documents/${id}/pdf`, { responseType: 'blob' }).then(r => r),
+
+  uploadPdf: (id: string, file: File) => {
+    const fd = new FormData();
+    fd.append('file', file);
+    return apiClient.post(`/documents/${id}/upload-pdf`, fd, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    }).then(r => r.data);
+  },
 };

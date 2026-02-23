@@ -31,10 +31,12 @@
     "noRequests": "No requests found"
   },
   "documents": {
-    "title": "Issued Documents", "prepare": "Prepare Document", "uploadPdf": "Upload PDF",
+    "title": "Issued Documents", "prepare": "Prepare Document", "generatePdf": "Generate PDF",
     "revoke": "Revoke", "documentNumber": "Document Number", "documentBody": "Document Content",
     "qrCode": "QR Code", "print": "Print", "revocationReason": "Revocation Reason",
-    "pdfUploaded": "PDF uploaded successfully", "noDocuments": "No documents found"
+    "uploadPdf": "Upload PDF", "pdfUploaded": "PDF uploaded successfully",
+    "pdfGenerated": "PDF generated successfully", "fileTooLarge": "File size exceeds 10 MB limit",
+    "noDocuments": "No documents found"
   },
   "verification": {
     "title": "Document Verification", "verified": "Document Verified",

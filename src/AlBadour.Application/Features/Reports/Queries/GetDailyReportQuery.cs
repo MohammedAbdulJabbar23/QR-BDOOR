@@ -24,7 +24,8 @@ public class GetDailyReportQueryHandler : IRequestHandler<GetDailyReportQuery, R
 
     public async Task<Result<DailyReportDto>> Handle(GetDailyReportQuery request, CancellationToken cancellationToken)
     {
-        if (_currentUser.Role != UserRole.Supervisor && _currentUser.Role != UserRole.Admin)
+        if (_currentUser.Role != UserRole.Supervisor && _currentUser.Role != UserRole.Admin
+            && _currentUser.Department != Department.Statistics)
             return Result.Failure<DailyReportDto>("Only supervisors and admins can view reports.", "FORBIDDEN");
 
         var date = request.Date.Date;

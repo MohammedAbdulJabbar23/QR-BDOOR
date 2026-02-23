@@ -6,7 +6,7 @@ using MediatR;
 
 namespace AlBadour.Application.Features.IssuedDocuments.Commands;
 
-public record UploadPdfCommand(Guid DocumentId, Stream FileStream, string FileName) : IRequest<Result>;
+public record UploadPdfCommand(Guid DocumentId, Stream PdfStream, string FileName) : IRequest<Result>;
 
 public class UploadPdfCommandHandler : IRequestHandler<UploadPdfCommand, Result>
 {
@@ -15,19 +15,22 @@ public class UploadPdfCommandHandler : IRequestHandler<UploadPdfCommand, Result>
     private readonly ICurrentUserService _currentUser;
     private readonly IAuditService _auditService;
     private readonly IFileStorageService _fileStorage;
+    private readonly INotificationService _notificationService;
 
     public UploadPdfCommandHandler(
         IIssuedDocumentRepository documentRepo,
         IUnitOfWork unitOfWork,
         ICurrentUserService currentUser,
         IAuditService auditService,
-        IFileStorageService fileStorage)
+        IFileStorageService fileStorage,
+        INotificationService notificationService)
     {
         _documentRepo = documentRepo;
         _unitOfWork = unitOfWork;
         _currentUser = currentUser;
         _auditService = auditService;
         _fileStorage = fileStorage;
+        _notificationService = notificationService;
     }
 
     public async Task<Result> Handle(UploadPdfCommand request, CancellationToken cancellationToken)
@@ -35,17 +38,14 @@ public class UploadPdfCommandHandler : IRequestHandler<UploadPdfCommand, Result>
         if (_currentUser.Department != Department.Statistics)
             return Result.Failure("Only Statistics department staff can upload PDFs.", "FORBIDDEN");
 
-        var document = await _documentRepo.GetByIdAsync(request.DocumentId, cancellationToken);
+        var document = await _documentRepo.GetByIdWithDetailsAsync(request.DocumentId, cancellationToken);
         if (document is null || document.IsDeleted)
             return Result.Failure("Document not found.", "NOT_FOUND");
 
         if (document.Status != DocumentStatus.Draft)
             return Result.Failure("PDF can only be uploaded for draft documents.", "INVALID_STATUS");
 
-        if (!request.FileName.EndsWith(".pdf", StringComparison.OrdinalIgnoreCase))
-            return Result.Failure("Only PDF files are allowed.", "INVALID_FILE_TYPE");
-
-        var pdfPath = await _fileStorage.SavePdfAsync(request.FileStream, $"{document.Id}.pdf", cancellationToken);
+        var pdfPath = await _fileStorage.SavePdfAsync(request.PdfStream, $"{document.Id}.pdf", cancellationToken);
 
         document.PdfFilePath = pdfPath;
         document.Status = DocumentStatus.Archived;
@@ -55,8 +55,16 @@ public class UploadPdfCommandHandler : IRequestHandler<UploadPdfCommand, Result>
         _documentRepo.Update(document);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-        await _auditService.LogAsync("document.archived", "document", document.Id.ToString(),
-            new { document.DocumentNumber }, cancellationToken);
+        await _auditService.LogAsync("document.pdf_uploaded", "document", document.Id.ToString(),
+            new { document.DocumentNumber, FileName = request.FileName }, cancellationToken);
+
+        await _notificationService.SendToUserAsync(
+            document.Request.CreatedById,
+            "تم أرشفة وثيقتك",
+            "Document Archived",
+            $"تم رفع النسخة الموقعة وأرشفة الوثيقة رقم {document.DocumentNumber}",
+            $"The signed copy has been uploaded and document #{document.DocumentNumber} is now archived.",
+            "document", document.Id.ToString(), cancellationToken);
 
         return Result.Success();
     }

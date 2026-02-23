@@ -32,10 +32,12 @@
     "noRequests": "لا توجد طلبات"
   },
   "documents": {
-    "title": "الوثائق الصادرة", "prepare": "إعداد وثيقة", "uploadPdf": "رفع ملف PDF",
+    "title": "الوثائق الصادرة", "prepare": "إعداد وثيقة", "generatePdf": "إنشاء PDF",
     "revoke": "إلغاء", "documentNumber": "رقم الوثيقة", "documentBody": "محتوى الوثيقة",
     "qrCode": "رمز QR", "print": "طباعة", "revocationReason": "سبب الإلغاء",
-    "pdfUploaded": "تم رفع ملف PDF بنجاح", "noDocuments": "لا توجد وثائق"
+    "uploadPdf": "رفع PDF", "pdfUploaded": "تم رفع ملف PDF بنجاح",
+    "pdfGenerated": "تم إنشاء ملف PDF بنجاح", "fileTooLarge": "حجم الملف يتجاوز 10 ميغابايت",
+    "noDocuments": "لا توجد وثائق"
   },
   "verification": {
     "title": "التحقق من الوثيقة", "verified": "وثيقة موثقة",

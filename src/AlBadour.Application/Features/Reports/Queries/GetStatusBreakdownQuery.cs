@@ -22,7 +22,8 @@ public class GetStatusBreakdownQueryHandler : IRequestHandler<GetStatusBreakdown
 
     public async Task<Result<List<StatusBreakdownDto>>> Handle(GetStatusBreakdownQuery request, CancellationToken cancellationToken)
     {
-        if (_currentUser.Role != UserRole.Supervisor && _currentUser.Role != UserRole.Admin)
+        if (_currentUser.Role != UserRole.Supervisor && _currentUser.Role != UserRole.Admin
+            && _currentUser.Department != Department.Statistics)
             return Result.Failure<List<StatusBreakdownDto>>("Only supervisors and admins can view reports.", "FORBIDDEN");
 
         var (allRequests, _) = await _requestRepo.GetAllAsync(null, null, null, 1, 10000, cancellationToken);

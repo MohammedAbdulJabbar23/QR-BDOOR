@@ -61,17 +61,43 @@ public class IssuedDocumentsController : ControllerBase
         return Ok(result.Value);
     }
 
+    [HttpPost("{id:guid}/generate-pdf")]
+    public async Task<IActionResult> GeneratePdf(Guid id)
+    {
+        var result = await _mediator.Send(new GeneratePdfCommand(id));
+        if (!result.IsSuccess) return BadRequest(new { error = result.Error, code = result.ErrorCode });
+        return Ok(new { message = "PDF generated. Print, sign, then upload the signed copy." });
+    }
+
+    [HttpGet("{id:guid}/pdf")]
+    public async Task<IActionResult> GetPdf(Guid id)
+    {
+        var docResult = await _mediator.Send(new GetDocumentByIdQuery(id));
+        if (!docResult.IsSuccess || docResult.Value is not { HasPdf: true })
+            return NotFound();
+
+        var stream = await _fileStorage.GetFileAsync($"pdfs/{id}.pdf");
+        if (stream is null) return NotFound();
+        return File(stream, "application/pdf", $"{docResult.Value.DocumentNumber}.pdf");
+    }
+
     [HttpPost("{id:guid}/upload-pdf")]
-    [RequestSizeLimit(20 * 1024 * 1024)] // 20MB limit
     public async Task<IActionResult> UploadPdf(Guid id, IFormFile file)
     {
         if (file is null || file.Length == 0)
-            return BadRequest(new { error = "No file uploaded." });
+            return BadRequest(new { error = "No file provided.", code = "INVALID_FILE" });
+
+        const long maxFileSize = 10 * 1024 * 1024; // 10 MB
+        if (file.Length > maxFileSize)
+            return BadRequest(new { error = "File size exceeds 10 MB limit.", code = "FILE_TOO_LARGE" });
+
+        if (file.ContentType != "application/pdf" && !file.FileName.EndsWith(".pdf", StringComparison.OrdinalIgnoreCase))
+            return BadRequest(new { error = "Only PDF files are allowed.", code = "INVALID_FILE_TYPE" });
 
         using var stream = file.OpenReadStream();
         var result = await _mediator.Send(new UploadPdfCommand(id, stream, file.FileName));
         if (!result.IsSuccess) return BadRequest(new { error = result.Error, code = result.ErrorCode });
-        return Ok(new { message = "PDF uploaded. Document is now archived and QR verification is active." });
+        return Ok(new { message = "PDF uploaded. Document is now archived." });
     }
 
     [HttpPost("{id:guid}/revoke")]

@@ -14,17 +14,20 @@ public class AcceptRequestCommandHandler : IRequestHandler<AcceptRequestCommand,
     private readonly IUnitOfWork _unitOfWork;
     private readonly ICurrentUserService _currentUser;
     private readonly IAuditService _auditService;
+    private readonly INotificationService _notificationService;
 
     public AcceptRequestCommandHandler(
         IDocumentRequestRepository requestRepo,
         IUnitOfWork unitOfWork,
         ICurrentUserService currentUser,
-        IAuditService auditService)
+        IAuditService auditService,
+        INotificationService notificationService)
     {
         _requestRepo = requestRepo;
         _unitOfWork = unitOfWork;
         _currentUser = currentUser;
         _auditService = auditService;
+        _notificationService = notificationService;
     }
 
     public async Task<Result> Handle(AcceptRequestCommand request, CancellationToken cancellationToken)
@@ -47,6 +50,14 @@ public class AcceptRequestCommandHandler : IRequestHandler<AcceptRequestCommand,
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         await _auditService.LogAsync("request.accepted", "request", entity.Id.ToString(), null, cancellationToken);
+
+        await _notificationService.SendToUserAsync(
+            entity.CreatedById,
+            "تم قبول طلبك",
+            "Request Accepted",
+            "تم قبول طلبك وهو قيد المعالجة الآن",
+            "Your request has been accepted and is now being processed.",
+            "request", entity.Id.ToString(), cancellationToken);
 
         return Result.Success();
     }

@@ -34,6 +34,6 @@ export function canViewAuditLogs(role: string): boolean {
   return role === 'Admin';
 }
 
-export function canViewReports(role: string): boolean {
-  return role === 'Supervisor' || role === 'Admin';
+export function canViewReports(role: string, department?: string): boolean {
+  return role === 'Supervisor' || role === 'Admin' || department === 'Statistics';
 }

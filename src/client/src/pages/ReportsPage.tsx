@@ -71,7 +71,7 @@ export default function ReportsPage() {
     }
   };
 
-  if (!user || !canViewReports(user.role)) {
+  if (!user || !canViewReports(user.role, user.department)) {
     return (
       <EmptyState
         title={t('common.error')}
