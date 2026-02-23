@@ -1,0 +1,28 @@
+namespace AlBadour.Application.Features.IssuedDocuments.DTOs;
+
+public record DocumentDto(
+    Guid Id,
+    string DocumentNumber,
+    Guid RequestId,
+    string PatientName,
+    string? PatientNameEn,
+    string RecipientEntity,
+    string DocumentTypeNameAr,
+    string DocumentTypeNameEn,
+    string QrCodeUrl,
+    string? QrCodeImagePath,
+    bool HasPdf,
+    string? DocumentBody,
+    string Status,
+    string? RevocationReason,
+    Guid? ReplacementDocumentId,
+    string? ReplacementDocumentNumber,
+    DateTime? QrExpiresAt,
+    Guid IssuedById,
+    string IssuedByName,
+    Guid? RevokedById,
+    string? RevokedByName,
+    DateTime IssuedAt,
+    DateTime? ArchivedAt,
+    DateTime? RevokedAt
+);

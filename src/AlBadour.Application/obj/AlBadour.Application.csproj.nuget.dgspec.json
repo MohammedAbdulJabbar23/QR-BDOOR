@@ -1,0 +1,158 @@
+{
+  "format": 1,
+  "restore": {
+    "/home/kira/Documents/freelance/bdor-hospital/src/AlBadour.Application/AlBadour.Application.csproj": {}
+  },
+  "projects": {
+    "/home/kira/Documents/freelance/bdor-hospital/src/AlBadour.Application/AlBadour.Application.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/home/kira/Documents/freelance/bdor-hospital/src/AlBadour.Application/AlBadour.Application.csproj",
+        "projectName": "AlBadour.Application",
+        "projectPath": "/home/kira/Documents/freelance/bdor-hospital/src/AlBadour.Application/AlBadour.Application.csproj",
+        "packagesPath": "/home/kira/.nuget/packages/",
+        "outputPath": "/home/kira/Documents/freelance/bdor-hospital/src/AlBadour.Application/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/kira/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net9.0"
+        ],
+        "sources": {
+          "/usr/lib64/dotnet/library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net9.0": {
+            "targetAlias": "net9.0",
+            "projectReferences": {
+              "/home/kira/Documents/freelance/bdor-hospital/src/AlBadour.Domain/AlBadour.Domain.csproj": {
+                "projectPath": "/home/kira/Documents/freelance/bdor-hospital/src/AlBadour.Domain/AlBadour.Domain.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.100"
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "dependencies": {
+            "BCrypt.Net-Next": {
+              "target": "Package",
+              "version": "[4.0.3, )"
+            },
+            "FluentValidation": {
+              "target": "Package",
+              "version": "[11.11.0, )"
+            },
+            "FluentValidation.DependencyInjectionExtensions": {
+              "target": "Package",
+              "version": "[11.11.0, )"
+            },
+            "Mapster": {
+              "target": "Package",
+              "version": "[7.4.0, )"
+            },
+            "MediatR": {
+              "target": "Package",
+              "version": "[12.4.1, )"
+            },
+            "Microsoft.Extensions.Logging.Abstractions": {
+              "target": "Package",
+              "version": "[10.0.3, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/lib64/dotnet/sdk/9.0.113/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "/home/kira/Documents/freelance/bdor-hospital/src/AlBadour.Domain/AlBadour.Domain.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "/home/kira/Documents/freelance/bdor-hospital/src/AlBadour.Domain/AlBadour.Domain.csproj",
+        "projectName": "AlBadour.Domain",
+        "projectPath": "/home/kira/Documents/freelance/bdor-hospital/src/AlBadour.Domain/AlBadour.Domain.csproj",
+        "packagesPath": "/home/kira/.nuget/packages/",
+        "outputPath": "/home/kira/Documents/freelance/bdor-hospital/src/AlBadour.Domain/obj/",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "/home/kira/.nuget/NuGet/NuGet.Config"
+        ],
+        "originalTargetFrameworks": [
+          "net9.0"
+        ],
+        "sources": {
+          "/usr/lib64/dotnet/library-packs": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net9.0": {
+            "targetAlias": "net9.0",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        },
+        "SdkAnalysisLevel": "9.0.100"
+      },
+      "frameworks": {
+        "net9.0": {
+          "targetAlias": "net9.0",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48",
+            "net481"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "/usr/lib64/dotnet/sdk/9.0.113/PortableRuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}
