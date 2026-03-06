@@ -1,3 +1,4 @@
+using System.Reflection;
 using AlBadour.Application.Common.Interfaces;
 using AlBadour.Domain.Interfaces;
 using AlBadour.Infrastructure.Persistence;
@@ -6,6 +7,10 @@ using AlBadour.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Minio;
+using QuestPDF;
+using QuestPDF.Drawing;
+using QuestPDF.Infrastructure;
 
 namespace AlBadour.Infrastructure;
 
@@ -13,9 +18,34 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
+        // QuestPDF
+        Settings.License = LicenseType.Community;
+
+        var assembly = Assembly.GetExecutingAssembly();
+        using (var fontStream = assembly.GetManifestResourceStream(
+            "AlBadour.Infrastructure.Resources.Fonts.NotoSansArabic-Regular.ttf"))
+        {
+            if (fontStream is not null) FontManager.RegisterFont(fontStream);
+        }
+        using (var fontStream = assembly.GetManifestResourceStream(
+            "AlBadour.Infrastructure.Resources.Fonts.NotoSansArabic-Bold.ttf"))
+        {
+            if (fontStream is not null) FontManager.RegisterFont(fontStream);
+        }
+
         // Database
         services.AddDbContext<ApplicationDbContext>(options =>
             options.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
+
+        // MinIO
+        services.AddSingleton<IMinioClient>(_ =>
+            new MinioClient()
+                .WithEndpoint(configuration["Minio:Endpoint"] ?? "localhost:9000")
+                .WithCredentials(
+                    configuration["Minio:AccessKey"] ?? "minioadmin",
+                    configuration["Minio:SecretKey"] ?? "minioadmin")
+                .WithSSL(configuration.GetValue<bool>("Minio:UseSSL"))
+                .Build());
 
         // Repositories
         services.AddScoped<IDocumentRequestRepository, DocumentRequestRepository>();
@@ -35,6 +65,7 @@ public static class DependencyInjection
         services.AddScoped<IDocumentNumberService, DocumentNumberService>();
         services.AddScoped<INotificationService, NotificationService>();
         services.AddScoped<IReportGenerationService, ReportGenerationService>();
+        services.AddSingleton<IPdfGenerationService, PdfGenerationService>();
 
         return services;
     }

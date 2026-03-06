@@ -1,47 +1,75 @@
 using AlBadour.Domain.Interfaces;
 using Microsoft.Extensions.Configuration;
+using Minio;
+using Minio.DataModel.Args;
 
 namespace AlBadour.Infrastructure.Services;
 
 public class FileStorageService : IFileStorageService
 {
-    private readonly string _basePath;
+    private readonly IMinioClient _minioClient;
+    private readonly string _bucketName;
 
-    public FileStorageService(IConfiguration configuration)
+    public FileStorageService(IMinioClient minioClient, IConfiguration configuration)
     {
-        _basePath = configuration["FileStorage:BasePath"] ?? Path.Combine(Directory.GetCurrentDirectory(), "storage");
-        Directory.CreateDirectory(Path.Combine(_basePath, "pdfs"));
-        Directory.CreateDirectory(Path.Combine(_basePath, "qrcodes"));
+        _minioClient = minioClient;
+        _bucketName = configuration["Minio:BucketName"] ?? "albadour";
     }
 
     public async Task<string> SavePdfAsync(Stream fileStream, string fileName, CancellationToken ct = default)
     {
-        var filePath = Path.Combine(_basePath, "pdfs", fileName);
-        await using var outputStream = new FileStream(filePath, FileMode.Create);
-        await fileStream.CopyToAsync(outputStream, ct);
-        return filePath;
+        var objectKey = $"pdfs/{fileName}";
+        await _minioClient.PutObjectAsync(new PutObjectArgs()
+            .WithBucket(_bucketName)
+            .WithObject(objectKey)
+            .WithStreamData(fileStream)
+            .WithObjectSize(fileStream.Length)
+            .WithContentType("application/pdf"), ct);
+        return objectKey;
     }
 
     public async Task<string> SaveQrCodeAsync(byte[] imageBytes, string fileName, CancellationToken ct = default)
     {
-        var filePath = Path.Combine(_basePath, "qrcodes", fileName);
-        await File.WriteAllBytesAsync(filePath, imageBytes, ct);
-        return filePath;
+        var objectKey = $"qrcodes/{fileName}";
+        using var stream = new MemoryStream(imageBytes);
+        await _minioClient.PutObjectAsync(new PutObjectArgs()
+            .WithBucket(_bucketName)
+            .WithObject(objectKey)
+            .WithStreamData(stream)
+            .WithObjectSize(stream.Length)
+            .WithContentType("image/png"), ct);
+        return objectKey;
     }
 
-    public Task<Stream?> GetFileAsync(string filePath, CancellationToken ct = default)
+    public async Task<Stream?> GetFileAsync(string objectKey, CancellationToken ct = default)
     {
-        if (!File.Exists(filePath))
-            return Task.FromResult<Stream?>(null);
-
-        Stream stream = new FileStream(filePath, FileMode.Open, FileAccess.Read);
-        return Task.FromResult<Stream?>(stream);
+        try
+        {
+            var memoryStream = new MemoryStream();
+            await _minioClient.GetObjectAsync(new GetObjectArgs()
+                .WithBucket(_bucketName)
+                .WithObject(objectKey)
+                .WithCallbackStream(stream => stream.CopyTo(memoryStream)), ct);
+            memoryStream.Position = 0;
+            return memoryStream;
+        }
+        catch (Minio.Exceptions.ObjectNotFoundException)
+        {
+            return null;
+        }
     }
 
-    public Task DeleteFileAsync(string filePath, CancellationToken ct = default)
+    public async Task DeleteFileAsync(string objectKey, CancellationToken ct = default)
     {
-        if (File.Exists(filePath))
-            File.Delete(filePath);
-        return Task.CompletedTask;
+        try
+        {
+            await _minioClient.RemoveObjectAsync(new RemoveObjectArgs()
+                .WithBucket(_bucketName)
+                .WithObject(objectKey), ct);
+        }
+        catch (Minio.Exceptions.ObjectNotFoundException)
+        {
+            // Already deleted — no-op
+        }
     }
 }

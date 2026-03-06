@@ -101,7 +101,7 @@ export default function RequestDetailsPage() {
   const showEdit = canEditRequest(department, request.status, request.createdById, userId);
   const showDelete = canEditRequest(department, request.status, request.createdById, userId);
   const showAcceptReject = canAcceptRejectRequest(department) && request.status === 'Pending';
-  const showPrepareDoc = canPrepareDocument(department) && request.status === 'Completed';
+  const showPrepareDoc = canPrepareDocument(department) && request.status === 'InProgress';
 
   const BackIcon = isRtl ? ArrowRight : ArrowLeft;
 

@@ -35,8 +35,8 @@ public class VerificationController : ControllerBase
         if (doc is null || doc.IsDeleted || string.IsNullOrEmpty(doc.PdfFilePath))
             return NotFound(new { error = "PDF not available." });
 
-        // Only serve PDF for archived or revoked documents
-        if (doc.Status != Domain.Enums.DocumentStatus.Archived && doc.Status != Domain.Enums.DocumentStatus.Revoked)
+        // Only serve PDF for archived documents
+        if (doc.Status != Domain.Enums.DocumentStatus.Archived)
             return NotFound(new { error = "PDF not available." });
 
         var stream = await _fileStorage.GetFileAsync(doc.PdfFilePath);

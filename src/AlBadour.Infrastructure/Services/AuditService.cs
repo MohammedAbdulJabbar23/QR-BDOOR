@@ -18,12 +18,15 @@ public class AuditService : IAuditService
         _unitOfWork = unitOfWork;
     }
 
-    public async Task LogAsync(string action, string entityType, string entityId, object? details = null, CancellationToken ct = default)
+    public Task LogAsync(string action, string entityType, string entityId, object? details = null, CancellationToken ct = default)
+        => LogAsync(_currentUser.UserId, _currentUser.UserName, action, entityType, entityId, details, ct);
+
+    public async Task LogAsync(Guid userId, string userName, string action, string entityType, string entityId, object? details = null, CancellationToken ct = default)
     {
         var log = new AuditLog
         {
-            UserId = _currentUser.UserId,
-            UserName = _currentUser.UserName,
+            UserId = userId,
+            UserName = userName,
             Action = action,
             EntityType = entityType,
             EntityId = entityId,

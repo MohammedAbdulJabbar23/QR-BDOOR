@@ -36,7 +36,8 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
             Username = "admin",
             FullName = "مدير النظام",
             FullNameEn = "System Admin",
-            PasswordHash = BCrypt.Net.BCrypt.HashPassword("Admin@123"),
+            // Pre-computed hash for "Admin@123" — must be static for EF Core seed data
+            PasswordHash = "$2a$11$YzOw4eOH8B8mZAqmYXTVuuyZjYlAHz7FyQCfr6zAE7MLTjjb03Iue",
             Role = UserRole.Admin,
             Department = Department.Management,
             LanguagePreference = "ar",

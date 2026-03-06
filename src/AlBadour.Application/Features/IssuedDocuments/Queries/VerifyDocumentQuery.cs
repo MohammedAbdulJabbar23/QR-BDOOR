@@ -60,7 +60,7 @@ public class VerifyDocumentQueryHandler : IRequestHandler<VerifyDocumentQuery, R
                 doc.RevocationReason,
                 doc.ReplacementDocumentId,
                 doc.ReplacementDocument?.DocumentNumber,
-                !string.IsNullOrEmpty(doc.PdfFilePath)
+                false
             ));
         }
 

@@ -44,7 +44,7 @@ public class LoginCommandHandler : IRequestHandler<LoginCommand, Result<AuthResp
         _userRepo.Update(user);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-        await _auditService.LogAsync("user.login", "user", user.Id.ToString(), null, cancellationToken);
+        await _auditService.LogAsync(user.Id, user.Username, "user.login", "user", user.Id.ToString(), null, cancellationToken);
 
         var response = new AuthResponse(
             accessToken,
