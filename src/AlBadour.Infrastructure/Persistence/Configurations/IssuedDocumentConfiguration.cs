@@ -26,6 +26,12 @@ public class IssuedDocumentConfiguration : IEntityTypeConfiguration<IssuedDocume
         builder.Property(d => d.RevocationReason).HasColumnName("revocation_reason");
         builder.Property(d => d.ReplacementDocumentId).HasColumnName("replacement_document_id");
         builder.Property(d => d.QrExpiresAt).HasColumnName("qr_expires_at");
+        builder.Property(d => d.PatientGender).HasColumnName("patient_gender").HasMaxLength(50);
+        builder.Property(d => d.PatientProfession).HasColumnName("patient_profession").HasMaxLength(200);
+        builder.Property(d => d.PatientAge).HasColumnName("patient_age").HasMaxLength(50);
+        builder.Property(d => d.AdmissionDate).HasColumnName("admission_date").HasMaxLength(50);
+        builder.Property(d => d.DischargeDate).HasColumnName("discharge_date").HasMaxLength(50);
+        builder.Property(d => d.LeaveGranted).HasColumnName("leave_granted").HasMaxLength(500);
         builder.Property(d => d.IssuedById).HasColumnName("issued_by");
         builder.Property(d => d.RevokedById).HasColumnName("revoked_by");
         builder.Property(d => d.ApprovedById).HasColumnName("approved_by");

@@ -3,7 +3,16 @@ import type { IssuedDocument } from '@/types/document.types';
 import type { PaginatedList } from '@/types/common.types';
 
 export const documentsApi = {
-  prepare: (data: { requestId: string; documentBody?: string }) =>
+  prepare: (data: {
+    requestId: string;
+    documentBody?: string;
+    patientGender?: string;
+    patientProfession?: string;
+    patientAge?: string;
+    admissionDate?: string;
+    dischargeDate?: string;
+    leaveGranted?: string;
+  }) =>
     apiClient.post<IssuedDocument>('/documents', data).then(r => r.data),
 
   getAll: (params: { status?: string; search?: string; page?: number; pageSize?: number }) =>

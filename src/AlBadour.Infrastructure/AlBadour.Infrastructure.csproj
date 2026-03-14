@@ -9,6 +9,9 @@
     <EmbeddedResource Include="Resources\Fonts\NotoSansArabic-Regular.ttf" />
     <EmbeddedResource Include="Resources\Fonts\NotoSansArabic-Bold.ttf" />
     <EmbeddedResource Include="Resources\Images\bdoor_logo.png" />
+    <EmbeddedResource Include="Resources\Images\letterhead.jpg" />
+    <EmbeddedResource Include="Resources\Images\phone_icon.png" />
+    <EmbeddedResource Include="Resources\Images\location_icon.png" />
   </ItemGroup>
 
   <ItemGroup>

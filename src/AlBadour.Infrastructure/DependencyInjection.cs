@@ -65,7 +65,7 @@ public static class DependencyInjection
         services.AddScoped<IDocumentNumberService, DocumentNumberService>();
         services.AddScoped<INotificationService, NotificationService>();
         services.AddScoped<IReportGenerationService, ReportGenerationService>();
-        services.AddSingleton<IPdfGenerationService, PdfGenerationService>();
+        services.AddSingleton<IDocumentGenerationService, PdfGenerationService>();
 
         return services;
     }

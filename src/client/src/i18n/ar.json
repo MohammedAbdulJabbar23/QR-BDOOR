@@ -37,7 +37,9 @@
     "qrCode": "رمز QR", "print": "طباعة", "revocationReason": "سبب الإلغاء",
     "uploadPdf": "رفع PDF", "pdfUploaded": "تم رفع ملف PDF بنجاح",
     "pdfGenerated": "تم إنشاء ملف PDF بنجاح", "fileTooLarge": "حجم الملف يتجاوز 10 ميغابايت",
-    "noDocuments": "لا توجد وثائق"
+    "noDocuments": "لا توجد وثائق",
+    "patientGender": "الجنس", "patientProfession": "المهنة", "patientAge": "العمر",
+    "admissionDate": "تاريخ الدخول", "dischargeDate": "تاريخ الخروج", "leaveGranted": "الاجازة الممنوحة"
   },
   "verification": {
     "title": "التحقق من الوثيقة", "verified": "وثيقة موثقة",

@@ -14,6 +14,12 @@ public class IssuedDocument : BaseEntity
     public string? RevocationReason { get; set; }
     public Guid? ReplacementDocumentId { get; set; }
     public DateTime? QrExpiresAt { get; set; }
+    public string? PatientGender { get; set; }
+    public string? PatientProfession { get; set; }
+    public string? PatientAge { get; set; }
+    public string? AdmissionDate { get; set; }
+    public string? DischargeDate { get; set; }
+    public string? LeaveGranted { get; set; }
     public Guid IssuedById { get; set; }
     public Guid? RevokedById { get; set; }
     public Guid? ApprovedById { get; set; }

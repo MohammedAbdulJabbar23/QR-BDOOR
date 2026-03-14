@@ -36,7 +36,9 @@
     "qrCode": "QR Code", "print": "Print", "revocationReason": "Revocation Reason",
     "uploadPdf": "Upload PDF", "pdfUploaded": "PDF uploaded successfully",
     "pdfGenerated": "PDF generated successfully", "fileTooLarge": "File size exceeds 10 MB limit",
-    "noDocuments": "No documents found"
+    "noDocuments": "No documents found",
+    "patientGender": "Gender", "patientProfession": "Profession", "patientAge": "Age",
+    "admissionDate": "Admission Date", "dischargeDate": "Discharge Date", "leaveGranted": "Leave Granted"
   },
   "verification": {
     "title": "Document Verification", "verified": "Document Verified",

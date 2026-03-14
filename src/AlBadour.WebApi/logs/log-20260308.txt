@@ -1,0 +1,14 @@
+2026-03-08 02:03:46.939 +03:00 [INF] Handling VerifyDocumentQuery
+2026-03-08 02:03:46.946 +03:00 [INF] HTTP GET /api/documents/e83297db-9c04-4916-8188-8995b9859967 responded 401 in 9ms
+2026-03-08 02:03:46.959 +03:00 [INF] Handled VerifyDocumentQuery in 17ms
+2026-03-08 02:03:46.959 +03:00 [INF] HTTP GET /api/verify/e83297db-9c04-4916-8188-8995b9859967 responded 200 in 21ms
+2026-03-08 02:03:46.969 +03:00 [INF] Handling RefreshTokenCommand
+2026-03-08 02:03:46.987 +03:00 [INF] Handled RefreshTokenCommand in 17ms
+2026-03-08 02:03:46.987 +03:00 [INF] HTTP POST /api/auth/refresh responded 200 in 30ms
+2026-03-08 02:03:46.996 +03:00 [INF] Handling GetDocumentByIdQuery
+2026-03-08 02:03:47.001 +03:00 [INF] Handled GetDocumentByIdQuery in 4ms
+2026-03-08 02:03:47.001 +03:00 [INF] HTTP GET /api/documents/e83297db-9c04-4916-8188-8995b9859967 responded 200 in 5ms
+2026-03-08 02:03:54.482 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-08 02:03:54.485 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-08 02:03:54.485 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 3ms
+2026-03-08 02:04:01.475 +03:00 [INF] HTTP GET /api/v1/dashboard/stats responded 404 in 0ms

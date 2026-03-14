@@ -15,7 +15,7 @@ public class GeneratePdfCommandHandler : IRequestHandler<GeneratePdfCommand, Res
     private readonly ICurrentUserService _currentUser;
     private readonly IAuditService _auditService;
     private readonly IFileStorageService _fileStorage;
-    private readonly IPdfGenerationService _pdfService;
+    private readonly IDocumentGenerationService _docService;
 
     public GeneratePdfCommandHandler(
         IIssuedDocumentRepository documentRepo,
@@ -23,30 +23,30 @@ public class GeneratePdfCommandHandler : IRequestHandler<GeneratePdfCommand, Res
         ICurrentUserService currentUser,
         IAuditService auditService,
         IFileStorageService fileStorage,
-        IPdfGenerationService pdfService)
+        IDocumentGenerationService docService)
     {
         _documentRepo = documentRepo;
         _unitOfWork = unitOfWork;
         _currentUser = currentUser;
         _auditService = auditService;
         _fileStorage = fileStorage;
-        _pdfService = pdfService;
+        _docService = docService;
     }
 
     public async Task<Result> Handle(GeneratePdfCommand request, CancellationToken cancellationToken)
     {
         if (_currentUser.Department != Department.Statistics)
-            return Result.Failure("Only Statistics department staff can generate PDFs.", "FORBIDDEN");
+            return Result.Failure("Only Statistics department staff can generate documents.", "FORBIDDEN");
 
         var document = await _documentRepo.GetByIdWithDetailsAsync(request.DocumentId, cancellationToken);
         if (document is null || document.IsDeleted)
             return Result.Failure("Document not found.", "NOT_FOUND");
 
         if (document.Status != DocumentStatus.Draft)
-            return Result.Failure("PDF can only be generated for draft documents.", "INVALID_STATUS");
+            return Result.Failure("Document can only be generated for draft documents.", "INVALID_STATUS");
 
         if (string.IsNullOrEmpty(document.QrCodeImagePath))
-            return Result.Failure("QR code image must exist before generating PDF.", "MISSING_QR");
+            return Result.Failure("QR code image must exist before generating document.", "MISSING_QR");
 
         // Fetch QR image bytes from MinIO
         var qrStream = await _fileStorage.GetFileAsync(document.QrCodeImagePath, cancellationToken);
@@ -62,7 +62,7 @@ public class GeneratePdfCommandHandler : IRequestHandler<GeneratePdfCommand, Res
         if (qrStream is IDisposable disposable)
             disposable.Dispose();
 
-        var pdfData = new PdfDocumentData(
+        var docData = new DocumentGenerationData(
             DocumentNumber: document.DocumentNumber,
             PatientName: document.Request.PatientName,
             PatientNameEn: document.Request.PatientNameEn,
@@ -73,10 +73,16 @@ public class GeneratePdfCommandHandler : IRequestHandler<GeneratePdfCommand, Res
             QrCodeUrl: document.QrCodeUrl,
             QrCodeImageBytes: qrImageBytes,
             IssuedByName: document.IssuedBy.FullName,
-            IssuedAt: document.IssuedAt
+            IssuedAt: document.IssuedAt,
+            PatientGender: document.PatientGender,
+            PatientProfession: document.PatientProfession,
+            PatientAge: document.PatientAge,
+            AdmissionDate: document.AdmissionDate,
+            DischargeDate: document.DischargeDate,
+            LeaveGranted: document.LeaveGranted
         );
 
-        var pdfBytes = _pdfService.GenerateDocumentPdf(pdfData);
+        var pdfBytes = _docService.GenerateDocument(docData);
 
         using var pdfStream = new MemoryStream(pdfBytes);
         var pdfPath = await _fileStorage.SavePdfAsync(pdfStream, $"{document.Id}.pdf", cancellationToken);
@@ -87,7 +93,7 @@ public class GeneratePdfCommandHandler : IRequestHandler<GeneratePdfCommand, Res
         _documentRepo.Update(document);
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-        await _auditService.LogAsync("document.pdf_generated", "document", document.Id.ToString(),
+        await _auditService.LogAsync("document.generated", "document", document.Id.ToString(),
             new { document.DocumentNumber }, cancellationToken);
 
         return Result.Success();

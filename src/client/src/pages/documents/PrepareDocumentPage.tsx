@@ -18,6 +18,12 @@ export default function PrepareDocumentPage() {
   const isRtl = language === 'ar';
 
   const [documentBody, setDocumentBody] = useState('');
+  const [patientGender, setPatientGender] = useState('');
+  const [patientProfession, setPatientProfession] = useState('');
+  const [patientAge, setPatientAge] = useState('');
+  const [admissionDate, setAdmissionDate] = useState('');
+  const [dischargeDate, setDischargeDate] = useState('');
+  const [leaveGranted, setLeaveGranted] = useState('');
   const [error, setError] = useState('');
 
   const { data: request, isLoading: requestLoading } = useQuery({
@@ -27,8 +33,16 @@ export default function PrepareDocumentPage() {
   });
 
   const prepareMutation = useMutation({
-    mutationFn: (data: { requestId: string; documentBody?: string }) =>
-      documentsApi.prepare(data),
+    mutationFn: (data: {
+      requestId: string;
+      documentBody?: string;
+      patientGender?: string;
+      patientProfession?: string;
+      patientAge?: string;
+      admissionDate?: string;
+      dischargeDate?: string;
+      leaveGranted?: string;
+    }) => documentsApi.prepare(data),
     onSuccess: (doc) => {
       navigate(`/documents/${doc.id}`);
     },
@@ -44,6 +58,12 @@ export default function PrepareDocumentPage() {
     prepareMutation.mutate({
       requestId,
       documentBody: documentBody.trim() || undefined,
+      patientGender: patientGender.trim() || undefined,
+      patientProfession: patientProfession.trim() || undefined,
+      patientAge: patientAge.trim() || undefined,
+      admissionDate: admissionDate.trim() || undefined,
+      dischargeDate: dischargeDate.trim() || undefined,
+      leaveGranted: leaveGranted.trim() || undefined,
     });
   };
 
@@ -151,6 +171,88 @@ export default function PrepareDocumentPage() {
             >
               {documentBody + ' '}
             </div>
+          </div>
+        </div>
+
+        {/* Additional Fields */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
+          <div>
+            <label htmlFor="patientGender" className="block text-sm font-medium text-neutral-700 mb-1">
+              {t('documents.patientGender')}
+            </label>
+            <input
+              id="patientGender"
+              type="text"
+              value={patientGender}
+              onChange={(e) => setPatientGender(e.target.value)}
+              className="w-full px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+              placeholder={language === 'ar' ? 'مثال: ذكر' : 'e.g. Male'}
+            />
+          </div>
+          <div>
+            <label htmlFor="patientProfession" className="block text-sm font-medium text-neutral-700 mb-1">
+              {t('documents.patientProfession')}
+            </label>
+            <input
+              id="patientProfession"
+              type="text"
+              value={patientProfession}
+              onChange={(e) => setPatientProfession(e.target.value)}
+              className="w-full px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+              placeholder={language === 'ar' ? 'مثال: موظف' : 'e.g. Employee'}
+            />
+          </div>
+          <div>
+            <label htmlFor="patientAge" className="block text-sm font-medium text-neutral-700 mb-1">
+              {t('documents.patientAge')}
+            </label>
+            <input
+              id="patientAge"
+              type="text"
+              value={patientAge}
+              onChange={(e) => setPatientAge(e.target.value)}
+              className="w-full px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+              placeholder={language === 'ar' ? 'مثال: 35 سنة' : 'e.g. 35 years'}
+            />
+          </div>
+          <div>
+            <label htmlFor="admissionDate" className="block text-sm font-medium text-neutral-700 mb-1">
+              {t('documents.admissionDate')}
+            </label>
+            <input
+              id="admissionDate"
+              type="text"
+              value={admissionDate}
+              onChange={(e) => setAdmissionDate(e.target.value)}
+              className="w-full px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+              placeholder={language === 'ar' ? 'مثال: 23/2/2026' : 'e.g. 23/2/2026'}
+            />
+          </div>
+          <div>
+            <label htmlFor="dischargeDate" className="block text-sm font-medium text-neutral-700 mb-1">
+              {t('documents.dischargeDate')}
+            </label>
+            <input
+              id="dischargeDate"
+              type="text"
+              value={dischargeDate}
+              onChange={(e) => setDischargeDate(e.target.value)}
+              className="w-full px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+              placeholder={language === 'ar' ? 'مثال: 23/2/2026' : 'e.g. 23/2/2026'}
+            />
+          </div>
+          <div className="sm:col-span-2 lg:col-span-3">
+            <label htmlFor="leaveGranted" className="block text-sm font-medium text-neutral-700 mb-1">
+              {t('documents.leaveGranted')}
+            </label>
+            <input
+              id="leaveGranted"
+              type="text"
+              value={leaveGranted}
+              onChange={(e) => setLeaveGranted(e.target.value)}
+              className="w-full px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+              placeholder={language === 'ar' ? 'مثال: يمنح إجازة مرضية لمدة (28 يوما)' : 'e.g. 28 days sick leave'}
+            />
           </div>
         </div>
 

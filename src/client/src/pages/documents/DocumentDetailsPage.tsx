@@ -227,6 +227,24 @@ export default function DocumentDetailsPage() {
                   value={formatDateTime(document.archivedAt, language)}
                 />
               )}
+              {document.patientGender && (
+                <InfoItem label={t('documents.patientGender')} value={document.patientGender} />
+              )}
+              {document.patientProfession && (
+                <InfoItem label={t('documents.patientProfession')} value={document.patientProfession} />
+              )}
+              {document.patientAge && (
+                <InfoItem label={t('documents.patientAge')} value={document.patientAge} />
+              )}
+              {document.admissionDate && (
+                <InfoItem label={t('documents.admissionDate')} value={document.admissionDate} />
+              )}
+              {document.dischargeDate && (
+                <InfoItem label={t('documents.dischargeDate')} value={document.dischargeDate} />
+              )}
+              {document.leaveGranted && (
+                <InfoItem label={t('documents.leaveGranted')} value={document.leaveGranted} />
+              )}
             </div>
           </div>
 

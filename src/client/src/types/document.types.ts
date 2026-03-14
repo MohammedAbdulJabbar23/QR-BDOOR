@@ -16,6 +16,12 @@ export interface IssuedDocument {
   replacementDocumentId: string | null;
   replacementDocumentNumber: string | null;
   qrExpiresAt: string | null;
+  patientGender: string | null;
+  patientProfession: string | null;
+  patientAge: string | null;
+  admissionDate: string | null;
+  dischargeDate: string | null;
+  leaveGranted: string | null;
   issuedById: string;
   issuedByName: string;
   revokedById: string | null;

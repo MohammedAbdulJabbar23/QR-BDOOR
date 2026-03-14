@@ -1,6 +1,6 @@
 namespace AlBadour.Application.Common.Interfaces;
 
-public record PdfDocumentData(
+public record DocumentGenerationData(
     string DocumentNumber,
     string PatientName,
     string? PatientNameEn,
@@ -11,10 +11,16 @@ public record PdfDocumentData(
     string QrCodeUrl,
     byte[] QrCodeImageBytes,
     string IssuedByName,
-    DateTime IssuedAt
+    DateTime IssuedAt,
+    string? PatientGender,
+    string? PatientProfession,
+    string? PatientAge,
+    string? AdmissionDate,
+    string? DischargeDate,
+    string? LeaveGranted
 );
 
-public interface IPdfGenerationService
+public interface IDocumentGenerationService
 {
-    byte[] GenerateDocumentPdf(PdfDocumentData data);
+    byte[] GenerateDocument(DocumentGenerationData data);
 }
