@@ -37,11 +37,15 @@ public class UpdateRequestCommandHandler : IRequestHandler<UpdateRequestCommand,
         if (entity is null || entity.IsDeleted)
             return Result.Failure("Request not found.", "NOT_FOUND");
 
-        if (entity.CreatedById != _currentUser.UserId)
-            return Result.Failure("You can only edit your own requests.", "FORBIDDEN");
+        var isCreator = entity.CreatedById == _currentUser.UserId;
+        var isHrOrStatistics = _currentUser.Department == Department.HR
+            || _currentUser.Department == Department.Statistics;
 
-        if (entity.Status != RequestStatus.Pending)
-            return Result.Failure("Request can only be edited while pending.", "INVALID_STATUS");
+        if (!isCreator && !isHrOrStatistics)
+            return Result.Failure("You do not have permission to edit this request.", "FORBIDDEN");
+
+        if (entity.Status == RequestStatus.Completed || entity.Status == RequestStatus.Rejected)
+            return Result.Failure("Request cannot be edited after completion or rejection.", "INVALID_STATUS");
 
         var docType = await _typeRepo.GetByIdAsync(request.Dto.DocumentTypeId, cancellationToken);
         if (docType is null || !docType.IsActive)

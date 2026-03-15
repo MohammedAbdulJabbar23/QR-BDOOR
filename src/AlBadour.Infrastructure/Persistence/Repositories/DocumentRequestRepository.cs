@@ -30,6 +30,7 @@ public class DocumentRequestRepository : IDocumentRequestRepository
 
     public async Task<(List<DocumentRequest> Items, int TotalCount)> GetAllAsync(
         RequestStatus? status, Guid? createdById, string? search,
+        DateTime? fromDate, DateTime? toDate,
         int page, int pageSize, CancellationToken ct = default)
     {
         var query = _context.DocumentRequests
@@ -46,6 +47,18 @@ public class DocumentRequestRepository : IDocumentRequestRepository
 
         if (!string.IsNullOrWhiteSpace(search))
             query = query.Where(r => r.PatientName.Contains(search) || (r.PatientNameEn != null && r.PatientNameEn.Contains(search)));
+
+        if (fromDate.HasValue)
+        {
+            var from = DateTime.SpecifyKind(fromDate.Value.Date, DateTimeKind.Utc);
+            query = query.Where(r => r.CreatedAt >= from);
+        }
+
+        if (toDate.HasValue)
+        {
+            var to = DateTime.SpecifyKind(toDate.Value.Date.AddDays(1), DateTimeKind.Utc);
+            query = query.Where(r => r.CreatedAt < to);
+        }
 
         var totalCount = await query.CountAsync(ct);
         var items = await query
@@ -66,6 +79,28 @@ public class DocumentRequestRepository : IDocumentRequestRepository
             .Where(r => r.Status == RequestStatus.Pending)
             .OrderByDescending(r => r.CreatedAt)
             .ToListAsync(ct);
+    }
+
+    public async Task<Dictionary<string, int>> GetStatusCountsAsync(DateTime? fromDate, DateTime? toDate, CancellationToken ct = default)
+    {
+        var query = _context.DocumentRequests.AsQueryable();
+
+        if (fromDate.HasValue)
+        {
+            var from = DateTime.SpecifyKind(fromDate.Value.Date, DateTimeKind.Utc);
+            query = query.Where(r => r.CreatedAt >= from);
+        }
+
+        if (toDate.HasValue)
+        {
+            var to = DateTime.SpecifyKind(toDate.Value.Date.AddDays(1), DateTimeKind.Utc);
+            query = query.Where(r => r.CreatedAt < to);
+        }
+
+        return await query
+            .GroupBy(r => r.Status)
+            .Select(g => new { Status = g.Key.ToString(), Count = g.Count() })
+            .ToDictionaryAsync(x => x.Status, x => x.Count, ct);
     }
 
     public async Task AddAsync(DocumentRequest request, CancellationToken ct = default)

@@ -37,12 +37,22 @@ public class CreateRequestCommandHandler : IRequestHandler<CreateRequestCommand,
 
     public async Task<Result<Guid>> Handle(CreateRequestCommand request, CancellationToken cancellationToken)
     {
-        if (_currentUser.Department != Department.Inquiry)
-            return Result.Failure<Guid>("Only Inquiry department staff can create requests.", "FORBIDDEN");
+        if (_currentUser.Department != Department.Inquiry && _currentUser.Department != Department.HR)
+            return Result.Failure<Guid>("Only Inquiry and HR department staff can create requests.", "FORBIDDEN");
 
         var docType = await _typeRepo.GetByIdAsync(request.Dto.DocumentTypeId, cancellationToken);
         if (docType is null || !docType.IsActive)
             return Result.Failure<Guid>("Invalid or inactive document type.", "INVALID_DOCUMENT_TYPE");
+
+        // HR department can only create Administrative Letter requests
+        var isAdministrativeLetter = docType.NameEn.Equals("Administrative Letter", StringComparison.OrdinalIgnoreCase);
+
+        if (_currentUser.Department == Department.HR && !isAdministrativeLetter)
+            return Result.Failure<Guid>("HR department can only create Administrative Letter requests.", "FORBIDDEN");
+
+        // Inquiry department cannot create Administrative Letter requests (HR only)
+        if (_currentUser.Department == Department.Inquiry && isAdministrativeLetter)
+            return Result.Failure<Guid>("Administrative Letter requests can only be created by HR department.", "FORBIDDEN");
 
         var entity = new DocumentRequest
         {
@@ -62,8 +72,10 @@ public class CreateRequestCommandHandler : IRequestHandler<CreateRequestCommand,
         await _auditService.LogAsync("request.created", "request", entity.Id.ToString(),
             new { entity.PatientName, entity.RecipientEntity, DocumentType = docType.NameAr }, cancellationToken);
 
+        // Notify the department responsible for processing this type
+        var notifyDept = isAdministrativeLetter ? Department.HR : Department.Statistics;
         await _notificationService.SendToDepartmentAsync(
-            Department.Statistics,
+            notifyDept,
             "طلب وثيقة جديد",
             "New Document Request",
             "تم تقديم طلب وثيقة جديد",

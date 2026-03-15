@@ -44,10 +44,11 @@ public class PdfGenerationService : IDocumentGenerationService
 
                 page.Header().Height(0);
 
-                page.Content().PaddingTop(180).PaddingBottom(120).PaddingHorizontal(50)
+                page.Content().PaddingTop(160).PaddingHorizontal(50)
                     .Element(content => ComposeBodyDispatch(content, data));
 
-                page.Footer().Height(0);
+                page.Footer().PaddingBottom(80).PaddingHorizontal(50)
+                    .Element(footer => ComposeSignatureSection(footer, data));
             });
         });
 
@@ -73,28 +74,37 @@ public class PdfGenerationService : IDocumentGenerationService
     {
         container.Column(col =>
         {
-            // Document number + date
-            col.Item().Text($"العدد:   {data.DocumentNumber}")
-                .FontSize(16).Bold();
-            col.Item().Text($"التاريخ: {data.IssuedAt:d/M/yyyy}")
-                .FontSize(16).Bold();
+            // Document number/date (right in RTL) + QR code (left in RTL)
+            col.Item().Row(row =>
+            {
+                row.RelativeItem().Column(info =>
+                {
+                    info.Item().Text($"العدد:   {data.DocumentNumber}")
+                        .FontSize(12).Bold();
+                    info.Item().Text($"التاريخ: {data.IssuedAt:d/M/yyyy}")
+                        .FontSize(12).Bold();
+                });
 
-            col.Item().PaddingVertical(8);
+                row.AutoItem().Width(55).Height(55)
+                    .Image(data.QrCodeImageBytes);
+            });
+
+            col.Item().PaddingVertical(3);
 
             // Recipient
             col.Item().AlignCenter().Text($"إلى/ {data.RecipientEntity}")
-                .FontSize(16);
+                .FontSize(12);
 
             // Subject
-            col.Item().AlignCenter().PaddingBottom(8).Text($"م/ {data.DocumentTypeNameAr}")
-                .FontSize(16).Bold();
+            col.Item().AlignCenter().PaddingBottom(3).Text($"م/ {data.DocumentTypeNameAr}")
+                .FontSize(12).Bold();
 
             // Patient info table
             col.Item().Table(table =>
             {
                 table.ColumnsDefinition(columns =>
                 {
-                    columns.ConstantColumn(130);
+                    columns.ConstantColumn(110);
                     columns.RelativeColumn();
                 });
 
@@ -125,9 +135,6 @@ public class PdfGenerationService : IDocumentGenerationService
                     AddTableRow(table, "الاجازة الممنوحة:", data.LeaveGranted);
             });
 
-            // QR + signature
-            col.Item().PaddingTop(15);
-            col.Item().Element(c => ComposeFooterSection(c, data));
         });
     }
 
@@ -135,65 +142,71 @@ public class PdfGenerationService : IDocumentGenerationService
     {
         container.Column(col =>
         {
-            // Document number + date
-            col.Item().Text($"العدد: {data.DocumentNumber}")
-                .FontSize(16).Bold();
-            col.Item().Text($"التاريخ: {data.IssuedAt:d/M/yyyy}")
-                .FontSize(16).Bold();
+            // Document number/date (right in RTL) + QR code (left in RTL)
+            col.Item().Row(row =>
+            {
+                row.RelativeItem().Column(info =>
+                {
+                    info.Item().Text($"العدد: {data.DocumentNumber}")
+                        .FontSize(12).Bold();
+                    info.Item().Text($"التاريخ: {data.IssuedAt:d/M/yyyy}")
+                        .FontSize(12).Bold();
+                });
 
-            col.Item().PaddingVertical(8);
+                row.AutoItem().Width(55).Height(55)
+                    .Image(data.QrCodeImageBytes);
+            });
+
+            col.Item().PaddingVertical(3);
 
             // Recipient (multi-line support)
             foreach (var line in data.RecipientEntity.Split('\n', StringSplitOptions.RemoveEmptyEntries))
             {
-                col.Item().Text($"الى /{line.Trim()}").FontSize(14);
+                col.Item().Text($"الى /{line.Trim()}").FontSize(11);
             }
 
-            col.Item().PaddingVertical(4);
+            col.Item().PaddingVertical(2);
 
             // Subject
-            col.Item().Text($"م/{data.DocumentTypeNameAr}").FontSize(16).Bold();
+            col.Item().Text($"م/{data.DocumentTypeNameAr}").FontSize(12).Bold();
 
             // Greeting
-            col.Item().PaddingTop(4).Text("تحية طيبة...").FontSize(14);
+            col.Item().PaddingTop(2).Text("تحية طيبة...").FontSize(11);
 
             // Patient reference
-            col.Item().PaddingTop(4).Text(t =>
+            col.Item().PaddingTop(2).Text(t =>
             {
-                t.Span("بخصوص المريض/ة: ").FontSize(13).Bold();
-                t.Span(data.PatientName).FontSize(13);
+                t.Span("بخصوص المريض/ة: ").FontSize(11).Bold();
+                t.Span(data.PatientName).FontSize(11);
                 if (!string.IsNullOrEmpty(data.PatientNameEn))
-                    t.Span($" / {data.PatientNameEn}").FontSize(13);
+                    t.Span($" / {data.PatientNameEn}").FontSize(11);
             });
 
             // Body text
             if (!string.IsNullOrEmpty(data.DocumentBody))
             {
-                col.Item().PaddingTop(8).Text(data.DocumentBody)
-                    .FontSize(14).LineHeight(1.8f);
+                col.Item().PaddingTop(4).Text(data.DocumentBody)
+                    .FontSize(11).LineHeight(1.3f);
             }
 
-            col.Item().PaddingTop(8);
+            col.Item().PaddingTop(4);
 
             // Closing
             col.Item().Text("يرجى التفضل بالإطلاع مع الشكر والتقدير..")
-                .FontSize(14);
+                .FontSize(11);
 
-            // QR + signature
-            col.Item().PaddingTop(15);
-            col.Item().Element(c => ComposeFooterSection(c, data));
         });
     }
 
     private static void AddTableRow(TableDescriptor table, string label, string value)
     {
-        table.Cell().Border(0.5f).BorderColor(Colors.Black).Padding(5)
-            .Text(label).FontSize(14).Bold();
-        table.Cell().Border(0.5f).BorderColor(Colors.Black).Padding(5)
-            .Text(value).FontSize(14);
+        table.Cell().Border(0.5f).BorderColor(Colors.Black).Padding(3)
+            .Text(label).FontSize(11).Bold();
+        table.Cell().Border(0.5f).BorderColor(Colors.Black).Padding(3)
+            .Text(value).FontSize(11);
     }
 
-    private void ComposeFooterSection(IContainer container, DocumentGenerationData data)
+    private static void ComposeSignatureSection(IContainer container, DocumentGenerationData data)
     {
         container.Column(col =>
         {
@@ -203,42 +216,33 @@ public class PdfGenerationService : IDocumentGenerationService
                 row.RelativeItem().Column(sigCol =>
                 {
                     sigCol.Item().Text("الاسم / Name")
-                        .FontSize(10).Bold();
-                    sigCol.Item().PaddingTop(18).Width(180).LineHorizontal(0.5f).LineColor(Colors.Grey.Darken1);
+                        .FontSize(9).Bold();
+                    sigCol.Item().PaddingTop(10).Width(150).LineHorizontal(0.5f).LineColor(Colors.Grey.Darken1);
 
-                    sigCol.Item().PaddingTop(12).Text("التوقيع / Signature")
-                        .FontSize(10).Bold();
-                    sigCol.Item().PaddingTop(18).Width(180).LineHorizontal(0.5f).LineColor(Colors.Grey.Darken1);
+                    sigCol.Item().PaddingTop(6).Text("التوقيع / Signature")
+                        .FontSize(9).Bold();
+                    sigCol.Item().PaddingTop(10).Width(150).LineHorizontal(0.5f).LineColor(Colors.Grey.Darken1);
                 });
 
-                row.AutoItem().AlignLeft().Width(130).Column(stampCol =>
+                row.AutoItem().AlignLeft().Width(100).Column(stampCol =>
                 {
                     stampCol.Item().Text("الختم / Stamp")
-                        .FontSize(10).Bold();
-                    stampCol.Item().PaddingTop(4)
-                        .Height(55).Width(120)
+                        .FontSize(9).Bold();
+                    stampCol.Item().PaddingTop(3)
+                        .Height(40).Width(95)
                         .Border(0.5f).BorderColor(Colors.Grey.Lighten1);
                 });
             });
 
-            // QR & issued-by info
-            col.Item().PaddingTop(10).LineHorizontal(0.5f).LineColor(Colors.Grey.Lighten1);
+            // Issued-by info
+            col.Item().PaddingTop(4).LineHorizontal(0.5f).LineColor(Colors.Grey.Lighten1);
 
-            col.Item().PaddingTop(6).Row(row =>
-            {
-                row.RelativeItem().Column(c =>
-                {
-                    c.Item().Text($"صادرة بواسطة: {data.IssuedByName}")
-                        .FontSize(9).FontColor(Colors.Grey.Darken2);
-                    c.Item().Text($"تاريخ الإصدار: {data.IssuedAt:yyyy-MM-dd HH:mm}")
-                        .FontSize(9).FontColor(Colors.Grey.Darken2);
-                    c.Item().PaddingTop(2).Text(data.QrCodeUrl)
-                        .FontSize(7).FontColor(Colors.Grey.Medium);
-                });
-
-                row.AutoItem().AlignLeft().Width(65).Height(65)
-                    .Image(data.QrCodeImageBytes);
-            });
+            col.Item().PaddingTop(2).Text($"صادرة بواسطة: {data.IssuedByName}")
+                .FontSize(7).FontColor(Colors.Grey.Darken2);
+            col.Item().Text($"تاريخ الإصدار: {data.IssuedAt:yyyy-MM-dd HH:mm}")
+                .FontSize(7).FontColor(Colors.Grey.Darken2);
+            col.Item().PaddingTop(1).Text(data.QrCodeUrl)
+                .FontSize(6).FontColor(Colors.Grey.Medium);
         });
     }
 }

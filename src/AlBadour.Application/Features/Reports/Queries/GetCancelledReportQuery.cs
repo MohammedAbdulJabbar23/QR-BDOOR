@@ -26,10 +26,9 @@ public class GetCancelledReportQueryHandler : IRequestHandler<GetCancelledReport
             && _currentUser.Department != Department.Statistics)
             return Result.Failure<List<CancelledDocumentDto>>("Only supervisors and admins can view reports.", "FORBIDDEN");
 
-        var (allDocs, _) = await _documentRepo.GetAllAsync(DocumentStatus.Revoked, null, 1, 10000, cancellationToken);
-        var filtered = allDocs.Where(d => d.RevokedAt.HasValue && d.RevokedAt.Value >= request.From && d.RevokedAt.Value <= request.To).ToList();
+        var (allDocs, _) = await _documentRepo.GetAllAsync(DocumentStatus.Revoked, null, request.From, request.To, 1, 500, cancellationToken);
 
-        var dtos = filtered.Select(d => new CancelledDocumentDto(
+        var dtos = allDocs.Select(d => new CancelledDocumentDto(
             d.DocumentNumber,
             d.Request.PatientName,
             d.RevocationReason,

@@ -29,6 +29,7 @@ export interface IssuedDocument {
   issuedAt: string;
   archivedAt: string | null;
   revokedAt: string | null;
+  hasAccountStatement: boolean;
 }
 
 export interface VerificationResult {
@@ -42,4 +43,5 @@ export interface VerificationResult {
   replacementDocumentId: string | null;
   replacementDocumentNumber: string | null;
   hasPdf: boolean;
+  hasAccountStatement: boolean;
 }

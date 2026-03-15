@@ -4,5 +4,6 @@ public enum DocumentStatus
 {
     Draft,
     Archived,
-    Revoked
+    Revoked,
+    AwaitingAccountStatement
 }

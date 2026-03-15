@@ -4,5 +4,7 @@ public enum Department
 {
     Inquiry,
     Statistics,
-    Management
+    Management,
+    Accounts,
+    HR
 }

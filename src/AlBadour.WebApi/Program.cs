@@ -3,10 +3,14 @@ using System.Text;
 using AlBadour.Application;
 using AlBadour.Infrastructure;
 using AlBadour.Infrastructure.Hubs;
+using AlBadour.Infrastructure.Persistence;
 using AlBadour.WebApi.Middleware;
 using AspNetCoreRateLimit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Minio;
+using Minio.DataModel.Args;
 using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -99,11 +103,13 @@ builder.Services.AddSwaggerGen(c =>
 });
 
 // CORS
+var allowedOrigins = builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>()
+    ?? ["http://localhost:5173", "http://localhost:3000"];
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
     {
-        policy.WithOrigins("http://localhost:5173", "http://localhost:3000")
+        policy.WithOrigins(allowedOrigins)
               .AllowAnyHeader()
               .AllowAnyMethod()
               .AllowCredentials();
@@ -111,6 +117,20 @@ builder.Services.AddCors(options =>
 });
 
 var app = builder.Build();
+
+await using (var scope = app.Services.CreateAsyncScope())
+{
+    var dbContext = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    await dbContext.Database.MigrateAsync();
+
+    var minioClient = scope.ServiceProvider.GetRequiredService<IMinioClient>();
+    var bucketName = builder.Configuration["Minio:BucketName"] ?? "albadour";
+    var bucketExists = await minioClient.BucketExistsAsync(new BucketExistsArgs().WithBucket(bucketName));
+    if (!bucketExists)
+    {
+        await minioClient.MakeBucketAsync(new MakeBucketArgs().WithBucket(bucketName));
+    }
+}
 
 // Middleware pipeline
 app.UseMiddleware<RequestLoggingMiddleware>();

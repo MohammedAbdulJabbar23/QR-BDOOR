@@ -37,6 +37,10 @@
     "uploadPdf": "Upload PDF", "pdfUploaded": "PDF uploaded successfully",
     "pdfGenerated": "PDF generated successfully", "fileTooLarge": "File size exceeds 10 MB limit",
     "noDocuments": "No documents found",
+    "transferToAccounts": "Transfer to Accounts",
+    "uploadAccountStatement": "Upload Account Statement",
+    "accountStatementUploaded": "Account statement uploaded successfully",
+    "viewAccountStatement": "View Account Statement",
     "patientGender": "Gender", "patientProfession": "Profession", "patientAge": "Age",
     "admissionDate": "Admission Date", "dischargeDate": "Discharge Date", "leaveGranted": "Leave Granted"
   },
@@ -151,8 +155,9 @@
   },
   "status": {
     "pending": "Pending", "inProgress": "In Progress", "rejected": "Rejected",
-    "completed": "Completed", "draft": "Draft", "archived": "Archived", "revoked": "Revoked"
+    "completed": "Completed", "draft": "Draft", "archived": "Archived", "revoked": "Revoked",
+    "awaitingAccountStatement": "Awaiting Account Statement"
   },
   "roles": { "employee": "Employee", "supervisor": "Supervisor", "admin": "Admin" },
-  "departments": { "inquiry": "Inquiry", "statistics": "Statistics", "management": "Management" }
+  "departments": { "inquiry": "Inquiry", "statistics": "Statistics", "management": "Management", "accounts": "Accounts", "hr": "HR" }
 }

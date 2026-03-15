@@ -25,15 +25,17 @@ public class VerifyDocumentQueryHandler : IRequestHandler<VerifyDocumentQuery, R
         if (doc is null || doc.IsDeleted || doc.Status == DocumentStatus.Draft)
         {
             return Result.Success(new VerificationResultDto(
-                "invalid", null, null, null, null, null, null, null, null, false));
+                "invalid", null, null, null, null, null, null, null, null, false, false));
         }
 
         // Check QR expiry if set
         if (doc.QrExpiresAt.HasValue && doc.QrExpiresAt.Value < DateTime.UtcNow)
         {
             return Result.Success(new VerificationResultDto(
-                "expired", doc.DocumentNumber, null, null, doc.IssuedAt, null, null, null, null, false));
+                "expired", doc.DocumentNumber, null, null, doc.IssuedAt, null, null, null, null, false, false));
         }
+
+        var hasAccountStatement = !string.IsNullOrEmpty(doc.AccountStatementPath);
 
         if (doc.Status == DocumentStatus.Archived)
         {
@@ -44,7 +46,8 @@ public class VerifyDocumentQueryHandler : IRequestHandler<VerifyDocumentQuery, R
                 doc.Request.RecipientEntity,
                 doc.IssuedAt,
                 null, null, null, null,
-                !string.IsNullOrEmpty(doc.PdfFilePath)
+                !string.IsNullOrEmpty(doc.PdfFilePath),
+                hasAccountStatement
             ));
         }
 
@@ -60,11 +63,12 @@ public class VerifyDocumentQueryHandler : IRequestHandler<VerifyDocumentQuery, R
                 doc.RevocationReason,
                 doc.ReplacementDocumentId,
                 doc.ReplacementDocument?.DocumentNumber,
+                false,
                 false
             ));
         }
 
         return Result.Success(new VerificationResultDto(
-            "invalid", null, null, null, null, null, null, null, null, false));
+            "invalid", null, null, null, null, null, null, null, null, false, false));
     }
 }

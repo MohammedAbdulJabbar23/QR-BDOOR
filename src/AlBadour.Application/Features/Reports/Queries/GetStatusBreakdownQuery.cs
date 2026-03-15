@@ -26,12 +26,10 @@ public class GetStatusBreakdownQueryHandler : IRequestHandler<GetStatusBreakdown
             && _currentUser.Department != Department.Statistics)
             return Result.Failure<List<StatusBreakdownDto>>("Only supervisors and admins can view reports.", "FORBIDDEN");
 
-        var (allRequests, _) = await _requestRepo.GetAllAsync(null, null, null, 1, 10000, cancellationToken);
-        var filtered = allRequests.Where(r => r.CreatedAt >= request.From && r.CreatedAt <= request.To).ToList();
+        var statusCounts = await _requestRepo.GetStatusCountsAsync(request.From, request.To, cancellationToken);
 
-        var breakdown = filtered
-            .GroupBy(r => r.Status.ToString())
-            .Select(g => new StatusBreakdownDto(g.Key, g.Count()))
+        var breakdown = statusCounts
+            .Select(kv => new StatusBreakdownDto(kv.Key, kv.Value))
             .ToList();
 
         return Result.Success(breakdown);

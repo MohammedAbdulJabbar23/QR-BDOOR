@@ -30,5 +30,6 @@ public record DocumentDto(
     string? RevokedByName,
     DateTime IssuedAt,
     DateTime? ArchivedAt,
-    DateTime? RevokedAt
+    DateTime? RevokedAt,
+    bool HasAccountStatement
 );

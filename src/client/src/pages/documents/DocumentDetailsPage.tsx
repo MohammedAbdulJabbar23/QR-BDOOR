@@ -9,7 +9,7 @@ import {
 import { documentsApi } from '@/api/documents.api';
 import { useAuthStore } from '@/stores/authStore';
 import { useUiStore } from '@/stores/uiStore';
-import { canUploadPdf, canRevokeDocument, canDeleteDocument } from '@/utils/permissions';
+import { canUploadPdf, canRevokeDocument, canDeleteDocument, canTransferToAccounts, canUploadAccountStatement } from '@/utils/permissions';
 import { formatDateTime } from '@/utils/formatters';
 import { cn } from '@/utils/cn';
 import PageHeader from '@/components/common/PageHeader';
@@ -32,13 +32,24 @@ export default function DocumentDetailsPage() {
   const [revokeReason, setRevokeReason] = useState('');
   const [generateError, setGenerateError] = useState('');
   const [uploadError, setUploadError] = useState('');
+  const [pdfError, setPdfError] = useState('');
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const accountStatementInputRef = useRef<HTMLInputElement>(null);
+  const [accountStatementError, setAccountStatementError] = useState('');
+  const blobUrlsRef = useRef<string[]>([]);
 
   const { data: document, isLoading } = useQuery({
     queryKey: ['document', id],
     queryFn: () => documentsApi.getById(id!),
     enabled: !!id,
   });
+
+  // Cleanup blob URLs on unmount
+  useEffect(() => {
+    return () => {
+      blobUrlsRef.current.forEach(url => URL.revokeObjectURL(url));
+    };
+  }, []);
 
   // Fetch QR code image
   useEffect(() => {
@@ -95,6 +106,37 @@ export default function DocumentDetailsPage() {
     e.target.value = '';
   };
 
+  const transferToAccountsMutation = useMutation({
+    mutationFn: () => documentsApi.transferToAccounts(id!),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['document', id] });
+    },
+  });
+
+  const uploadAccountStatementMutation = useMutation({
+    mutationFn: (file: File) => documentsApi.uploadAccountStatement(id!, file),
+    onSuccess: () => {
+      setAccountStatementError('');
+      queryClient.invalidateQueries({ queryKey: ['document', id] });
+    },
+    onError: () => {
+      setAccountStatementError(t('common.error'));
+    },
+  });
+
+  const handleAccountStatementSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      if (file.size > 10 * 1024 * 1024) {
+        setAccountStatementError(t('documents.fileTooLarge'));
+        e.target.value = '';
+        return;
+      }
+      uploadAccountStatementMutation.mutate(file);
+    }
+    e.target.value = '';
+  };
+
   const revokeMutation = useMutation({
     mutationFn: (reason: string) => documentsApi.revoke(id!, reason),
     onSuccess: () => {
@@ -125,20 +167,27 @@ export default function DocumentDetailsPage() {
       window.print();
       return;
     }
-    const res = await documentsApi.getPdf(document.id);
-    const blob = new Blob([res.data], { type: 'application/pdf' });
-    const url = URL.createObjectURL(blob);
-    const iframe = window.document.createElement('iframe');
-    iframe.style.display = 'none';
-    iframe.src = url;
-    window.document.body.appendChild(iframe);
-    iframe.onload = () => {
-      iframe.contentWindow?.print();
-      setTimeout(() => {
-        window.document.body.removeChild(iframe);
-        URL.revokeObjectURL(url);
-      }, 60000);
-    };
+    try {
+      setPdfError('');
+      const res = await documentsApi.getPdf(document.id);
+      const blob = new Blob([res.data], { type: 'application/pdf' });
+      const url = URL.createObjectURL(blob);
+      blobUrlsRef.current.push(url);
+      const iframe = window.document.createElement('iframe');
+      iframe.style.display = 'none';
+      iframe.src = url;
+      window.document.body.appendChild(iframe);
+      iframe.onload = () => {
+        iframe.contentWindow?.print();
+        setTimeout(() => {
+          if (iframe.parentNode) iframe.parentNode.removeChild(iframe);
+          URL.revokeObjectURL(url);
+          blobUrlsRef.current = blobUrlsRef.current.filter(u => u !== url);
+        }, 5000);
+      };
+    } catch {
+      setPdfError(t('common.error'));
+    }
   };
 
   const BackIcon = isRtl ? ArrowRight : ArrowLeft;
@@ -165,9 +214,15 @@ export default function DocumentDetailsPage() {
 
   const isRevoked = document.status === 'Revoked';
   const isDraft = document.status === 'Draft';
-  const isStatistics = user && canUploadPdf(user.department);
-  const showGenerate = isStatistics && isDraft && !isRevoked;
-  const showUpload = isStatistics && isDraft && !isRevoked && document.hasPdf;
+  const isAwaitingAccountStatement = document.status === 'AwaitingAccountStatement';
+  const isAdminLetter = document.documentTypeNameEn?.toLowerCase() === 'administrative letter';
+  const isResponsibleDept = user && (isAdminLetter ? user.department === 'HR' : user.department === 'Statistics');
+  const isAccounts = user && canUploadAccountStatement(user.department);
+  const showGenerate = isResponsibleDept && isDraft && !isRevoked;
+  const showUpload = isResponsibleDept && isDraft && !isRevoked && document.hasPdf;
+  const isMedicalReportAccountStatement = document.documentTypeNameEn?.toLowerCase() === 'medical report + account statement';
+  const showTransferToAccounts = isResponsibleDept && isDraft && !isRevoked && document.hasPdf && isMedicalReportAccountStatement;
+  const showUploadAccountStatement = isAccounts && isAwaitingAccountStatement;
   const showRevoke = user && canRevokeDocument(user.role) && !isRevoked;
   const showDelete = user && canDeleteDocument(user.role);
 
@@ -409,15 +464,100 @@ export default function DocumentDetailsPage() {
                 </>
               )}
 
+              {/* Transfer to Accounts */}
+              {showTransferToAccounts && (
+                <>
+                  <button
+                    onClick={() => transferToAccountsMutation.mutate()}
+                    disabled={transferToAccountsMutation.isPending}
+                    className={cn(
+                      'flex items-center gap-2 px-4 py-2.5 text-sm font-medium rounded-lg transition-colors w-full',
+                      'bg-purple-600 text-white hover:bg-purple-700',
+                      'disabled:opacity-50 disabled:cursor-not-allowed'
+                    )}
+                  >
+                    <FileText size={16} />
+                    {transferToAccountsMutation.isPending
+                      ? t('common.loading')
+                      : t('documents.transferToAccounts')}
+                  </button>
+                  {transferToAccountsMutation.isSuccess && (
+                    <p className="text-xs text-green-600">
+                      {language === 'ar' ? 'تم التحويل بنجاح' : 'Transferred successfully'}
+                    </p>
+                  )}
+                </>
+              )}
+
+              {/* Upload Account Statement (Accounts department) */}
+              {showUploadAccountStatement && (
+                <>
+                  <input
+                    ref={accountStatementInputRef}
+                    type="file"
+                    accept=".pdf"
+                    className="hidden"
+                    onChange={handleAccountStatementSelect}
+                  />
+                  <button
+                    onClick={() => accountStatementInputRef.current?.click()}
+                    disabled={uploadAccountStatementMutation.isPending}
+                    className={cn(
+                      'flex items-center gap-2 px-4 py-2.5 text-sm font-medium rounded-lg transition-colors w-full',
+                      'bg-purple-600 text-white hover:bg-purple-700',
+                      'disabled:opacity-50 disabled:cursor-not-allowed'
+                    )}
+                  >
+                    <Upload size={16} />
+                    {uploadAccountStatementMutation.isPending
+                      ? t('common.loading')
+                      : t('documents.uploadAccountStatement')}
+                  </button>
+                  {accountStatementError && (
+                    <p className="text-xs text-red-600">{accountStatementError}</p>
+                  )}
+                  {uploadAccountStatementMutation.isSuccess && (
+                    <p className="text-xs text-green-600">{t('documents.accountStatementUploaded')}</p>
+                  )}
+                </>
+              )}
+
+              {/* View/Download Account Statement */}
+              {document.hasAccountStatement && (
+                <button
+                  onClick={async () => {
+                    try {
+                      setPdfError('');
+                      const res = await documentsApi.getAccountStatement(document.id);
+                      const blob = new Blob([res.data], { type: 'application/pdf' });
+                      const url = URL.createObjectURL(blob);
+                      blobUrlsRef.current.push(url);
+                      window.open(url, '_blank');
+                    } catch {
+                      setPdfError(t('common.error'));
+                    }
+                  }}
+                  className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium rounded-lg transition-colors w-full bg-purple-600 text-white hover:bg-purple-700"
+                >
+                  <FileDown size={16} />
+                  {t('documents.viewAccountStatement')}
+                </button>
+              )}
+
               {/* View/Download PDF */}
               {document.hasPdf && (
                 <button
                   onClick={async () => {
-                    const res = await documentsApi.getPdf(document.id);
-                    const blob = new Blob([res.data], { type: 'application/pdf' });
-                    const url = URL.createObjectURL(blob);
-                    window.open(url, '_blank');
-                    setTimeout(() => URL.revokeObjectURL(url), 60000);
+                    try {
+                      setPdfError('');
+                      const res = await documentsApi.getPdf(document.id);
+                      const blob = new Blob([res.data], { type: 'application/pdf' });
+                      const url = URL.createObjectURL(blob);
+                      blobUrlsRef.current.push(url);
+                      window.open(url, '_blank');
+                    } catch {
+                      setPdfError(t('common.error'));
+                    }
                   }}
                   className="flex items-center gap-2 px-4 py-2.5 text-sm font-medium rounded-lg transition-colors w-full bg-blue-600 text-white hover:bg-blue-700"
                 >
@@ -434,6 +574,10 @@ export default function DocumentDetailsPage() {
                 <Printer size={16} />
                 {t('documents.print')}
               </button>
+
+              {pdfError && (
+                <p className="text-xs text-red-600">{pdfError}</p>
+              )}
 
               {/* Revoke */}
               {showRevoke && (

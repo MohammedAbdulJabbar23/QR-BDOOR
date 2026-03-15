@@ -26,22 +26,26 @@ export default function DashboardPage() {
   const { data: requestsData, isLoading: requestsLoading } = useQuery({
     queryKey: ['requests', 'dashboard'],
     queryFn: () => requestsApi.getAll({ page: 1, pageSize: 10 }),
+    refetchInterval: 180000,
   });
 
   const { data: pendingRequests, isLoading: pendingLoading } = useQuery({
     queryKey: ['requests', 'pending'],
     queryFn: () => requestsApi.getPending(),
     enabled: canAcceptRejectRequest(user?.department || ''),
+    refetchInterval: 180000,
   });
 
   const { data: documentsData, isLoading: documentsLoading } = useQuery({
     queryKey: ['documents', 'dashboard'],
     queryFn: () => documentsApi.getAll({ page: 1, pageSize: 10 }),
+    refetchInterval: 180000,
   });
 
   const { data: archivedDocs } = useQuery({
     queryKey: ['documents', 'archived'],
     queryFn: () => documentsApi.getAll({ status: 'Archived', page: 1, pageSize: 1 }),
+    refetchInterval: 180000,
   });
 
   const isLoading = requestsLoading || documentsLoading;

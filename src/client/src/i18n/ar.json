@@ -38,6 +38,10 @@
     "uploadPdf": "رفع PDF", "pdfUploaded": "تم رفع ملف PDF بنجاح",
     "pdfGenerated": "تم إنشاء ملف PDF بنجاح", "fileTooLarge": "حجم الملف يتجاوز 10 ميغابايت",
     "noDocuments": "لا توجد وثائق",
+    "transferToAccounts": "تحويل إلى قسم الحسابات",
+    "uploadAccountStatement": "رفع كشف الحساب",
+    "accountStatementUploaded": "تم رفع كشف الحساب بنجاح",
+    "viewAccountStatement": "عرض كشف الحساب",
     "patientGender": "الجنس", "patientProfession": "المهنة", "patientAge": "العمر",
     "admissionDate": "تاريخ الدخول", "dischargeDate": "تاريخ الخروج", "leaveGranted": "الاجازة الممنوحة"
   },
@@ -152,8 +156,9 @@
   },
   "status": {
     "pending": "قيد الانتظار", "inProgress": "قيد المعالجة", "rejected": "مرفوض",
-    "completed": "مكتمل", "draft": "مسودة", "archived": "مؤرشف", "revoked": "ملغى"
+    "completed": "مكتمل", "draft": "مسودة", "archived": "مؤرشف", "revoked": "ملغى",
+    "awaitingAccountStatement": "بانتظار كشف الحساب"
   },
   "roles": { "employee": "موظف", "supervisor": "مشرف", "admin": "مدير" },
-  "departments": { "inquiry": "الاستعلامات", "statistics": "الإحصاء", "management": "الإدارة" }
+  "departments": { "inquiry": "الاستعلامات", "statistics": "الإحصاء", "management": "الإدارة", "accounts": "الحسابات", "hr": "الموارد البشرية" }
 }

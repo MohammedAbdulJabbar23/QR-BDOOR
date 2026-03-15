@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
-import { Search, Plus, Eye } from 'lucide-react';
+import { Search, Plus, Eye, Calendar, X } from 'lucide-react';
 import { requestsApi } from '@/api/requests.api';
 import { useAuthStore } from '@/stores/authStore';
 import { useUiStore } from '@/stores/uiStore';
@@ -34,6 +34,8 @@ export default function RequestsListPage() {
   const [search, setSearch] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
+  const [fromDate, setFromDate] = useState('');
+  const [toDate, setToDate] = useState('');
   const [page, setPage] = useState(1);
   const pageSize = 10;
 
@@ -46,17 +48,19 @@ export default function RequestsListPage() {
     return () => clearTimeout(timer);
   }, [search]);
 
-  // Reset page when status filter changes
+  // Reset page when filters change
   useEffect(() => {
     setPage(1);
-  }, [statusFilter]);
+  }, [statusFilter, fromDate, toDate]);
 
   const { data, isLoading } = useQuery({
-    queryKey: ['requests', { status: statusFilter, search: debouncedSearch, page, pageSize }],
+    queryKey: ['requests', { status: statusFilter, search: debouncedSearch, fromDate, toDate, page, pageSize }],
     queryFn: () =>
       requestsApi.getAll({
         status: statusFilter || undefined,
         search: debouncedSearch || undefined,
+        fromDate: fromDate || undefined,
+        toDate: toDate || undefined,
         page,
         pageSize,
       }),
@@ -82,35 +86,75 @@ export default function RequestsListPage() {
       />
 
       {/* Filters */}
-      <div className="flex flex-col sm:flex-row gap-3 mb-6">
-        <div className="relative flex-1">
-          <Search
-            size={18}
-            className="absolute top-1/2 -translate-y-1/2 start-3 text-neutral-400 pointer-events-none"
-          />
-          <input
-            type="text"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder={t('common.search')}
-            className="w-full ps-10 pe-4 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
-          />
+      <div className="space-y-3 mb-6">
+        <div className="flex flex-col sm:flex-row gap-3">
+          <div className="relative flex-1">
+            <Search
+              size={18}
+              className="absolute top-1/2 -translate-y-1/2 start-3 text-neutral-400 pointer-events-none"
+            />
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder={t('common.search')}
+              className="w-full ps-10 pe-4 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+            />
+          </div>
+
+          <div className="flex gap-2 flex-wrap">
+            {STATUS_OPTIONS.map((status) => (
+              <button
+                key={status}
+                onClick={() => setStatusFilter(status)}
+                className={
+                  statusFilter === status
+                    ? 'px-3 py-2 text-sm rounded-lg font-medium bg-primary text-white'
+                    : 'px-3 py-2 text-sm rounded-lg font-medium border border-neutral-300 text-neutral-600 hover:bg-neutral-50'
+                }
+              >
+                {t(STATUS_LABEL_KEYS[status])}
+              </button>
+            ))}
+          </div>
         </div>
 
-        <div className="flex gap-2 flex-wrap">
-          {STATUS_OPTIONS.map((status) => (
-            <button
-              key={status}
-              onClick={() => setStatusFilter(status)}
-              className={
-                statusFilter === status
-                  ? 'px-3 py-2 text-sm rounded-lg font-medium bg-primary text-white'
-                  : 'px-3 py-2 text-sm rounded-lg font-medium border border-neutral-300 text-neutral-600 hover:bg-neutral-50'
-              }
-            >
-              {t(STATUS_LABEL_KEYS[status])}
-            </button>
-          ))}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
+          <div className="flex items-center gap-1.5 text-sm text-neutral-500">
+            <Calendar size={16} />
+            <span>{t('reports.dateRange')}:</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="relative">
+              <input
+                type="date"
+                value={fromDate}
+                onChange={(e) => setFromDate(e.target.value)}
+                placeholder={t('reports.from')}
+                className="ps-3 pe-3 py-1.5 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+              />
+            </div>
+            <span className="text-neutral-400 text-sm">&ndash;</span>
+            <div className="relative">
+              <input
+                type="date"
+                value={toDate}
+                min={fromDate || undefined}
+                onChange={(e) => setToDate(e.target.value)}
+                placeholder={t('reports.to')}
+                className="ps-3 pe-3 py-1.5 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+              />
+            </div>
+            {(fromDate || toDate) && (
+              <button
+                onClick={() => { setFromDate(''); setToDate(''); }}
+                className="p-1.5 text-neutral-400 hover:text-neutral-600 hover:bg-neutral-100 rounded-md transition-colors"
+                title={t('common.reset')}
+              >
+                <X size={16} />
+              </button>
+            )}
+          </div>
         </div>
       </div>
 

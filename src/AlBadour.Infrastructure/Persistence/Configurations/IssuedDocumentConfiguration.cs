@@ -21,7 +21,7 @@ public class IssuedDocumentConfiguration : IEntityTypeConfiguration<IssuedDocume
         builder.Property(d => d.QrCodeImagePath).HasColumnName("qr_code_image_path").HasMaxLength(500);
         builder.Property(d => d.PdfFilePath).HasColumnName("pdf_file_path").HasMaxLength(500);
         builder.Property(d => d.DocumentBody).HasColumnName("document_body");
-        builder.Property(d => d.Status).HasColumnName("status").HasMaxLength(20).HasDefaultValue(DocumentStatus.Draft)
+        builder.Property(d => d.Status).HasColumnName("status").HasMaxLength(30).HasDefaultValue(DocumentStatus.Draft)
             .HasConversion(v => v.ToString().ToLower(), v => Enum.Parse<DocumentStatus>(v, true));
         builder.Property(d => d.RevocationReason).HasColumnName("revocation_reason");
         builder.Property(d => d.ReplacementDocumentId).HasColumnName("replacement_document_id");
@@ -32,6 +32,7 @@ public class IssuedDocumentConfiguration : IEntityTypeConfiguration<IssuedDocume
         builder.Property(d => d.AdmissionDate).HasColumnName("admission_date").HasMaxLength(50);
         builder.Property(d => d.DischargeDate).HasColumnName("discharge_date").HasMaxLength(50);
         builder.Property(d => d.LeaveGranted).HasColumnName("leave_granted").HasMaxLength(500);
+        builder.Property(d => d.AccountStatementPath).HasColumnName("account_statement_path").HasMaxLength(500);
         builder.Property(d => d.IssuedById).HasColumnName("issued_by");
         builder.Property(d => d.RevokedById).HasColumnName("revoked_by");
         builder.Property(d => d.ApprovedById).HasColumnName("approved_by");

@@ -10,5 +10,6 @@ public record VerificationResultDto(
     string? RevocationReason,
     Guid? ReplacementDocumentId,
     string? ReplacementDocumentNumber,
-    bool HasPdf
+    bool HasPdf,
+    bool HasAccountStatement
 );

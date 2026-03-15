@@ -9,8 +9,10 @@ public interface IDocumentRequestRepository
     Task<DocumentRequest?> GetByIdWithDetailsAsync(Guid id, CancellationToken ct = default);
     Task<(List<DocumentRequest> Items, int TotalCount)> GetAllAsync(
         RequestStatus? status, Guid? createdById, string? search,
+        DateTime? fromDate, DateTime? toDate,
         int page, int pageSize, CancellationToken ct = default);
     Task<List<DocumentRequest>> GetPendingAsync(CancellationToken ct = default);
+    Task<Dictionary<string, int>> GetStatusCountsAsync(DateTime? fromDate, DateTime? toDate, CancellationToken ct = default);
     Task AddAsync(DocumentRequest request, CancellationToken ct = default);
     void Update(DocumentRequest request);
 }

@@ -20,6 +20,7 @@ public class IssuedDocument : BaseEntity
     public string? AdmissionDate { get; set; }
     public string? DischargeDate { get; set; }
     public string? LeaveGranted { get; set; }
+    public string? AccountStatementPath { get; set; }
     public Guid IssuedById { get; set; }
     public Guid? RevokedById { get; set; }
     public Guid? ApprovedById { get; set; }

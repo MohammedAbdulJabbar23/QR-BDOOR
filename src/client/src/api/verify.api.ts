@@ -9,4 +9,6 @@ export const verifyApi = {
     axios.get<VerificationResult>(`${baseUrl}/verify/${documentId}`).then(r => r.data),
 
   getPdfUrl: (documentId: string) => `${baseUrl}/verify/${documentId}/pdf`,
+
+  getAccountStatementUrl: (documentId: string) => `${baseUrl}/verify/${documentId}/account-statement`,
 };

@@ -6,7 +6,7 @@ export const requestsApi = {
   create: (data: CreateRequestDto) =>
     apiClient.post<{ id: string }>('/requests', data).then(r => r.data),
 
-  getAll: (params: { status?: string; search?: string; page?: number; pageSize?: number }) =>
+  getAll: (params: { status?: string; search?: string; fromDate?: string; toDate?: string; page?: number; pageSize?: number }) =>
     apiClient.get<PaginatedList<DocumentRequest>>('/requests', { params }).then(r => r.data),
 
   getById: (id: string) =>

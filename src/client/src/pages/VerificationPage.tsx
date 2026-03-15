@@ -30,7 +30,8 @@ const labels = {
     revocationReason: 'سبب الإلغاء',
     replacementAvailable: 'تم إصدار وثيقة بديلة محدثة.',
     viewReplacement: 'عرض الوثيقة البديلة',
-    downloadPdf: 'عرض PDF',
+    downloadPdf: 'تحميل التقرير',
+    downloadAccountStatement: 'تحميل كشف الحساب',
     loading: 'جاري التحقق...',
     toggleLang: 'EN',
     footer: 'مستشفى البدور - نظام إدارة الوثائق',
@@ -53,7 +54,8 @@ const labels = {
     revocationReason: 'Revocation Reason',
     replacementAvailable: 'An updated document has been issued.',
     viewReplacement: 'View Replacement Document',
-    downloadPdf: 'Download PDF',
+    downloadPdf: 'Download Report',
+    downloadAccountStatement: 'Download Account Statement',
     loading: 'Verifying...',
     toggleLang: 'عربي',
     footer: 'Al-Badour Hospital - Document Management System',
@@ -252,9 +254,9 @@ export default function VerificationPage() {
                     </div>
                   )}
 
-                  {/* PDF download */}
+                  {/* PDF downloads */}
                   {data.hasPdf && status === 'verified' && documentId && (
-                    <div className="mt-6 pt-4">
+                    <div className="mt-6 pt-4 space-y-3">
                       <a
                         href={verifyApi.getPdfUrl(documentId)}
                         target="_blank"

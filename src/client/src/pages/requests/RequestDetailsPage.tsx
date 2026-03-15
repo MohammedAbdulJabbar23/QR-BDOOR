@@ -99,9 +99,14 @@ export default function RequestDetailsPage() {
   const userId = user?.id || '';
 
   const showEdit = canEditRequest(department, request.status, request.createdById, userId);
-  const showDelete = canEditRequest(department, request.status, request.createdById, userId);
-  const showAcceptReject = canAcceptRejectRequest(department) && request.status === 'Pending';
-  const showPrepareDoc = canPrepareDocument(department) && request.status === 'InProgress';
+  const role = user?.role || '';
+  const isAdminOrSupervisor = role === 'Admin' || role === 'Supervisor';
+  const isClosed = request.status === 'Completed' || request.status === 'Rejected';
+  const showDelete = isAdminOrSupervisor && !isClosed;
+  const isAdminLetter = request.documentTypeNameEn?.toLowerCase() === 'administrative letter';
+  const isResponsibleDept = isAdminLetter ? department === 'HR' : department === 'Statistics';
+  const showAcceptReject = isResponsibleDept && request.status === 'Pending';
+  const showPrepareDoc = isResponsibleDept && request.status === 'InProgress';
 
   const BackIcon = isRtl ? ArrowRight : ArrowLeft;
 

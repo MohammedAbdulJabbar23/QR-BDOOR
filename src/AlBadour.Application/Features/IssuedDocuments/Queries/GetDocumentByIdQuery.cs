@@ -57,7 +57,8 @@ public class GetDocumentByIdQueryHandler : IRequestHandler<GetDocumentByIdQuery,
             doc.RevokedBy?.FullName,
             doc.IssuedAt,
             doc.ArchivedAt,
-            doc.RevokedAt
+            doc.RevokedAt,
+            !string.IsNullOrEmpty(doc.AccountStatementPath)
         );
     }
 }

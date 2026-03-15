@@ -15,7 +15,7 @@ export const documentsApi = {
   }) =>
     apiClient.post<IssuedDocument>('/documents', data).then(r => r.data),
 
-  getAll: (params: { status?: string; search?: string; page?: number; pageSize?: number }) =>
+  getAll: (params: { status?: string; search?: string; fromDate?: string; toDate?: string; page?: number; pageSize?: number }) =>
     apiClient.get<PaginatedList<IssuedDocument>>('/documents', { params }).then(r => r.data),
 
   getById: (id: string) =>
@@ -46,4 +46,18 @@ export const documentsApi = {
       headers: { 'Content-Type': 'multipart/form-data' },
     }).then(r => r.data);
   },
+
+  transferToAccounts: (id: string) =>
+    apiClient.post(`/documents/${id}/transfer-to-accounts`).then(r => r.data),
+
+  uploadAccountStatement: (id: string, file: File) => {
+    const fd = new FormData();
+    fd.append('file', file);
+    return apiClient.post(`/documents/${id}/upload-account-statement`, fd, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    }).then(r => r.data);
+  },
+
+  getAccountStatement: (id: string) =>
+    apiClient.get(`/documents/${id}/account-statement`, { responseType: 'blob' }).then(r => r),
 };

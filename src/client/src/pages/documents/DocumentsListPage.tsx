@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
-import { Search, Eye } from 'lucide-react';
+import { Search, Eye, Calendar, X } from 'lucide-react';
 import { documentsApi } from '@/api/documents.api';
 import { useUiStore } from '@/stores/uiStore';
 import { formatDate } from '@/utils/formatters';
@@ -19,6 +19,7 @@ const STATUS_LABEL_KEYS: Record<string, string> = {
   Draft: 'status.draft',
   Archived: 'status.archived',
   Revoked: 'status.revoked',
+  AwaitingAccountStatement: 'status.awaitingAccountStatement',
 };
 
 const STATUS_OPTIONS = ['', ...DOCUMENT_STATUSES] as const;
@@ -32,6 +33,8 @@ export default function DocumentsListPage() {
   const [search, setSearch] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
+  const [fromDate, setFromDate] = useState('');
+  const [toDate, setToDate] = useState('');
   const [page, setPage] = useState(1);
 
   // Debounce search input
@@ -43,17 +46,19 @@ export default function DocumentsListPage() {
     return () => clearTimeout(timer);
   }, [search]);
 
-  // Reset page when status filter changes
+  // Reset page when filters change
   useEffect(() => {
     setPage(1);
-  }, [statusFilter]);
+  }, [statusFilter, fromDate, toDate]);
 
   const { data, isLoading } = useQuery({
-    queryKey: ['documents', { search: debouncedSearch, status: statusFilter, page, pageSize: PAGE_SIZE }],
+    queryKey: ['documents', { search: debouncedSearch, status: statusFilter, fromDate, toDate, page, pageSize: PAGE_SIZE }],
     queryFn: () =>
       documentsApi.getAll({
         search: debouncedSearch || undefined,
         status: statusFilter || undefined,
+        fromDate: fromDate || undefined,
+        toDate: toDate || undefined,
         page,
         pageSize: PAGE_SIZE,
       }),
@@ -73,35 +78,75 @@ export default function DocumentsListPage() {
       <PageHeader title={t('documents.title')} />
 
       {/* Filters */}
-      <div className="flex flex-col sm:flex-row gap-3 mb-6">
-        <div className="relative flex-1">
-          <Search
-            size={18}
-            className="absolute top-1/2 -translate-y-1/2 start-3 text-neutral-400 pointer-events-none"
-          />
-          <input
-            type="text"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            placeholder={t('common.search')}
-            className="w-full ps-10 pe-4 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
-          />
+      <div className="space-y-3 mb-6">
+        <div className="flex flex-col sm:flex-row gap-3">
+          <div className="relative flex-1">
+            <Search
+              size={18}
+              className="absolute top-1/2 -translate-y-1/2 start-3 text-neutral-400 pointer-events-none"
+            />
+            <input
+              type="text"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              placeholder={t('common.search')}
+              className="w-full ps-10 pe-4 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+            />
+          </div>
+
+          <div className="flex gap-2 flex-wrap">
+            {STATUS_OPTIONS.map((status) => (
+              <button
+                key={status}
+                onClick={() => setStatusFilter(status)}
+                className={
+                  statusFilter === status
+                    ? 'px-3 py-2 text-sm rounded-lg font-medium bg-primary text-white'
+                    : 'px-3 py-2 text-sm rounded-lg font-medium border border-neutral-300 text-neutral-600 hover:bg-neutral-50'
+                }
+              >
+                {t(STATUS_LABEL_KEYS[status])}
+              </button>
+            ))}
+          </div>
         </div>
 
-        <div className="flex gap-2 flex-wrap">
-          {STATUS_OPTIONS.map((status) => (
-            <button
-              key={status}
-              onClick={() => setStatusFilter(status)}
-              className={
-                statusFilter === status
-                  ? 'px-3 py-2 text-sm rounded-lg font-medium bg-primary text-white'
-                  : 'px-3 py-2 text-sm rounded-lg font-medium border border-neutral-300 text-neutral-600 hover:bg-neutral-50'
-              }
-            >
-              {t(STATUS_LABEL_KEYS[status])}
-            </button>
-          ))}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">
+          <div className="flex items-center gap-1.5 text-sm text-neutral-500">
+            <Calendar size={16} />
+            <span>{t('reports.dateRange')}:</span>
+          </div>
+          <div className="flex items-center gap-2">
+            <div className="relative">
+              <input
+                type="date"
+                value={fromDate}
+                onChange={(e) => setFromDate(e.target.value)}
+                placeholder={t('reports.from')}
+                className="ps-3 pe-3 py-1.5 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+              />
+            </div>
+            <span className="text-neutral-400 text-sm">&ndash;</span>
+            <div className="relative">
+              <input
+                type="date"
+                value={toDate}
+                min={fromDate || undefined}
+                onChange={(e) => setToDate(e.target.value)}
+                placeholder={t('reports.to')}
+                className="ps-3 pe-3 py-1.5 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+              />
+            </div>
+            {(fromDate || toDate) && (
+              <button
+                onClick={() => { setFromDate(''); setToDate(''); }}
+                className="p-1.5 text-neutral-400 hover:text-neutral-600 hover:bg-neutral-100 rounded-md transition-colors"
+                title={t('common.reset')}
+              >
+                <X size={16} />
+              </button>
+            )}
+          </div>
         </div>
       </div>
 

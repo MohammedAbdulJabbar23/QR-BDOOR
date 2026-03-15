@@ -35,12 +35,14 @@ public class GeneratePdfCommandHandler : IRequestHandler<GeneratePdfCommand, Res
 
     public async Task<Result> Handle(GeneratePdfCommand request, CancellationToken cancellationToken)
     {
-        if (_currentUser.Department != Department.Statistics)
-            return Result.Failure("Only Statistics department staff can generate documents.", "FORBIDDEN");
-
         var document = await _documentRepo.GetByIdWithDetailsAsync(request.DocumentId, cancellationToken);
         if (document is null || document.IsDeleted)
             return Result.Failure("Document not found.", "NOT_FOUND");
+
+        var isAdminLetter = document.Request.DocumentType.NameEn.Equals("Administrative Letter", StringComparison.OrdinalIgnoreCase);
+        var allowedDept = isAdminLetter ? Department.HR : Department.Statistics;
+        if (_currentUser.Department != allowedDept)
+            return Result.Failure($"Only {allowedDept} department staff can generate this document.", "FORBIDDEN");
 
         if (document.Status != DocumentStatus.Draft)
             return Result.Failure("Document can only be generated for draft documents.", "INVALID_STATUS");

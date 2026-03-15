@@ -31,22 +31,23 @@ public class GetDailyReportQueryHandler : IRequestHandler<GetDailyReportQuery, R
         var date = request.Date.Date;
         var nextDate = date.AddDays(1);
 
-        // Get all requests for the day (using GetAllAsync with broad filter)
-        var (allRequests, _) = await _requestRepo.GetAllAsync(null, null, null, 1, 10000, cancellationToken);
-        var dayRequests = allRequests.Where(r => r.CreatedAt >= date && r.CreatedAt < nextDate).ToList();
+        var statusCounts = await _requestRepo.GetStatusCountsAsync(date, nextDate, cancellationToken);
+        var totalRequests = statusCounts.Values.Sum();
+        var pending = statusCounts.GetValueOrDefault(RequestStatus.Pending.ToString(), 0);
+        var completed = statusCounts.GetValueOrDefault(RequestStatus.Completed.ToString(), 0);
+        var rejected = statusCounts.GetValueOrDefault(RequestStatus.Rejected.ToString(), 0);
 
-        var (allDocs, _) = await _documentRepo.GetAllAsync(null, null, 1, 10000, cancellationToken);
-        var dayDocs = allDocs.Where(d => d.IssuedAt >= date && d.IssuedAt < nextDate).ToList();
-        var dayArchived = allDocs.Where(d => d.ArchivedAt.HasValue && d.ArchivedAt.Value >= date && d.ArchivedAt.Value < nextDate).ToList();
+        var docsIssued = await _documentRepo.CountAsync(null, date, nextDate, cancellationToken);
+        var docsArchived = await _documentRepo.CountArchivedInRangeAsync(date, nextDate, cancellationToken);
 
         return Result.Success(new DailyReportDto(
             date,
-            dayRequests.Count,
-            dayRequests.Count(r => r.Status == RequestStatus.Pending),
-            dayRequests.Count(r => r.Status == RequestStatus.Completed),
-            dayRequests.Count(r => r.Status == RequestStatus.Rejected),
-            dayDocs.Count,
-            dayArchived.Count
+            totalRequests,
+            pending,
+            completed,
+            rejected,
+            docsIssued,
+            docsArchived
         ));
     }
 }

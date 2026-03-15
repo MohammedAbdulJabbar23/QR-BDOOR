@@ -1,0 +1,71 @@
+services:
+  postgres:
+    image: postgres:16
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB}
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  minio:
+    image: minio/minio
+    restart: unless-stopped
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
+    volumes:
+      - minio_data:/data
+    ports:
+      - "127.0.0.1:${MINIO_CONSOLE_PORT:-9001}:9001"
+
+  api:
+    build:
+      context: ./src
+      dockerfile: AlBadour.WebApi/Dockerfile
+    restart: unless-stopped
+    depends_on:
+      - postgres
+      - minio
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ConnectionStrings__DefaultConnection: Host=postgres;Port=5432;Database=${POSTGRES_DB};Username=${POSTGRES_USER};Password=${POSTGRES_PASSWORD}
+      Jwt__Key: ${JWT_KEY}
+      Jwt__Issuer: ${JWT_ISSUER:-AlBadourHospital}
+      Jwt__Audience: ${JWT_AUDIENCE:-AlBadourApp}
+      Minio__Endpoint: minio:9000
+      Minio__AccessKey: ${MINIO_ROOT_USER}
+      Minio__SecretKey: ${MINIO_ROOT_PASSWORD}
+      Minio__BucketName: ${MINIO_BUCKET_NAME:-albadour}
+      Minio__UseSSL: "false"
+      BaseUrl: ${PUBLIC_BASE_URL}
+      Cors__AllowedOrigins__0: ${PUBLIC_BASE_URL}
+      Cors__AllowedOrigins__1: ${INTERNAL_BASE_URL}
+
+  public-web:
+    build:
+      context: ./src/client
+      dockerfile: Dockerfile
+      target: public
+    restart: unless-stopped
+    depends_on:
+      - api
+    ports:
+      - "${PUBLIC_APP_PORT:-8081}:80"
+
+  internal-web:
+    build:
+      context: ./src/client
+      dockerfile: Dockerfile
+      target: internal
+    restart: unless-stopped
+    depends_on:
+      - api
+    ports:
+      - "127.0.0.1:${INTERNAL_APP_PORT:-8082}:80"
+
+volumes:
+  postgres_data:
+  minio_data:

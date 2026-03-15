@@ -36,6 +36,9 @@ public class DeleteRequestCommandHandler : IRequestHandler<DeleteRequestCommand,
         if (entity is null || entity.IsDeleted)
             return Result.Failure("Request not found.", "NOT_FOUND");
 
+        if (entity.Status == RequestStatus.Completed || entity.Status == RequestStatus.Rejected)
+            return Result.Failure("Completed or rejected requests cannot be deleted.", "INVALID_STATUS");
+
         entity.IsDeleted = true;
         entity.UpdatedAt = DateTime.UtcNow;
 

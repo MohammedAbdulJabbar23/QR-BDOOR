@@ -27,7 +27,9 @@ public class DocumentNumberService : IDocumentNumberService
               RETURNING last_number", year)
             .ToListAsync(ct);
 
-        var sequenceNumber = result.First();
+        var sequenceNumber = result.FirstOrDefault();
+        if (sequenceNumber <= 0)
+            throw new InvalidOperationException("Failed to generate document number sequence.");
         return DocumentNumberGenerator.Format(year, sequenceNumber);
     }
 }

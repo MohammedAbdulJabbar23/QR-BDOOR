@@ -16,11 +16,13 @@ public class IssuedDocumentsController : ControllerBase
 {
     private readonly IMediator _mediator;
     private readonly IFileStorageService _fileStorage;
+    private readonly IIssuedDocumentRepository _documentRepo;
 
-    public IssuedDocumentsController(IMediator mediator, IFileStorageService fileStorage)
+    public IssuedDocumentsController(IMediator mediator, IFileStorageService fileStorage, IIssuedDocumentRepository documentRepo)
     {
         _mediator = mediator;
         _fileStorage = fileStorage;
+        _documentRepo = documentRepo;
     }
 
     [HttpPost]
@@ -34,13 +36,18 @@ public class IssuedDocumentsController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAll(
         [FromQuery] string? status, [FromQuery] string? search,
+        [FromQuery] DateTime? fromDate, [FromQuery] DateTime? toDate,
         [FromQuery] int page = 1, [FromQuery] int pageSize = 20)
     {
+        if (page < 1) page = 1;
+        if (pageSize < 1) pageSize = 1;
+        if (pageSize > 100) pageSize = 100;
+
         DocumentStatus? statusEnum = null;
         if (!string.IsNullOrEmpty(status) && Enum.TryParse<DocumentStatus>(status, true, out var parsed))
             statusEnum = parsed;
 
-        var result = await _mediator.Send(new GetAllDocumentsQuery(statusEnum, search, page, pageSize));
+        var result = await _mediator.Send(new GetAllDocumentsQuery(statusEnum, search, fromDate, toDate, page, pageSize));
         if (!result.IsSuccess) return BadRequest(new { error = result.Error, code = result.ErrorCode });
         return Ok(result.Value);
     }
@@ -98,6 +105,45 @@ public class IssuedDocumentsController : ControllerBase
         var result = await _mediator.Send(new UploadPdfCommand(id, stream, file.FileName));
         if (!result.IsSuccess) return BadRequest(new { error = result.Error, code = result.ErrorCode });
         return Ok(new { message = "PDF uploaded. Document is now archived." });
+    }
+
+    [HttpPost("{id:guid}/transfer-to-accounts")]
+    public async Task<IActionResult> TransferToAccounts(Guid id)
+    {
+        var result = await _mediator.Send(new TransferToAccountsCommand(id));
+        if (!result.IsSuccess) return BadRequest(new { error = result.Error, code = result.ErrorCode });
+        return Ok(new { message = "Document transferred to Accounts department." });
+    }
+
+    [HttpPost("{id:guid}/upload-account-statement")]
+    public async Task<IActionResult> UploadAccountStatement(Guid id, IFormFile file)
+    {
+        if (file is null || file.Length == 0)
+            return BadRequest(new { error = "No file provided.", code = "INVALID_FILE" });
+
+        const long maxFileSize = 10 * 1024 * 1024; // 10 MB
+        if (file.Length > maxFileSize)
+            return BadRequest(new { error = "File size exceeds 10 MB limit.", code = "FILE_TOO_LARGE" });
+
+        if (file.ContentType != "application/pdf" && !file.FileName.EndsWith(".pdf", StringComparison.OrdinalIgnoreCase))
+            return BadRequest(new { error = "Only PDF files are allowed.", code = "INVALID_FILE_TYPE" });
+
+        using var stream = file.OpenReadStream();
+        var result = await _mediator.Send(new UploadAccountStatementCommand(id, stream, file.FileName));
+        if (!result.IsSuccess) return BadRequest(new { error = result.Error, code = result.ErrorCode });
+        return Ok(new { message = "Account statement uploaded." });
+    }
+
+    [HttpGet("{id:guid}/account-statement")]
+    public async Task<IActionResult> GetAccountStatement(Guid id)
+    {
+        var doc = await _documentRepo.GetByIdAsync(id);
+        if (doc is null || doc.IsDeleted || string.IsNullOrEmpty(doc.AccountStatementPath))
+            return NotFound();
+
+        var stream = await _fileStorage.GetFileAsync(doc.AccountStatementPath);
+        if (stream is null) return NotFound();
+        return File(stream, "application/pdf", $"{doc.DocumentNumber}_account_statement.pdf");
     }
 
     [HttpPost("{id:guid}/revoke")]

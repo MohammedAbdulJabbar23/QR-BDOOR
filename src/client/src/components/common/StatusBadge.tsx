@@ -9,6 +9,7 @@ const statusStyles: Record<string, string> = {
   Draft: 'bg-neutral-100 text-neutral-700 border-neutral-200',
   Archived: 'bg-success-light text-green-800 border-green-200',
   Revoked: 'bg-danger-light text-red-800 border-red-200',
+  AwaitingAccountStatement: 'bg-purple-50 text-purple-800 border-purple-200',
 };
 
 const statusKeys: Record<string, string> = {
@@ -19,6 +20,7 @@ const statusKeys: Record<string, string> = {
   Draft: 'status.draft',
   Archived: 'status.archived',
   Revoked: 'status.revoked',
+  AwaitingAccountStatement: 'status.awaitingAccountStatement',
 };
 
 export default function StatusBadge({ status }: { status: string }) {

@@ -32,15 +32,17 @@ public class RejectRequestCommandHandler : IRequestHandler<RejectRequestCommand,
 
     public async Task<Result> Handle(RejectRequestCommand request, CancellationToken cancellationToken)
     {
-        if (_currentUser.Department != Department.Statistics)
-            return Result.Failure("Only Statistics department staff can reject requests.", "FORBIDDEN");
-
         if (string.IsNullOrWhiteSpace(request.Reason))
             return Result.Failure("Rejection reason is required.", "VALIDATION_ERROR");
 
-        var entity = await _requestRepo.GetByIdAsync(request.Id, cancellationToken);
+        var entity = await _requestRepo.GetByIdWithDetailsAsync(request.Id, cancellationToken);
         if (entity is null || entity.IsDeleted)
             return Result.Failure("Request not found.", "NOT_FOUND");
+
+        var isAdminLetter = entity.DocumentType.NameEn.Equals("Administrative Letter", StringComparison.OrdinalIgnoreCase);
+        var allowedDept = isAdminLetter ? Department.HR : Department.Statistics;
+        if (_currentUser.Department != allowedDept)
+            return Result.Failure($"Only {allowedDept} department staff can reject this request.", "FORBIDDEN");
 
         if (entity.Status != RequestStatus.Pending)
             return Result.Failure("Only pending requests can be rejected.", "INVALID_STATUS");

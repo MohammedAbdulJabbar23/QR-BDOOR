@@ -221,11 +221,10 @@ export default function PrepareDocumentPage() {
             </label>
             <input
               id="admissionDate"
-              type="text"
+              type="date"
               value={admissionDate}
               onChange={(e) => setAdmissionDate(e.target.value)}
               className="w-full px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
-              placeholder={language === 'ar' ? 'مثال: 23/2/2026' : 'e.g. 23/2/2026'}
             />
           </div>
           <div>
@@ -234,11 +233,11 @@ export default function PrepareDocumentPage() {
             </label>
             <input
               id="dischargeDate"
-              type="text"
+              type="date"
               value={dischargeDate}
+              min={admissionDate || undefined}
               onChange={(e) => setDischargeDate(e.target.value)}
               className="w-full px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
-              placeholder={language === 'ar' ? 'مثال: 23/2/2026' : 'e.g. 23/2/2026'}
             />
           </div>
           <div className="sm:col-span-2 lg:col-span-3">

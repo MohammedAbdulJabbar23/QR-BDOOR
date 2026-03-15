@@ -9,6 +9,8 @@ namespace AlBadour.Application.Features.IssuedDocuments.Queries;
 public record GetAllDocumentsQuery(
     DocumentStatus? Status,
     string? Search,
+    DateTime? FromDate,
+    DateTime? ToDate,
     int Page = 1,
     int PageSize = 20
 ) : IRequest<Result<PaginatedList<DocumentDto>>>;
@@ -26,6 +28,7 @@ public class GetAllDocumentsQueryHandler : IRequestHandler<GetAllDocumentsQuery,
     {
         var (items, totalCount) = await _documentRepo.GetAllAsync(
             request.Status, request.Search,
+            request.FromDate, request.ToDate,
             request.Page, request.PageSize, cancellationToken);
 
         var dtos = items.Select(GetDocumentByIdQueryHandler.MapToDto).ToList();

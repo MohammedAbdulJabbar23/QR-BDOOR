@@ -31,13 +31,18 @@ public class DocumentRequestsController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAll(
         [FromQuery] string? status, [FromQuery] string? search,
+        [FromQuery] DateTime? fromDate, [FromQuery] DateTime? toDate,
         [FromQuery] int page = 1, [FromQuery] int pageSize = 20)
     {
+        if (page < 1) page = 1;
+        if (pageSize < 1) pageSize = 1;
+        if (pageSize > 100) pageSize = 100;
+
         RequestStatus? statusEnum = null;
         if (!string.IsNullOrEmpty(status) && Enum.TryParse<RequestStatus>(status, true, out var parsed))
             statusEnum = parsed;
 
-        var result = await _mediator.Send(new GetAllRequestsQuery(statusEnum, search, page, pageSize));
+        var result = await _mediator.Send(new GetAllRequestsQuery(statusEnum, search, fromDate, toDate, page, pageSize));
         if (!result.IsSuccess) return BadRequest(new { error = result.Error, code = result.ErrorCode });
         return Ok(result.Value);
     }

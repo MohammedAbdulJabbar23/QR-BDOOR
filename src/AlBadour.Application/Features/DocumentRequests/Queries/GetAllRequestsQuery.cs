@@ -9,6 +9,8 @@ namespace AlBadour.Application.Features.DocumentRequests.Queries;
 public record GetAllRequestsQuery(
     RequestStatus? Status,
     string? Search,
+    DateTime? FromDate,
+    DateTime? ToDate,
     int Page = 1,
     int PageSize = 20
 ) : IRequest<Result<PaginatedList<RequestDto>>>;
@@ -26,11 +28,14 @@ public class GetAllRequestsQueryHandler : IRequestHandler<GetAllRequestsQuery, R
 
     public async Task<Result<PaginatedList<RequestDto>>> Handle(GetAllRequestsQuery request, CancellationToken cancellationToken)
     {
-        // Inquiry staff only see their own requests
-        Guid? createdById = _currentUser.Department == Department.Inquiry ? _currentUser.UserId : null;
+        // Inquiry and HR staff only see their own requests
+        Guid? createdById = _currentUser.Department == Department.Inquiry
+            || _currentUser.Department == Department.HR
+            ? _currentUser.UserId : null;
 
         var (items, totalCount) = await _requestRepo.GetAllAsync(
             request.Status, createdById, request.Search,
+            request.FromDate, request.ToDate,
             request.Page, request.PageSize, cancellationToken);
 
         var dtos = items.Select(e => new RequestDto(

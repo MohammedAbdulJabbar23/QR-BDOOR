@@ -7,6 +7,7 @@ import { z } from 'zod';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { requestsApi } from '@/api/requests.api';
 import { documentTypesApi } from '@/api/documentTypes.api';
+import { useAuthStore } from '@/stores/authStore';
 import { useUiStore } from '@/stores/uiStore';
 import PageHeader from '@/components/common/PageHeader';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
@@ -14,7 +15,6 @@ import type { CreateRequestDto } from '@/types/request.types';
 
 const requestSchema = z.object({
   patientName: z.string().min(1, 'required'),
-  patientNameEn: z.string().optional(),
   recipientEntity: z.string().min(1, 'required'),
   documentTypeId: z.string().min(1, 'required'),
   notes: z.string().optional(),
@@ -29,6 +29,8 @@ export default function CreateRequestPage() {
   const [searchParams] = useSearchParams();
   const language = useUiStore((s) => s.language);
   const isArabic = language === 'ar';
+  const user = useAuthStore((s) => s.user);
+  const isHR = user?.department === 'HR';
 
   const editId = searchParams.get('edit');
   const isEditMode = !!editId;
@@ -57,7 +59,6 @@ export default function CreateRequestPage() {
     resolver: zodResolver(requestSchema),
     defaultValues: {
       patientName: '',
-      patientNameEn: '',
       recipientEntity: '',
       documentTypeId: '',
       notes: '',
@@ -69,7 +70,6 @@ export default function CreateRequestPage() {
     if (existingRequest) {
       reset({
         patientName: existingRequest.patientName,
-        patientNameEn: existingRequest.patientNameEn || '',
         recipientEntity: existingRequest.recipientEntity,
         documentTypeId: existingRequest.documentTypeId,
         notes: existingRequest.notes || '',
@@ -106,7 +106,6 @@ export default function CreateRequestPage() {
     setSubmitError('');
     const payload: CreateRequestDto = {
       patientName: values.patientName,
-      patientNameEn: values.patientNameEn || undefined,
       recipientEntity: values.recipientEntity,
       documentTypeId: values.documentTypeId,
       notes: values.notes || undefined,
@@ -152,19 +151,6 @@ export default function CreateRequestPage() {
               )}
             </div>
 
-            {/* Patient Name (English) */}
-            <div>
-              <label className="block text-sm font-medium text-neutral-700 mb-1.5">
-                {t('requests.patientNameEn')}
-              </label>
-              <input
-                {...register('patientNameEn')}
-                type="text"
-                className="w-full px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
-                dir="ltr"
-              />
-            </div>
-
             {/* Recipient Entity */}
             <div>
               <label className="block text-sm font-medium text-neutral-700 mb-1.5">
@@ -193,7 +179,13 @@ export default function CreateRequestPage() {
                   className="w-full px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-white"
                 >
                   <option value="">--</option>
-                  {documentTypes?.map((dt) => (
+                  {documentTypes
+                    ?.filter((dt) => {
+                      const isAdminLetter = dt.nameEn.toLowerCase() === 'administrative letter';
+                      if (isHR) return isAdminLetter;
+                      return !isAdminLetter; // Inquiry: hide Administrative Letter
+                    })
+                    .map((dt) => (
                     <option key={dt.id} value={dt.id}>
                       {isArabic ? dt.nameAr : dt.nameEn}
                     </option>

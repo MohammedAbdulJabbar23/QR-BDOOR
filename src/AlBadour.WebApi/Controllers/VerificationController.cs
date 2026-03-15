@@ -44,4 +44,20 @@ public class VerificationController : ControllerBase
 
         return File(stream, "application/pdf", $"{doc.DocumentNumber}.pdf");
     }
+
+    [HttpGet("{documentId:guid}/account-statement")]
+    public async Task<IActionResult> GetAccountStatement(Guid documentId)
+    {
+        var doc = await _documentRepo.GetByIdAsync(documentId);
+        if (doc is null || doc.IsDeleted || string.IsNullOrEmpty(doc.AccountStatementPath))
+            return NotFound(new { error = "Account statement not available." });
+
+        if (doc.Status != Domain.Enums.DocumentStatus.Archived)
+            return NotFound(new { error = "Account statement not available." });
+
+        var stream = await _fileStorage.GetFileAsync(doc.AccountStatementPath);
+        if (stream is null) return NotFound(new { error = "Account statement file not found." });
+
+        return File(stream, "application/pdf", $"{doc.DocumentNumber}_account_statement.pdf");
+    }
 }

@@ -50,12 +50,14 @@ public class PrepareDocumentCommandHandler : IRequestHandler<PrepareDocumentComm
 
     public async Task<Result<DocumentDto>> Handle(PrepareDocumentCommand request, CancellationToken cancellationToken)
     {
-        if (_currentUser.Department != Department.Statistics)
-            return Result.Failure<DocumentDto>("Only Statistics department staff can prepare documents.", "FORBIDDEN");
-
         var req = await _requestRepo.GetByIdWithDetailsAsync(request.Dto.RequestId, cancellationToken);
         if (req is null || req.IsDeleted)
             return Result.Failure<DocumentDto>("Request not found.", "NOT_FOUND");
+
+        var isAdminLetter = req.DocumentType.NameEn.Equals("Administrative Letter", StringComparison.OrdinalIgnoreCase);
+        var allowedDept = isAdminLetter ? Department.HR : Department.Statistics;
+        if (_currentUser.Department != allowedDept)
+            return Result.Failure<DocumentDto>($"Only {allowedDept} department staff can prepare this document.", "FORBIDDEN");
 
         if (req.Status != RequestStatus.InProgress)
             return Result.Failure<DocumentDto>("Request must be in progress to prepare a document.", "INVALID_STATUS");
@@ -90,8 +92,6 @@ public class PrepareDocumentCommandHandler : IRequestHandler<PrepareDocumentComm
 
         await _documentRepo.AddAsync(document, cancellationToken);
 
-        // Update request status to Completed
-        req.Status = RequestStatus.Completed;
         req.UpdatedAt = DateTime.UtcNow;
         _requestRepo.Update(req);
 
@@ -133,7 +133,8 @@ public class PrepareDocumentCommandHandler : IRequestHandler<PrepareDocumentComm
             _currentUser.UserName,
             null, null,
             document.IssuedAt,
-            null, null
+            null, null,
+            false
         );
 
         return Result.Success(dto);

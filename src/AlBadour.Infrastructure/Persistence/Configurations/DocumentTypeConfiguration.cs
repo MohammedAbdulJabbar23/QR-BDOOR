@@ -39,6 +39,15 @@ public class DocumentTypeConfiguration : IEntityTypeConfiguration<DocumentType>
                 IsActive = true,
                 CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc),
                 UpdatedAt = new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc)
+            },
+            new DocumentType
+            {
+                Id = Guid.Parse("00000000-0000-0000-0000-000000000012"),
+                NameAr = "تقرير طبي + كشف حساب",
+                NameEn = "Medical Report + Account Statement",
+                IsActive = true,
+                CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+                UpdatedAt = new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc)
             }
         );
     }
