@@ -36,10 +36,16 @@ public class AcceptRequestCommandHandler : IRequestHandler<AcceptRequestCommand,
         if (entity is null || entity.IsDeleted)
             return Result.Failure("Request not found.", "NOT_FOUND");
 
-        var isAdminLetter = entity.DocumentType.NameEn.Equals("Administrative Letter", StringComparison.OrdinalIgnoreCase);
-        var allowedDept = isAdminLetter ? Department.HR : Department.Statistics;
-        if (_currentUser.Department != allowedDept)
-            return Result.Failure($"Only {allowedDept} department staff can accept this request.", "FORBIDDEN");
+        var isAdministrativeLetter = entity.DocumentType.NameEn.Equals("Administrative Letter", StringComparison.OrdinalIgnoreCase);
+
+        if (_currentUser.Department == Department.HR && !isAdministrativeLetter)
+            return Result.Failure("HR department can only accept Administrative Letter requests.", "FORBIDDEN");
+
+        if (_currentUser.Department == Department.Statistics && isAdministrativeLetter)
+            return Result.Failure("Statistics department cannot accept Administrative Letter requests.", "FORBIDDEN");
+
+        if (_currentUser.Department != Department.HR && _currentUser.Department != Department.Statistics)
+            return Result.Failure("Only HR and Statistics department staff can accept this request.", "FORBIDDEN");
 
         if (entity.Status != RequestStatus.Pending)
             return Result.Failure("Only pending requests can be accepted.", "INVALID_STATUS");

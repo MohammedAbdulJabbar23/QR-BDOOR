@@ -18,7 +18,6 @@ public class PrepareDocumentCommandHandler : IRequestHandler<PrepareDocumentComm
     private readonly IUnitOfWork _unitOfWork;
     private readonly ICurrentUserService _currentUser;
     private readonly IAuditService _auditService;
-    private readonly IDocumentNumberService _docNumberService;
     private readonly IQrCodeService _qrCodeService;
     private readonly IFileStorageService _fileStorage;
     private readonly IConfiguration _configuration;
@@ -30,7 +29,6 @@ public class PrepareDocumentCommandHandler : IRequestHandler<PrepareDocumentComm
         IUnitOfWork unitOfWork,
         ICurrentUserService currentUser,
         IAuditService auditService,
-        IDocumentNumberService docNumberService,
         IQrCodeService qrCodeService,
         IFileStorageService fileStorage,
         IConfiguration configuration,
@@ -41,7 +39,6 @@ public class PrepareDocumentCommandHandler : IRequestHandler<PrepareDocumentComm
         _unitOfWork = unitOfWork;
         _currentUser = currentUser;
         _auditService = auditService;
-        _docNumberService = docNumberService;
         _qrCodeService = qrCodeService;
         _fileStorage = fileStorage;
         _configuration = configuration;
@@ -62,8 +59,14 @@ public class PrepareDocumentCommandHandler : IRequestHandler<PrepareDocumentComm
         if (req.Status != RequestStatus.InProgress)
             return Result.Failure<DocumentDto>("Request must be in progress to prepare a document.", "INVALID_STATUS");
 
+        var documentNumber = request.Dto.DocumentNumber.Trim();
+        if (string.IsNullOrWhiteSpace(documentNumber))
+            return Result.Failure<DocumentDto>("Document number is required.", "VALIDATION_ERROR");
+
+        if (await _documentRepo.ExistsByDocumentNumberAsync(documentNumber, cancellationToken))
+            return Result.Failure<DocumentDto>("Document number already exists.", "DUPLICATE_DOCUMENT_NUMBER");
+
         var documentId = Guid.NewGuid();
-        var documentNumber = await _docNumberService.GenerateNextAsync(cancellationToken);
 
         // Generate QR code
         var baseUrl = _configuration["BaseUrl"]?.TrimEnd('/') ?? "https://albadour-hospital.com";
@@ -78,13 +81,14 @@ public class PrepareDocumentCommandHandler : IRequestHandler<PrepareDocumentComm
             RequestId = req.Id,
             QrCodeUrl = qrUrl,
             QrCodeImagePath = qrImagePath,
+            Subject = isAdminLetter ? request.Dto.Subject?.Trim() : null,
             DocumentBody = request.Dto.DocumentBody,
-            PatientGender = request.Dto.PatientGender,
-            PatientProfession = request.Dto.PatientProfession,
-            PatientAge = request.Dto.PatientAge,
-            AdmissionDate = request.Dto.AdmissionDate,
-            DischargeDate = request.Dto.DischargeDate,
-            LeaveGranted = request.Dto.LeaveGranted,
+            PatientGender = isAdminLetter ? null : request.Dto.PatientGender,
+            PatientProfession = isAdminLetter ? null : request.Dto.PatientProfession,
+            PatientAge = isAdminLetter ? null : request.Dto.PatientAge,
+            AdmissionDate = isAdminLetter ? null : request.Dto.AdmissionDate,
+            DischargeDate = isAdminLetter ? null : request.Dto.DischargeDate,
+            LeaveGranted = isAdminLetter ? null : request.Dto.LeaveGranted,
             Status = DocumentStatus.Draft,
             IssuedById = _currentUser.UserId,
             IssuedAt = DateTime.UtcNow
@@ -120,6 +124,7 @@ public class PrepareDocumentCommandHandler : IRequestHandler<PrepareDocumentComm
             document.QrCodeUrl,
             document.QrCodeImagePath,
             false,
+            document.Subject,
             document.DocumentBody,
             document.Status.ToString(),
             null, null, null, null,

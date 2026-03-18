@@ -17,4 +17,10 @@ export const usersApi = {
 
   deactivate: (id: string) =>
     apiClient.put(`/users/${id}/deactivate`).then(r => r.data),
+
+  activate: (id: string) =>
+    apiClient.put(`/users/${id}/activate`).then(r => r.data),
+
+  resetPassword: (id: string, newPassword: string) =>
+    apiClient.put(`/users/${id}/reset-password`, { newPassword }).then(r => r.data),
 };

@@ -31,6 +31,7 @@ public class DocumentRequestsController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAll(
         [FromQuery] string? status, [FromQuery] string? search,
+        [FromQuery] Guid? documentTypeId,
         [FromQuery] DateTime? fromDate, [FromQuery] DateTime? toDate,
         [FromQuery] int page = 1, [FromQuery] int pageSize = 20)
     {
@@ -42,7 +43,7 @@ public class DocumentRequestsController : ControllerBase
         if (!string.IsNullOrEmpty(status) && Enum.TryParse<RequestStatus>(status, true, out var parsed))
             statusEnum = parsed;
 
-        var result = await _mediator.Send(new GetAllRequestsQuery(statusEnum, search, fromDate, toDate, page, pageSize));
+        var result = await _mediator.Send(new GetAllRequestsQuery(statusEnum, search, documentTypeId, fromDate, toDate, page, pageSize));
         if (!result.IsSuccess) return BadRequest(new { error = result.Error, code = result.ErrorCode });
         return Ok(result.Value);
     }
@@ -56,9 +57,9 @@ public class DocumentRequestsController : ControllerBase
     }
 
     [HttpGet("pending")]
-    public async Task<IActionResult> GetPending()
+    public async Task<IActionResult> GetPending([FromQuery] Guid? documentTypeId)
     {
-        var result = await _mediator.Send(new GetPendingRequestsQuery());
+        var result = await _mediator.Send(new GetPendingRequestsQuery(documentTypeId));
         if (!result.IsSuccess) return BadRequest(new { error = result.Error, code = result.ErrorCode });
         return Ok(result.Value);
     }

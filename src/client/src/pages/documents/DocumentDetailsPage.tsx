@@ -16,6 +16,7 @@ import PageHeader from '@/components/common/PageHeader';
 import StatusBadge from '@/components/common/StatusBadge';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import ConfirmDialog from '@/components/common/ConfirmDialog';
+import { getApiErrorMessage } from '@/utils/apiErrors';
 
 export default function DocumentDetailsPage() {
   const { id } = useParams<{ id: string }>();
@@ -77,8 +78,8 @@ export default function DocumentDetailsPage() {
       setGenerateError('');
       queryClient.invalidateQueries({ queryKey: ['document', id] });
     },
-    onError: () => {
-      setGenerateError(t('common.error'));
+    onError: (error) => {
+      setGenerateError(getApiErrorMessage(error));
     },
   });
 
@@ -88,8 +89,8 @@ export default function DocumentDetailsPage() {
       setUploadError('');
       queryClient.invalidateQueries({ queryKey: ['document', id] });
     },
-    onError: () => {
-      setUploadError(t('common.error'));
+    onError: (error) => {
+      setUploadError(getApiErrorMessage(error));
     },
   });
 
@@ -119,8 +120,8 @@ export default function DocumentDetailsPage() {
       setAccountStatementError('');
       queryClient.invalidateQueries({ queryKey: ['document', id] });
     },
-    onError: () => {
-      setAccountStatementError(t('common.error'));
+    onError: (error) => {
+      setAccountStatementError(getApiErrorMessage(error));
     },
   });
 
@@ -256,10 +257,12 @@ export default function DocumentDetailsPage() {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <InfoItem
-                label={t('requests.patientName')}
-                value={patientName}
-              />
+              {!isAdminLetter && (
+                <InfoItem
+                  label={t('requests.patientName')}
+                  value={patientName || '-'}
+                />
+              )}
               <InfoItem
                 label={t('requests.recipientEntity')}
                 value={document.recipientEntity}

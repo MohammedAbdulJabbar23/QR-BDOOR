@@ -17,6 +17,7 @@ import { ROLES, DEPARTMENTS } from '@/utils/constants';
 import EmptyState from '@/components/common/EmptyState';
 import type { ApiError } from '@/types/common.types';
 import type { AxiosError } from 'axios';
+import { getApiErrorMessage } from '@/utils/apiErrors';
 
 const createUserSchema = z.object({
   username: z
@@ -71,13 +72,12 @@ export default function CreateUserPage() {
     },
     onError: (error: AxiosError<ApiError>) => {
       const apiError = error.response?.data;
-      if (apiError?.errors && apiError.errors.length > 0) {
+      if (apiError?.errors && apiError.errors.length > 0 && localStorage.getItem('lang') === 'en') {
         setServerError(apiError.errors.map((e) => e.errorMessage).join(', '));
-      } else if (apiError?.error) {
-        setServerError(apiError.error);
-      } else {
-        setServerError(t('users.createError'));
+        return;
       }
+
+      setServerError(getApiErrorMessage(error));
     },
   });
 

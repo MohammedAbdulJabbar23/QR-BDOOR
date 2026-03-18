@@ -44,24 +44,28 @@ public class CreateRequestCommandHandler : IRequestHandler<CreateRequestCommand,
         if (docType is null || !docType.IsActive)
             return Result.Failure<Guid>("Invalid or inactive document type.", "INVALID_DOCUMENT_TYPE");
 
-        // HR department can only create Administrative Letter requests
         var isAdministrativeLetter = docType.NameEn.Equals("Administrative Letter", StringComparison.OrdinalIgnoreCase);
 
         if (_currentUser.Department == Department.HR && !isAdministrativeLetter)
             return Result.Failure<Guid>("HR department can only create Administrative Letter requests.", "FORBIDDEN");
 
-        // Inquiry department cannot create Administrative Letter requests (HR only)
         if (_currentUser.Department == Department.Inquiry && isAdministrativeLetter)
             return Result.Failure<Guid>("Administrative Letter requests can only be created by HR department.", "FORBIDDEN");
+
+        if (!isAdministrativeLetter && string.IsNullOrWhiteSpace(request.Dto.PatientName))
+            return Result.Failure<Guid>("Patient name is required.", "VALIDATION_ERROR");
+
+        if (isAdministrativeLetter && string.IsNullOrWhiteSpace(request.Dto.Notes))
+            return Result.Failure<Guid>("Topic is required for administrative letters.", "VALIDATION_ERROR");
 
         var entity = new DocumentRequest
         {
             Id = Guid.NewGuid(),
-            PatientName = request.Dto.PatientName,
+            PatientName = isAdministrativeLetter ? string.Empty : request.Dto.PatientName.Trim(),
             PatientNameEn = request.Dto.PatientNameEn,
             RecipientEntity = request.Dto.RecipientEntity,
             DocumentTypeId = request.Dto.DocumentTypeId,
-            Notes = request.Dto.Notes,
+            Notes = request.Dto.Notes?.Trim(),
             Status = RequestStatus.Pending,
             CreatedById = _currentUser.UserId
         };

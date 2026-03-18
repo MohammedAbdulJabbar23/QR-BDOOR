@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Check, X, Eye } from 'lucide-react';
 import { requestsApi } from '@/api/requests.api';
+import { documentTypesApi } from '@/api/documentTypes.api';
 import { useUiStore } from '@/stores/uiStore';
 import { formatDate } from '@/utils/formatters';
 import PageHeader from '@/components/common/PageHeader';
@@ -21,10 +22,16 @@ export default function PendingRequestsPage() {
 
   const [rejectTarget, setRejectTarget] = useState<string | null>(null);
   const [rejectionReason, setRejectionReason] = useState('');
+  const [documentTypeFilter, setDocumentTypeFilter] = useState('');
+
+  const { data: documentTypes } = useQuery({
+    queryKey: ['documentTypes', true],
+    queryFn: () => documentTypesApi.getAll(true),
+  });
 
   const { data: requests, isLoading } = useQuery({
-    queryKey: ['pendingRequests'],
-    queryFn: () => requestsApi.getPending(),
+    queryKey: ['pendingRequests', documentTypeFilter],
+    queryFn: () => requestsApi.getPending({ documentTypeId: documentTypeFilter || undefined }),
   });
 
   const acceptMutation = useMutation({
@@ -55,6 +62,21 @@ export default function PendingRequestsPage() {
   return (
     <div>
       <PageHeader title={t('dashboard.pendingRequests')} />
+
+      <div className="mb-6">
+        <select
+          value={documentTypeFilter}
+          onChange={(e) => setDocumentTypeFilter(e.target.value)}
+          className="w-full sm:w-72 px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-white"
+        >
+          <option value="">{t('common.all')} {t('requests.documentType')}</option>
+          {documentTypes?.map((documentType) => (
+            <option key={documentType.id} value={documentType.id}>
+              {isArabic ? documentType.nameAr : documentType.nameEn}
+            </option>
+          ))}
+        </select>
+      </div>
 
       {isLoading ? (
         <LoadingSpinner />
@@ -94,8 +116,8 @@ export default function PendingRequestsPage() {
                   >
                     <td className="px-4 py-3 text-neutral-800">
                       {isArabic
-                        ? request.patientName
-                        : request.patientNameEn || request.patientName}
+                        ? request.patientName || '-'
+                        : request.patientNameEn || request.patientName || '-'}
                     </td>
                     <td className="px-4 py-3 text-neutral-600">
                       {isArabic

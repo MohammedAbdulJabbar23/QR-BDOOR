@@ -36,6 +36,7 @@ public class IssuedDocumentsController : ControllerBase
     [HttpGet]
     public async Task<IActionResult> GetAll(
         [FromQuery] string? status, [FromQuery] string? search,
+        [FromQuery] Guid? documentTypeId,
         [FromQuery] DateTime? fromDate, [FromQuery] DateTime? toDate,
         [FromQuery] int page = 1, [FromQuery] int pageSize = 20)
     {
@@ -47,7 +48,7 @@ public class IssuedDocumentsController : ControllerBase
         if (!string.IsNullOrEmpty(status) && Enum.TryParse<DocumentStatus>(status, true, out var parsed))
             statusEnum = parsed;
 
-        var result = await _mediator.Send(new GetAllDocumentsQuery(statusEnum, search, fromDate, toDate, page, pageSize));
+        var result = await _mediator.Send(new GetAllDocumentsQuery(statusEnum, search, documentTypeId, fromDate, toDate, page, pageSize));
         if (!result.IsSuccess) return BadRequest(new { error = result.Error, code = result.ErrorCode });
         return Ok(result.Value);
     }
@@ -137,6 +138,10 @@ public class IssuedDocumentsController : ControllerBase
     [HttpGet("{id:guid}/account-statement")]
     public async Task<IActionResult> GetAccountStatement(Guid id)
     {
+        var docResult = await _mediator.Send(new GetDocumentByIdQuery(id));
+        if (!docResult.IsSuccess || docResult.Value is not { HasAccountStatement: true })
+            return NotFound();
+
         var doc = await _documentRepo.GetByIdAsync(id);
         if (doc is null || doc.IsDeleted || string.IsNullOrEmpty(doc.AccountStatementPath))
             return NotFound();

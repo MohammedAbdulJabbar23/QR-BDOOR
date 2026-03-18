@@ -1,5 +1,6 @@
 using AlBadour.Application.Common.Interfaces;
 using AlBadour.Application.Common.Models;
+using AlBadour.Application.Common.Security;
 using AlBadour.Application.Features.Reports.DTOs;
 using AlBadour.Domain.Enums;
 using AlBadour.Domain.Interfaces;
@@ -29,16 +30,16 @@ public class GetDailyReportQueryHandler : IRequestHandler<GetDailyReportQuery, R
             return Result.Failure<DailyReportDto>("Only supervisors and admins can view reports.", "FORBIDDEN");
 
         var date = request.Date.Date;
-        var nextDate = date.AddDays(1);
+        var isAdministrativeLetter = DepartmentVisibility.GetAdministrativeLetterFilter(_currentUser.Department);
 
-        var statusCounts = await _requestRepo.GetStatusCountsAsync(date, nextDate, cancellationToken);
+        var statusCounts = await _requestRepo.GetStatusCountsAsync(date, date, isAdministrativeLetter, cancellationToken);
         var totalRequests = statusCounts.Values.Sum();
         var pending = statusCounts.GetValueOrDefault(RequestStatus.Pending.ToString(), 0);
         var completed = statusCounts.GetValueOrDefault(RequestStatus.Completed.ToString(), 0);
         var rejected = statusCounts.GetValueOrDefault(RequestStatus.Rejected.ToString(), 0);
 
-        var docsIssued = await _documentRepo.CountAsync(null, date, nextDate, cancellationToken);
-        var docsArchived = await _documentRepo.CountArchivedInRangeAsync(date, nextDate, cancellationToken);
+        var docsIssued = await _documentRepo.CountAsync(null, date, date, isAdministrativeLetter, cancellationToken);
+        var docsArchived = await _documentRepo.CountArchivedInRangeAsync(date, date, isAdministrativeLetter, cancellationToken);
 
         return Result.Success(new DailyReportDto(
             date,

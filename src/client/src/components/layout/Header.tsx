@@ -124,7 +124,9 @@ export default function Header() {
         <div className="flex items-center gap-2 ps-4 border-s border-neutral-200">
           <div className="text-sm">
             <p className="font-medium text-neutral-800">{user?.fullName}</p>
-            <p className="text-xs text-neutral-500">{user?.role}</p>
+            <p className="text-xs text-neutral-500">
+              {user?.role ? t(`roles.${user.role.toLowerCase()}`, user.role) : ''}
+            </p>
           </div>
           <button onClick={handleLogout} className="p-2 rounded-lg hover:bg-red-50 text-neutral-500 hover:text-primary" title={t('auth.logout')}>
             <LogOut size={18} />

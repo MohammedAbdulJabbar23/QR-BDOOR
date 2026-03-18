@@ -1,4 +1,6 @@
 using AlBadour.Application.Common.Models;
+using AlBadour.Application.Common.Interfaces;
+using AlBadour.Application.Common.Security;
 using AlBadour.Application.Features.DocumentRequests.DTOs;
 using AlBadour.Domain.Interfaces;
 using MediatR;
@@ -10,16 +12,21 @@ public record GetRequestByIdQuery(Guid Id) : IRequest<Result<RequestDto>>;
 public class GetRequestByIdQueryHandler : IRequestHandler<GetRequestByIdQuery, Result<RequestDto>>
 {
     private readonly IDocumentRequestRepository _requestRepo;
+    private readonly ICurrentUserService _currentUser;
 
-    public GetRequestByIdQueryHandler(IDocumentRequestRepository requestRepo)
+    public GetRequestByIdQueryHandler(IDocumentRequestRepository requestRepo, ICurrentUserService currentUser)
     {
         _requestRepo = requestRepo;
+        _currentUser = currentUser;
     }
 
     public async Task<Result<RequestDto>> Handle(GetRequestByIdQuery request, CancellationToken cancellationToken)
     {
         var entity = await _requestRepo.GetByIdWithDetailsAsync(request.Id, cancellationToken);
         if (entity is null || entity.IsDeleted)
+            return Result.Failure<RequestDto>("Request not found.", "NOT_FOUND");
+
+        if (!DepartmentVisibility.CanAccessDocumentType(_currentUser.Department, entity.DocumentType.NameEn))
             return Result.Failure<RequestDto>("Request not found.", "NOT_FOUND");
 
         var dto = new RequestDto(

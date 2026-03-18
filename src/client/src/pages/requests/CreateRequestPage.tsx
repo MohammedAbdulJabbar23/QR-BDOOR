@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useForm } from 'react-hook-form';
@@ -12,9 +12,11 @@ import { useUiStore } from '@/stores/uiStore';
 import PageHeader from '@/components/common/PageHeader';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import type { CreateRequestDto } from '@/types/request.types';
+import { getApiErrorMessage } from '@/utils/apiErrors';
+import { filterDocumentTypesForDepartment, isAdministrativeLetterType } from '@/utils/documentTypeFilters';
 
 const requestSchema = z.object({
-  patientName: z.string().min(1, 'required'),
+  patientName: z.string().optional(),
   recipientEntity: z.string().min(1, 'required'),
   documentTypeId: z.string().min(1, 'required'),
   notes: z.string().optional(),
@@ -30,7 +32,7 @@ export default function CreateRequestPage() {
   const language = useUiStore((s) => s.language);
   const isArabic = language === 'ar';
   const user = useAuthStore((s) => s.user);
-  const isHR = user?.department === 'HR';
+  const department = user?.department;
 
   const editId = searchParams.get('edit');
   const isEditMode = !!editId;
@@ -54,6 +56,8 @@ export default function CreateRequestPage() {
     register,
     handleSubmit,
     reset,
+    setValue,
+    watch,
     formState: { errors },
   } = useForm<RequestFormValues>({
     resolver: zodResolver(requestSchema),
@@ -77,14 +81,32 @@ export default function CreateRequestPage() {
     }
   }, [existingRequest, reset]);
 
+  const selectedDocumentTypeId = watch('documentTypeId');
+  const selectedDocumentType = useMemo(
+    () => documentTypes?.find((dt) => dt.id === selectedDocumentTypeId),
+    [documentTypes, selectedDocumentTypeId]
+  );
+  const availableDocumentTypes = useMemo(
+    () => filterDocumentTypesForDepartment(documentTypes, department),
+    [department, documentTypes]
+  );
+  const isAdministrativeLetter = isAdministrativeLetterType(selectedDocumentType)
+    || (!isEditMode && department === 'HR');
+
+  useEffect(() => {
+    if (!isEditMode && department === 'HR' && availableDocumentTypes.length === 1) {
+      setValue('documentTypeId', availableDocumentTypes[0].id, { shouldValidate: true });
+    }
+  }, [availableDocumentTypes, department, isEditMode, setValue]);
+
   const createMutation = useMutation({
     mutationFn: (data: CreateRequestDto) => requestsApi.create(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['requests'] });
       navigate('/requests');
     },
-    onError: () => {
-      setSubmitError(t('common.error'));
+    onError: (error) => {
+      setSubmitError(getApiErrorMessage(error));
     },
   });
 
@@ -95,8 +117,8 @@ export default function CreateRequestPage() {
       queryClient.invalidateQueries({ queryKey: ['request', editId] });
       navigate('/requests');
     },
-    onError: () => {
-      setSubmitError(t('common.error'));
+    onError: (error) => {
+      setSubmitError(getApiErrorMessage(error));
     },
   });
 
@@ -104,11 +126,20 @@ export default function CreateRequestPage() {
 
   const onSubmit = (values: RequestFormValues) => {
     setSubmitError('');
+    if (!isAdministrativeLetter && !(values.patientName || '').trim()) {
+      setSubmitError(t('requests.patientNameRequired'));
+      return;
+    }
+    if (isAdministrativeLetter && !(values.notes || '').trim()) {
+      setSubmitError(t('requests.topicRequired'));
+      return;
+    }
+
     const payload: CreateRequestDto = {
-      patientName: values.patientName,
+      patientName: isAdministrativeLetter ? '' : (values.patientName || '').trim(),
       recipientEntity: values.recipientEntity,
       documentTypeId: values.documentTypeId,
-      notes: values.notes || undefined,
+      notes: values.notes?.trim() || undefined,
     };
 
     if (isEditMode) {
@@ -135,21 +166,19 @@ export default function CreateRequestPage() {
           )}
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-            {/* Patient Name (Arabic) */}
-            <div>
-              <label className="block text-sm font-medium text-neutral-700 mb-1.5">
-                {t('requests.patientName')} <span className="text-red-500">*</span>
-              </label>
-              <input
-                {...register('patientName')}
-                type="text"
-                className="w-full px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
-                dir="rtl"
-              />
-              {errors.patientName && (
-                <p className="mt-1 text-xs text-red-600">{t('requests.patientName')}</p>
-              )}
-            </div>
+            {!isAdministrativeLetter && (
+              <div>
+                <label className="block text-sm font-medium text-neutral-700 mb-1.5">
+                  {t('requests.patientName')} <span className="text-red-500">*</span>
+                </label>
+                <input
+                  {...register('patientName')}
+                  type="text"
+                  className="w-full px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                  dir="rtl"
+                />
+              </div>
+            )}
 
             {/* Recipient Entity */}
             <div>
@@ -179,13 +208,7 @@ export default function CreateRequestPage() {
                   className="w-full px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-white"
                 >
                   <option value="">--</option>
-                  {documentTypes
-                    ?.filter((dt) => {
-                      const isAdminLetter = dt.nameEn.toLowerCase() === 'administrative letter';
-                      if (isHR) return isAdminLetter;
-                      return !isAdminLetter; // Inquiry: hide Administrative Letter
-                    })
-                    .map((dt) => (
+                  {availableDocumentTypes.map((dt) => (
                     <option key={dt.id} value={dt.id}>
                       {isArabic ? dt.nameAr : dt.nameEn}
                     </option>
@@ -200,12 +223,14 @@ export default function CreateRequestPage() {
             {/* Notes */}
             <div>
               <label className="block text-sm font-medium text-neutral-700 mb-1.5">
-                {t('requests.notes')}
+                {isAdministrativeLetter ? t('requests.topic') : t('requests.notes')}
+                {isAdministrativeLetter && <span className="text-red-500"> *</span>}
               </label>
               <textarea
                 {...register('notes')}
                 rows={4}
                 className="w-full px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary resize-none"
+                placeholder={isAdministrativeLetter ? t('requests.topic') : undefined}
               />
             </div>
 

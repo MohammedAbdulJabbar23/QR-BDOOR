@@ -18,6 +18,7 @@
     "totalRequests": "Total Requests Today", "pending": "Pending",
     "documentsIssued": "Documents Issued Today", "archived": "Archived Documents",
     "recentActivity": "Recent Activity", "myRequests": "My Recent Requests",
+    "recentRequests": "Recent Requests",
     "pendingRequests": "Pending Requests", "createNew": "Create New Request",
     "quickActions": "Quick Actions", "viewAll": "View All",
     "viewPending": "View Pending Requests"
@@ -25,6 +26,8 @@
   "requests": {
     "title": "Document Requests", "create": "Create Request", "edit": "Edit Request",
     "patientName": "Patient Name", "patientNameEn": "Patient Name (English)",
+    "topic": "Topic",
+    "topicRequired": "Topic is required for administrative letters",
     "recipientEntity": "Recipient Entity", "documentType": "Document Type",
     "notes": "Notes", "status": "Status", "date": "Date", "actions": "Actions",
     "accept": "Accept", "reject": "Reject", "rejectionReason": "Rejection Reason",
@@ -36,6 +39,7 @@
     "qrCode": "QR Code", "print": "Print", "revocationReason": "Revocation Reason",
     "uploadPdf": "Upload PDF", "pdfUploaded": "PDF uploaded successfully",
     "pdfGenerated": "PDF generated successfully", "fileTooLarge": "File size exceeds 10 MB limit",
+    "documentNumberRequired": "Document number is required.",
     "noDocuments": "No documents found",
     "transferToAccounts": "Transfer to Accounts",
     "uploadAccountStatement": "Upload Account Statement",
@@ -57,18 +61,22 @@
   "users": {
     "title": "User Management", "create": "Create User", "fullName": "Full Name",
     "fullNameEn": "Full Name (English)", "role": "Role", "department": "Department",
-    "active": "Active", "inactive": "Inactive", "deactivate": "Deactivate",
+    "active": "Active", "inactive": "Inactive", "deactivate": "Deactivate", "activate": "Activate",
     "edit": "Edit User", "username": "Username", "name": "Name", "status": "Status",
-    "actions": "Actions", "password": "Password",
+    "actions": "Actions", "password": "Password", "newPassword": "New Password",
+    "resetPassword": "Reset Password",
     "noUsers": "No users found",
     "deactivateConfirm": "Are you sure you want to deactivate this user?",
     "deactivateMessage": "The user will no longer be able to log in.",
+    "activateConfirm": "Are you sure you want to activate this user?",
+    "activateMessage": "The user will be able to log in again.",
     "userCreated": "User created successfully",
     "userUpdated": "User updated successfully",
     "userDeactivated": "User deactivated successfully",
     "createError": "Failed to create user",
     "updateError": "Failed to update user",
     "deactivateError": "Failed to deactivate user",
+    "resetPasswordError": "Failed to reset password",
     "usernameAlphanumeric": "Username must contain only letters and numbers",
     "passwordMinLength": "Password must be at least 6 characters",
     "fullNameRequired": "Full name is required",
@@ -106,7 +114,8 @@
   "reports": {
     "title": "Reports",
     "dailyReport": "Daily Report", "statusBreakdown": "Status Breakdown",
-    "cancelledRejected": "Rejected Requests",
+    "cancelledRejected": "Cancelled Documents",
+    "filteredExtract": "Filtered Extract",
     "dateRange": "Date Range", "from": "From", "to": "To", "apply": "Apply",
     "date": "Date", "selectDate": "Select a date",
     "totalRequests": "Total Requests", "completed": "Completed",
@@ -114,11 +123,15 @@
     "documentsIssued": "Documents Issued",
     "status": "Status", "count": "Count",
     "requestId": "Request ID", "reason": "Reason", "rejectedAt": "Rejected At",
-    "patientName": "Patient Name",
+    "patientName": "Patient Name", "documentNumber": "Document Number",
+    "replacementDocumentNumber": "Replacement Document Number",
+    "requestsData": "Requests", "documentsData": "Documents",
+    "issuedAt": "Issued At",
     "noData": "No data available for the selected period",
     "exportDaily": "Export Daily Report",
     "exportStatus": "Export Status Report",
     "exportCancelled": "Export Rejected Report",
+    "exportExtract": "Export Extract",
     "exporting": "Exporting...",
     "exportError": "Failed to export report"
   },
@@ -145,7 +158,7 @@
     "goHome": "Go to Dashboard"
   },
   "common": {
-    "save": "Save", "cancel": "Cancel", "delete": "Delete", "confirm": "Confirm",
+    "save": "Save", "saving": "Saving...", "cancel": "Cancel", "delete": "Delete", "confirm": "Confirm",
     "search": "Search...", "loading": "Loading...", "noData": "No data available",
     "page": "Page", "of": "of", "previous": "Previous", "next": "Next",
     "yes": "Yes", "no": "No", "all": "All", "export": "Export",
@@ -158,6 +171,6 @@
     "completed": "Completed", "draft": "Draft", "archived": "Archived", "revoked": "Revoked",
     "awaitingAccountStatement": "Awaiting Account Statement"
   },
-  "roles": { "employee": "Employee", "supervisor": "Supervisor", "admin": "Admin" },
+  "roles": { "employee": "Employee", "supervisor": "Supervisor", "admin": "Manager" },
   "departments": { "inquiry": "Inquiry", "statistics": "Statistics", "management": "Management", "accounts": "Accounts", "hr": "HR" }
 }

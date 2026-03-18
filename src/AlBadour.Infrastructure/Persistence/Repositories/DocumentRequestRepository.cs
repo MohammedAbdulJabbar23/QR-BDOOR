@@ -30,8 +30,8 @@ public class DocumentRequestRepository : IDocumentRequestRepository
 
     public async Task<(List<DocumentRequest> Items, int TotalCount)> GetAllAsync(
         RequestStatus? status, Guid? createdById, string? search,
-        DateTime? fromDate, DateTime? toDate,
-        int page, int pageSize, CancellationToken ct = default)
+        Guid? documentTypeId, DateTime? fromDate, DateTime? toDate,
+        int page, int pageSize, bool? isAdministrativeLetter = null, CancellationToken ct = default)
     {
         var query = _context.DocumentRequests
             .Include(r => r.DocumentType)
@@ -45,8 +45,22 @@ public class DocumentRequestRepository : IDocumentRequestRepository
         if (createdById.HasValue)
             query = query.Where(r => r.CreatedById == createdById.Value);
 
+        if (documentTypeId.HasValue)
+            query = query.Where(r => r.DocumentTypeId == documentTypeId.Value);
+
+        if (isAdministrativeLetter.HasValue)
+        {
+            query = isAdministrativeLetter.Value
+                ? query.Where(r => r.DocumentType.NameEn == "Administrative Letter")
+                : query.Where(r => r.DocumentType.NameEn != "Administrative Letter");
+        }
+
         if (!string.IsNullOrWhiteSpace(search))
-            query = query.Where(r => r.PatientName.Contains(search) || (r.PatientNameEn != null && r.PatientNameEn.Contains(search)));
+            query = query.Where(r =>
+                r.PatientName.Contains(search) ||
+                (r.PatientNameEn != null && r.PatientNameEn.Contains(search)) ||
+                r.RecipientEntity.Contains(search) ||
+                (r.Notes != null && r.Notes.Contains(search)));
 
         if (fromDate.HasValue)
         {
@@ -70,20 +84,46 @@ public class DocumentRequestRepository : IDocumentRequestRepository
         return (items, totalCount);
     }
 
-    public async Task<List<DocumentRequest>> GetPendingAsync(CancellationToken ct = default)
+    public async Task<List<DocumentRequest>> GetPendingAsync(Guid? documentTypeId = null, bool? isAdministrativeLetter = null, CancellationToken ct = default)
     {
-        return await _context.DocumentRequests
+        var query = _context.DocumentRequests
             .Include(r => r.DocumentType)
             .Include(r => r.CreatedBy)
             .Include(r => r.AssignedTo)
             .Where(r => r.Status == RequestStatus.Pending)
+            .AsQueryable();
+
+        if (documentTypeId.HasValue)
+            query = query.Where(r => r.DocumentTypeId == documentTypeId.Value);
+
+        if (isAdministrativeLetter.HasValue)
+        {
+            query = isAdministrativeLetter.Value
+                ? query.Where(r => r.DocumentType.NameEn == "Administrative Letter")
+                : query.Where(r => r.DocumentType.NameEn != "Administrative Letter");
+        }
+
+        return await query
             .OrderByDescending(r => r.CreatedAt)
             .ToListAsync(ct);
     }
 
-    public async Task<Dictionary<string, int>> GetStatusCountsAsync(DateTime? fromDate, DateTime? toDate, CancellationToken ct = default)
+    public async Task<Dictionary<string, int>> GetStatusCountsAsync(
+        DateTime? fromDate,
+        DateTime? toDate,
+        bool? isAdministrativeLetter = null,
+        CancellationToken ct = default)
     {
-        var query = _context.DocumentRequests.AsQueryable();
+        var query = _context.DocumentRequests
+            .Include(r => r.DocumentType)
+            .AsQueryable();
+
+        if (isAdministrativeLetter.HasValue)
+        {
+            query = isAdministrativeLetter.Value
+                ? query.Where(r => r.DocumentType.NameEn == "Administrative Letter")
+                : query.Where(r => r.DocumentType.NameEn != "Administrative Letter");
+        }
 
         if (fromDate.HasValue)
         {

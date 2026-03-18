@@ -30,10 +30,15 @@ public class IssuedDocumentRepository : IIssuedDocumentRepository
             .FirstOrDefaultAsync(d => d.Id == id, ct);
     }
 
+    public async Task<bool> ExistsByDocumentNumberAsync(string documentNumber, CancellationToken ct = default)
+    {
+        return await _context.IssuedDocuments.AnyAsync(d => d.DocumentNumber == documentNumber, ct);
+    }
+
     public async Task<(List<IssuedDocument> Items, int TotalCount)> GetAllAsync(
-        DocumentStatus? status, string? search,
+        DocumentStatus? status, string? search, Guid? documentTypeId,
         DateTime? fromDate, DateTime? toDate,
-        int page, int pageSize, CancellationToken ct = default)
+        int page, int pageSize, bool? isAdministrativeLetter = null, CancellationToken ct = default)
     {
         var query = _context.IssuedDocuments
             .Include(d => d.Request).ThenInclude(r => r.DocumentType)
@@ -46,10 +51,21 @@ public class IssuedDocumentRepository : IIssuedDocumentRepository
         if (status.HasValue)
             query = query.Where(d => d.Status == status.Value);
 
+        if (documentTypeId.HasValue)
+            query = query.Where(d => d.Request.DocumentTypeId == documentTypeId.Value);
+
+        if (isAdministrativeLetter.HasValue)
+        {
+            query = isAdministrativeLetter.Value
+                ? query.Where(d => d.Request.DocumentType.NameEn == "Administrative Letter")
+                : query.Where(d => d.Request.DocumentType.NameEn != "Administrative Letter");
+        }
+
         if (!string.IsNullOrWhiteSpace(search))
             query = query.Where(d => d.DocumentNumber.Contains(search) ||
                 d.Request.PatientName.Contains(search) ||
-                (d.Request.PatientNameEn != null && d.Request.PatientNameEn.Contains(search)));
+                (d.Request.PatientNameEn != null && d.Request.PatientNameEn.Contains(search)) ||
+                d.Request.RecipientEntity.Contains(search));
 
         if (fromDate.HasValue)
         {
@@ -73,25 +89,49 @@ public class IssuedDocumentRepository : IIssuedDocumentRepository
         return (items, totalCount);
     }
 
-    public async Task<List<IssuedDocument>> GetByRequestIdAsync(Guid requestId, CancellationToken ct = default)
+    public async Task<List<IssuedDocument>> GetByRequestIdAsync(Guid requestId, bool? isAdministrativeLetter = null, CancellationToken ct = default)
     {
-        return await _context.IssuedDocuments
+        var query = _context.IssuedDocuments
             .Include(d => d.Request).ThenInclude(r => r.DocumentType)
             .Include(d => d.Request).ThenInclude(r => r.CreatedBy)
             .Include(d => d.IssuedBy)
             .Include(d => d.RevokedBy)
             .Include(d => d.ReplacementDocument)
             .Where(d => d.RequestId == requestId)
+            .AsQueryable();
+
+        if (isAdministrativeLetter.HasValue)
+        {
+            query = isAdministrativeLetter.Value
+                ? query.Where(d => d.Request.DocumentType.NameEn == "Administrative Letter")
+                : query.Where(d => d.Request.DocumentType.NameEn != "Administrative Letter");
+        }
+
+        return await query
             .OrderByDescending(d => d.IssuedAt)
             .ToListAsync(ct);
     }
 
-    public async Task<int> CountAsync(DocumentStatus? status, DateTime? fromDate, DateTime? toDate, CancellationToken ct = default)
+    public async Task<int> CountAsync(
+        DocumentStatus? status,
+        DateTime? fromDate,
+        DateTime? toDate,
+        bool? isAdministrativeLetter = null,
+        CancellationToken ct = default)
     {
-        var query = _context.IssuedDocuments.AsQueryable();
+        var query = _context.IssuedDocuments
+            .Include(d => d.Request).ThenInclude(r => r.DocumentType)
+            .AsQueryable();
 
         if (status.HasValue)
             query = query.Where(d => d.Status == status.Value);
+
+        if (isAdministrativeLetter.HasValue)
+        {
+            query = isAdministrativeLetter.Value
+                ? query.Where(d => d.Request.DocumentType.NameEn == "Administrative Letter")
+                : query.Where(d => d.Request.DocumentType.NameEn != "Administrative Letter");
+        }
 
         if (fromDate.HasValue)
         {
@@ -108,14 +148,28 @@ public class IssuedDocumentRepository : IIssuedDocumentRepository
         return await query.CountAsync(ct);
     }
 
-    public async Task<int> CountArchivedInRangeAsync(DateTime fromDate, DateTime toDate, CancellationToken ct = default)
+    public async Task<int> CountArchivedInRangeAsync(
+        DateTime fromDate,
+        DateTime toDate,
+        bool? isAdministrativeLetter = null,
+        CancellationToken ct = default)
     {
         var from = DateTime.SpecifyKind(fromDate.Date, DateTimeKind.Utc);
         var to = DateTime.SpecifyKind(toDate.Date.AddDays(1), DateTimeKind.Utc);
 
-        return await _context.IssuedDocuments
+        var query = _context.IssuedDocuments
+            .Include(d => d.Request).ThenInclude(r => r.DocumentType)
             .Where(d => d.ArchivedAt.HasValue && d.ArchivedAt.Value >= from && d.ArchivedAt.Value < to)
-            .CountAsync(ct);
+            .AsQueryable();
+
+        if (isAdministrativeLetter.HasValue)
+        {
+            query = isAdministrativeLetter.Value
+                ? query.Where(d => d.Request.DocumentType.NameEn == "Administrative Letter")
+                : query.Where(d => d.Request.DocumentType.NameEn != "Administrative Letter");
+        }
+
+        return await query.CountAsync(ct);
     }
 
     public async Task AddAsync(IssuedDocument document, CancellationToken ct = default)

@@ -9,6 +9,7 @@ public class IssuedDocument : BaseEntity
     public string QrCodeUrl { get; set; } = string.Empty;
     public string? QrCodeImagePath { get; set; }
     public string? PdfFilePath { get; set; }
+    public string? Subject { get; set; }
     public string? DocumentBody { get; set; }
     public DocumentStatus Status { get; set; } = DocumentStatus.Draft;
     public string? RevocationReason { get; set; }

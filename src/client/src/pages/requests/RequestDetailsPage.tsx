@@ -7,12 +7,8 @@ import { requestsApi } from '@/api/requests.api';
 import { documentsApi } from '@/api/documents.api';
 import { useAuthStore } from '@/stores/authStore';
 import { useUiStore } from '@/stores/uiStore';
-import {
-  canEditRequest,
-  canAcceptRejectRequest,
-  canPrepareDocument,
-} from '@/utils/permissions';
 import { formatDateTime } from '@/utils/formatters';
+import { canAcceptRejectRequest, canEditRequest, canPrepareDocument } from '@/utils/permissions';
 import PageHeader from '@/components/common/PageHeader';
 import StatusBadge from '@/components/common/StatusBadge';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
@@ -97,16 +93,22 @@ export default function RequestDetailsPage() {
 
   const department = user?.department || '';
   const userId = user?.id || '';
-
-  const showEdit = canEditRequest(department, request.status, request.createdById, userId);
   const role = user?.role || '';
   const isAdminOrSupervisor = role === 'Admin' || role === 'Supervisor';
   const isClosed = request.status === 'Completed' || request.status === 'Rejected';
   const showDelete = isAdminOrSupervisor && !isClosed;
+  const showEdit = canEditRequest(
+    department,
+    request.status,
+    request.createdById,
+    userId,
+    request.documentTypeNameEn,
+  );
+  const showAcceptReject = request.status === 'Pending'
+    && canAcceptRejectRequest(department, request.documentTypeNameEn);
+  const showPrepareDoc = request.status === 'InProgress'
+    && canPrepareDocument(department, request.documentTypeNameEn);
   const isAdminLetter = request.documentTypeNameEn?.toLowerCase() === 'administrative letter';
-  const isResponsibleDept = isAdminLetter ? department === 'HR' : department === 'Statistics';
-  const showAcceptReject = isResponsibleDept && request.status === 'Pending';
-  const showPrepareDoc = isResponsibleDept && request.status === 'InProgress';
 
   const BackIcon = isRtl ? ArrowRight : ArrowLeft;
 
@@ -133,23 +135,25 @@ export default function RequestDetailsPage() {
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Patient Name (Arabic) */}
-          <div>
-            <span className="text-xs font-medium text-neutral-400 uppercase tracking-wider">
-              {t('requests.patientName')}
-            </span>
-            <p className="mt-1 text-neutral-800 font-medium">{request.patientName}</p>
-          </div>
+          {!isAdminLetter && (
+            <>
+              <div>
+                <span className="text-xs font-medium text-neutral-400 uppercase tracking-wider">
+                  {t('requests.patientName')}
+                </span>
+                <p className="mt-1 text-neutral-800 font-medium">{request.patientName || '-'}</p>
+              </div>
 
-          {/* Patient Name (English) */}
-          <div>
-            <span className="text-xs font-medium text-neutral-400 uppercase tracking-wider">
-              {t('requests.patientNameEn')}
-            </span>
-            <p className="mt-1 text-neutral-800">
-              {request.patientNameEn || '-'}
-            </p>
-          </div>
+              <div>
+                <span className="text-xs font-medium text-neutral-400 uppercase tracking-wider">
+                  {t('requests.patientNameEn')}
+                </span>
+                <p className="mt-1 text-neutral-800">
+                  {request.patientNameEn || '-'}
+                </p>
+              </div>
+            </>
+          )}
 
           {/* Recipient Entity */}
           <div>
@@ -210,7 +214,7 @@ export default function RequestDetailsPage() {
         {request.notes && (
           <div className="mt-6 pt-6 border-t border-neutral-100">
             <span className="text-xs font-medium text-neutral-400 uppercase tracking-wider">
-              {t('requests.notes')}
+              {isAdminLetter ? t('requests.topic') : t('requests.notes')}
             </span>
             <p className="mt-1 text-neutral-700 whitespace-pre-wrap">{request.notes}</p>
           </div>

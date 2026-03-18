@@ -12,6 +12,7 @@ public record DocumentDto(
     string QrCodeUrl,
     string? QrCodeImagePath,
     bool HasPdf,
+    string? Subject,
     string? DocumentBody,
     string Status,
     string? RevocationReason,

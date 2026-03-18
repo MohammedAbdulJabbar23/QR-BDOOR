@@ -2,19 +2,57 @@ export function canCreateRequest(department: string): boolean {
   return department === 'Inquiry' || department === 'HR';
 }
 
-export function canEditRequest(department: string, status: string, createdById: string, userId: string): boolean {
+function isAdministrativeLetter(documentTypeNameEn?: string): boolean {
+  return documentTypeNameEn?.toLowerCase() === 'administrative letter';
+}
+
+export function canHandleRequestType(department: string, documentTypeNameEn?: string): boolean {
+  if (!documentTypeNameEn) {
+    return false;
+  }
+
+  if (department === 'HR') {
+    return isAdministrativeLetter(documentTypeNameEn);
+  }
+
+  if (department === 'Inquiry' || department === 'Statistics') {
+    return !isAdministrativeLetter(documentTypeNameEn);
+  }
+
+  return false;
+}
+
+export function canEditRequest(
+  department: string,
+  status: string,
+  createdById: string,
+  userId: string,
+  documentTypeNameEn?: string,
+): boolean {
   const isNotFinished = status !== 'Completed' && status !== 'Rejected';
   const isCreator = createdById === userId;
-  const isHrOrStatistics = department === 'HR' || department === 'Statistics';
-  return isNotFinished && (isCreator || isHrOrStatistics);
+  const isResponsibleDepartment =
+    (department === 'HR' || department === 'Statistics') && canHandleRequestType(department, documentTypeNameEn);
+  const isAllowedCreator = isCreator && canHandleRequestType(department, documentTypeNameEn);
+  return isNotFinished && (isAllowedCreator || isResponsibleDepartment);
 }
 
-export function canAcceptRejectRequest(department: string): boolean {
-  return department === 'Statistics' || department === 'HR';
+export function canAcceptRejectRequest(department: string, documentTypeNameEn?: string): boolean {
+  if (!documentTypeNameEn) {
+    return department === 'Statistics' || department === 'HR';
+  }
+
+  return (department === 'Statistics' || department === 'HR')
+    && canHandleRequestType(department, documentTypeNameEn);
 }
 
-export function canPrepareDocument(department: string): boolean {
-  return department === 'Statistics' || department === 'HR';
+export function canPrepareDocument(department: string, documentTypeNameEn?: string): boolean {
+  if (!documentTypeNameEn) {
+    return department === 'Statistics' || department === 'HR';
+  }
+
+  return (department === 'Statistics' || department === 'HR')
+    && canHandleRequestType(department, documentTypeNameEn);
 }
 
 export function canUploadPdf(department: string): boolean {

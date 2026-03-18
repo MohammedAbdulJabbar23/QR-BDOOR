@@ -22,10 +22,23 @@ export default function DashboardPage() {
   const language = useUiStore((s) => s.language);
   const isRtl = language === 'ar';
   const ArrowIcon = isRtl ? ArrowLeft : ArrowRight;
+  const todayParam = new Date().toLocaleDateString('en-CA');
 
-  const { data: requestsData, isLoading: requestsLoading } = useQuery({
-    queryKey: ['requests', 'dashboard'],
+  const { data: recentRequestsData, isLoading: requestsLoading } = useQuery({
+    queryKey: ['requests', 'dashboard', 'recent'],
     queryFn: () => requestsApi.getAll({ page: 1, pageSize: 10 }),
+    refetchInterval: 180000,
+  });
+
+  const { data: todayRequestsData, isLoading: todayRequestsLoading } = useQuery({
+    queryKey: ['requests', 'dashboard', 'today', todayParam],
+    queryFn: () => requestsApi.getAll({ page: 1, pageSize: 1, fromDate: todayParam, toDate: todayParam }),
+    refetchInterval: 180000,
+  });
+
+  const { data: pendingRequestsSummary, isLoading: pendingSummaryLoading } = useQuery({
+    queryKey: ['requests', 'dashboard', 'pending-count'],
+    queryFn: () => requestsApi.getAll({ status: 'Pending', page: 1, pageSize: 1 }),
     refetchInterval: 180000,
   });
 
@@ -36,9 +49,9 @@ export default function DashboardPage() {
     refetchInterval: 180000,
   });
 
-  const { data: documentsData, isLoading: documentsLoading } = useQuery({
-    queryKey: ['documents', 'dashboard'],
-    queryFn: () => documentsApi.getAll({ page: 1, pageSize: 10 }),
+  const { data: todayDocumentsData, isLoading: documentsLoading } = useQuery({
+    queryKey: ['documents', 'dashboard', 'today', todayParam],
+    queryFn: () => documentsApi.getAll({ fromDate: todayParam, toDate: todayParam, page: 1, pageSize: 1 }),
     refetchInterval: 180000,
   });
 
@@ -48,19 +61,11 @@ export default function DashboardPage() {
     refetchInterval: 180000,
   });
 
-  const isLoading = requestsLoading || documentsLoading;
+  const isLoading = requestsLoading || todayRequestsLoading || pendingSummaryLoading || documentsLoading;
 
-  // Calculate today's counts
-  const today = new Date().toDateString();
-  const todayRequests = requestsData?.items.filter(
-    (r) => new Date(r.createdAt).toDateString() === today,
-  ).length ?? 0;
-  const pendingCount = requestsData?.items.filter(
-    (r) => r.status === 'Pending',
-  ).length ?? 0;
-  const todayDocuments = documentsData?.items.filter(
-    (d) => new Date(d.issuedAt).toDateString() === today,
-  ).length ?? 0;
+  const todayRequests = todayRequestsData?.totalCount ?? 0;
+  const pendingCount = pendingRequestsSummary?.totalCount ?? 0;
+  const todayDocuments = todayDocumentsData?.totalCount ?? 0;
   const archivedCount = archivedDocs?.totalCount ?? 0;
 
   const statCards = [
@@ -147,7 +152,7 @@ export default function DashboardPage() {
             <div className="bg-white rounded-xl border border-neutral-200 p-6">
               <div className="flex items-center justify-between mb-4">
                 <h3 className="text-lg font-semibold text-neutral-800">
-                  {t('dashboard.myRequests')}
+                  {t('dashboard.recentRequests')}
                 </h3>
                 <Link
                   to="/requests"
@@ -157,7 +162,7 @@ export default function DashboardPage() {
                   <ArrowIcon size={14} />
                 </Link>
               </div>
-              {requestsData && requestsData.items.length > 0 ? (
+              {recentRequestsData && recentRequestsData.items.length > 0 ? (
                 <div className="overflow-x-auto">
                   <table className="w-full text-sm">
                     <thead>
@@ -177,7 +182,7 @@ export default function DashboardPage() {
                       </tr>
                     </thead>
                     <tbody>
-                      {requestsData.items.slice(0, 5).map((req) => (
+                      {recentRequestsData.items.slice(0, 5).map((req) => (
                         <tr
                           key={req.id}
                           className="border-b border-neutral-50 hover:bg-neutral-50"
@@ -187,7 +192,7 @@ export default function DashboardPage() {
                               to={`/requests/${req.id}`}
                               className="text-neutral-800 hover:text-primary font-medium"
                             >
-                              {req.patientName}
+                              {req.patientName || '-'}
                             </Link>
                           </td>
                           <td className="py-2.5 px-3 text-neutral-600">
@@ -269,7 +274,7 @@ export default function DashboardPage() {
                               to={`/requests/${req.id}`}
                               className="text-neutral-800 hover:text-primary font-medium"
                             >
-                              {req.patientName}
+                              {req.patientName || '-'}
                             </Link>
                           </td>
                           <td className="py-2.5 px-3 text-neutral-600">

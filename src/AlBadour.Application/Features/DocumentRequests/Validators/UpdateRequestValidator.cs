@@ -7,7 +7,6 @@ public class UpdateRequestValidator : AbstractValidator<Commands.UpdateRequestCo
     public UpdateRequestValidator()
     {
         RuleFor(x => x.Dto.PatientName)
-            .NotEmpty().WithMessage("Patient name is required.")
             .MaximumLength(255).WithMessage("Patient name must not exceed 255 characters.");
 
         RuleFor(x => x.Dto.RecipientEntity)

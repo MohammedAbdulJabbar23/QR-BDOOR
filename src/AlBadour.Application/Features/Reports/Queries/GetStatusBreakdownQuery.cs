@@ -1,5 +1,6 @@
 using AlBadour.Application.Common.Interfaces;
 using AlBadour.Application.Common.Models;
+using AlBadour.Application.Common.Security;
 using AlBadour.Application.Features.Reports.DTOs;
 using AlBadour.Domain.Enums;
 using AlBadour.Domain.Interfaces;
@@ -26,7 +27,8 @@ public class GetStatusBreakdownQueryHandler : IRequestHandler<GetStatusBreakdown
             && _currentUser.Department != Department.Statistics)
             return Result.Failure<List<StatusBreakdownDto>>("Only supervisors and admins can view reports.", "FORBIDDEN");
 
-        var statusCounts = await _requestRepo.GetStatusCountsAsync(request.From, request.To, cancellationToken);
+        var isAdministrativeLetter = DepartmentVisibility.GetAdministrativeLetterFilter(_currentUser.Department);
+        var statusCounts = await _requestRepo.GetStatusCountsAsync(request.From, request.To, isAdministrativeLetter, cancellationToken);
 
         var breakdown = statusCounts
             .Select(kv => new StatusBreakdownDto(kv.Key, kv.Value))

@@ -3,16 +3,23 @@ import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
 import { BarChart3, Calendar, Download, FileText, Loader2 } from 'lucide-react';
 import { reportsApi } from '@/api/reports.api';
+import { requestsApi } from '@/api/requests.api';
+import { documentsApi } from '@/api/documents.api';
+import { documentTypesApi } from '@/api/documentTypes.api';
 import { useAuthStore } from '@/stores/authStore';
 import { useUiStore } from '@/stores/uiStore';
 import { canViewReports } from '@/utils/permissions';
 import { formatDate } from '@/utils/formatters';
+import { getApiErrorMessage } from '@/utils/apiErrors';
+import { DOCUMENT_STATUSES, REQUEST_STATUSES } from '@/utils/constants';
+import { filterDocumentTypesForDepartment } from '@/utils/documentTypeFilters';
 import PageHeader from '@/components/common/PageHeader';
 import EmptyState from '@/components/common/EmptyState';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import { cn } from '@/utils/cn';
+import type { FilteredReportDataset } from '@/types/report.types';
 
-type ReportTab = 'daily' | 'status' | 'cancelled';
+type ReportTab = 'daily' | 'status' | 'cancelled' | 'extract';
 
 export default function ReportsPage() {
   const { t } = useTranslation();
@@ -26,7 +33,21 @@ export default function ReportsPage() {
   const [dailyDate, setDailyDate] = useState(today);
   const [fromDate, setFromDate] = useState(thirtyDaysAgo);
   const [toDate, setToDate] = useState(today);
+  const [extractDataset, setExtractDataset] = useState<FilteredReportDataset>('requests');
+  const [extractStatus, setExtractStatus] = useState('');
+  const [extractDocumentTypeId, setExtractDocumentTypeId] = useState('');
+  const [extractFromDate, setExtractFromDate] = useState(thirtyDaysAgo);
+  const [extractToDate, setExtractToDate] = useState(today);
   const [exporting, setExporting] = useState<string | null>(null);
+  const [exportError, setExportError] = useState('');
+
+  const { data: documentTypes } = useQuery({
+    queryKey: ['documentTypes', true],
+    queryFn: () => documentTypesApi.getAll(true),
+    enabled: activeTab === 'extract',
+  });
+
+  const visibleDocumentTypes = filterDocumentTypesForDepartment(documentTypes, user?.department);
 
   // Daily report query
   const {
@@ -58,14 +79,40 @@ export default function ReportsPage() {
     enabled: activeTab === 'cancelled',
   });
 
-  const handleExport = async (reportType: string) => {
+  const { data: requestExtractData, isLoading: requestExtractLoading } = useQuery({
+    queryKey: ['reports', 'extract', 'requests', extractStatus, extractDocumentTypeId, extractFromDate, extractToDate],
+    queryFn: () => requestsApi.getAll({
+      status: extractStatus || undefined,
+      documentTypeId: extractDocumentTypeId || undefined,
+      fromDate: extractFromDate || undefined,
+      toDate: extractToDate || undefined,
+      page: 1,
+      pageSize: 20,
+    }),
+    enabled: activeTab === 'extract' && extractDataset === 'requests',
+  });
+
+  const { data: documentExtractData, isLoading: documentExtractLoading } = useQuery({
+    queryKey: ['reports', 'extract', 'documents', extractStatus, extractDocumentTypeId, extractFromDate, extractToDate],
+    queryFn: () => documentsApi.getAll({
+      status: extractStatus || undefined,
+      documentTypeId: extractDocumentTypeId || undefined,
+      fromDate: extractFromDate || undefined,
+      toDate: extractToDate || undefined,
+      page: 1,
+      pageSize: 20,
+    }),
+    enabled: activeTab === 'extract' && extractDataset === 'documents',
+  });
+
+  const handleExport = async (reportType: string, params: Record<string, string | undefined>) => {
     setExporting(reportType);
+    setExportError('');
+
     try {
-      const from = activeTab === 'daily' ? dailyDate : fromDate;
-      const to = activeTab === 'daily' ? dailyDate : toDate;
-      await reportsApi.exportReport(reportType, from, to);
-    } catch {
-      // Export error - silently fail
+      await reportsApi.exportReport(reportType, params);
+    } catch (error) {
+      setExportError(getApiErrorMessage(error));
     } finally {
       setExporting(null);
     }
@@ -84,11 +131,25 @@ export default function ReportsPage() {
     { key: 'daily', label: t('reports.dailyReport') },
     { key: 'status', label: t('reports.statusBreakdown') },
     { key: 'cancelled', label: t('reports.cancelledRejected') },
+    { key: 'extract', label: t('reports.filteredExtract') },
   ];
+
+  const extractStatusOptions = extractDataset === 'requests'
+    ? ['', ...REQUEST_STATUSES]
+    : ['', ...DOCUMENT_STATUSES];
+  const extractLoading = extractDataset === 'requests' ? requestExtractLoading : documentExtractLoading;
+  const extractRequestItems = requestExtractData?.items ?? [];
+  const extractDocumentItems = documentExtractData?.items ?? [];
 
   return (
     <div>
       <PageHeader title={t('reports.title')} />
+
+      {exportError && (
+        <div className="mb-4 rounded-lg border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700">
+          {exportError}
+        </div>
+      )}
 
       {/* Tabs */}
       <div className="flex gap-1 mb-6 border-b border-neutral-200">
@@ -126,7 +187,7 @@ export default function ReportsPage() {
               className="px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
             />
             <button
-              onClick={() => handleExport('daily')}
+              onClick={() => handleExport('daily', { from: dailyDate, to: dailyDate })}
               disabled={exporting === 'daily'}
               className="flex items-center gap-2 px-4 py-2 text-sm font-medium border border-neutral-300 rounded-lg hover:bg-neutral-50 transition-colors text-neutral-700 disabled:opacity-60"
             >
@@ -154,14 +215,14 @@ export default function ReportsPage() {
               />
               <StatCard
                 label={t('reports.completed')}
-                value={dailyData.completed ?? 0}
+                value={dailyData.completedRequests ?? 0}
                 icon={BarChart3}
                 color="text-green-600"
                 bg="bg-green-50"
               />
               <StatCard
                 label={t('reports.pending')}
-                value={dailyData.pending ?? 0}
+                value={dailyData.pendingRequests ?? 0}
                 icon={BarChart3}
                 color="text-amber-600"
                 bg="bg-amber-50"
@@ -187,8 +248,8 @@ export default function ReportsPage() {
             onFromChange={setFromDate}
             onToChange={setToDate}
             exportLabel={t('reports.exportStatus')}
-            onExport={() => handleExport('status')}
-            exporting={exporting === 'status'}
+            onExport={() => handleExport('status-breakdown', { from: fromDate, to: toDate })}
+            exporting={exporting === 'status-breakdown'}
             t={t}
           />
 
@@ -214,7 +275,7 @@ export default function ReportsPage() {
                     {(Array.isArray(statusData) ? statusData : []).map(
                       (item: { status: string; count: number }, idx: number) => (
                         <tr
-                          key={idx}
+                          key={`${item.status}-${idx}`}
                           className="border-b border-neutral-100 hover:bg-neutral-50"
                         >
                           <td className="px-4 py-3 text-neutral-800">
@@ -243,7 +304,7 @@ export default function ReportsPage() {
             onFromChange={setFromDate}
             onToChange={setToDate}
             exportLabel={t('reports.exportCancelled')}
-            onExport={() => handleExport('cancelled')}
+            onExport={() => handleExport('cancelled', { from: fromDate, to: toDate })}
             exporting={exporting === 'cancelled'}
             t={t}
           />
@@ -259,7 +320,7 @@ export default function ReportsPage() {
                   <thead>
                     <tr className="border-b border-neutral-200 bg-neutral-50">
                       <th className="text-start px-4 py-3 font-semibold text-neutral-700">
-                        {t('reports.requestId')}
+                        {t('reports.documentNumber')}
                       </th>
                       <th className="text-start px-4 py-3 font-semibold text-neutral-700">
                         {t('reports.patientName')}
@@ -270,30 +331,241 @@ export default function ReportsPage() {
                       <th className="text-start px-4 py-3 font-semibold text-neutral-700">
                         {t('reports.rejectedAt')}
                       </th>
+                      <th className="text-start px-4 py-3 font-semibold text-neutral-700">
+                        {t('reports.replacementDocumentNumber')}
+                      </th>
                     </tr>
                   </thead>
                   <tbody>
                     {(Array.isArray(cancelledData) ? cancelledData : []).map(
-                      (item: { id: string; patientName: string; rejectionReason: string; updatedAt: string }, idx: number) => (
+                      (item, idx: number) => (
                         <tr
-                          key={idx}
+                          key={`${item.documentNumber}-${idx}`}
                           className="border-b border-neutral-100 hover:bg-neutral-50"
                         >
                           <td className="px-4 py-3 text-neutral-800 font-mono text-xs">
-                            {item.id?.substring(0, 8)}...
+                            {item.documentNumber}
                           </td>
                           <td className="px-4 py-3 text-neutral-800">
                             {item.patientName}
                           </td>
                           <td className="px-4 py-3 text-neutral-600">
-                            {item.rejectionReason || '-'}
+                            {item.revocationReason || '-'}
                           </td>
                           <td className="px-4 py-3 text-neutral-500">
-                            {item.updatedAt ? formatDate(item.updatedAt, language) : '-'}
+                            {item.revokedAt ? formatDate(item.revokedAt, language) : '-'}
+                          </td>
+                          <td className="px-4 py-3 text-neutral-600">
+                            {item.replacementDocumentNumber || '-'}
                           </td>
                         </tr>
                       ),
                     )}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {activeTab === 'extract' && (
+        <div className="space-y-6">
+          <div className="bg-white rounded-xl border border-neutral-200 p-5 space-y-4">
+            <div className="flex flex-col sm:flex-row gap-3">
+              <select
+                value={extractDataset}
+                onChange={(e) => {
+                  setExtractDataset(e.target.value as FilteredReportDataset);
+                  setExtractStatus('');
+                  setExtractDocumentTypeId('');
+                }}
+                className="w-full sm:w-56 px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-white"
+              >
+                <option value="requests">{t('reports.requestsData')}</option>
+                <option value="documents">{t('reports.documentsData')}</option>
+              </select>
+
+              <select
+                value={extractDocumentTypeId}
+                onChange={(e) => setExtractDocumentTypeId(e.target.value)}
+                className="w-full sm:w-72 px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-white"
+              >
+                <option value="">{t('common.all')} {t('requests.documentType')}</option>
+                {visibleDocumentTypes.map((documentType) => (
+                  <option key={documentType.id} value={documentType.id}>
+                    {language === 'ar' ? documentType.nameAr : documentType.nameEn}
+                  </option>
+                ))}
+              </select>
+
+              <button
+                onClick={() => handleExport('extract', {
+                  dataset: extractDataset,
+                  status: extractStatus || undefined,
+                  documentTypeId: extractDocumentTypeId || undefined,
+                  from: extractFromDate || undefined,
+                  to: extractToDate || undefined,
+                })}
+                disabled={exporting === 'extract'}
+                className="flex items-center justify-center gap-2 px-4 py-2 text-sm font-medium border border-neutral-300 rounded-lg hover:bg-neutral-50 transition-colors text-neutral-700 disabled:opacity-60"
+              >
+                {exporting === 'extract' ? (
+                  <Loader2 size={16} className="animate-spin" />
+                ) : (
+                  <Download size={16} />
+                )}
+                {t('reports.exportExtract')}
+              </button>
+            </div>
+
+            <div className="flex gap-2 flex-wrap">
+              {extractStatusOptions.map((status) => (
+                <button
+                  key={status}
+                  onClick={() => setExtractStatus(status)}
+                  className={
+                    extractStatus === status
+                      ? 'px-3 py-2 text-sm rounded-lg font-medium bg-primary text-white'
+                      : 'px-3 py-2 text-sm rounded-lg font-medium border border-neutral-300 text-neutral-600 hover:bg-neutral-50'
+                  }
+                >
+                  {status
+                    ? t(`status.${status.charAt(0).toLowerCase()}${status.slice(1)}`, status)
+                    : t('common.all')}
+                </button>
+              ))}
+            </div>
+
+            <div className="flex flex-col sm:flex-row items-start sm:items-center gap-3">
+              <div className="flex items-center gap-2">
+                <Calendar size={18} className="text-neutral-400" />
+                <label className="text-sm font-medium text-neutral-600">
+                  {t('reports.dateRange')}:
+                </label>
+              </div>
+              <input
+                type="date"
+                value={extractFromDate}
+                onChange={(e) => setExtractFromDate(e.target.value)}
+                className="px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+              />
+              <input
+                type="date"
+                value={extractToDate}
+                min={extractFromDate || undefined}
+                onChange={(e) => setExtractToDate(e.target.value)}
+                className="px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+              />
+            </div>
+          </div>
+
+          {extractLoading ? (
+            <LoadingSpinner />
+          ) : extractDataset === 'requests' && extractRequestItems.length === 0 ? (
+            <EmptyState title={t('reports.noData')} />
+          ) : extractDataset === 'requests' ? (
+            <div className="bg-white rounded-xl border border-neutral-200 overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b border-neutral-200 bg-neutral-50">
+                      <th className="text-start px-4 py-3 font-semibold text-neutral-700">
+                        {t('requests.patientName')}
+                      </th>
+                      <th className="text-start px-4 py-3 font-semibold text-neutral-700">
+                        {t('requests.documentType')}
+                      </th>
+                      <th className="text-start px-4 py-3 font-semibold text-neutral-700">
+                        {t('requests.recipientEntity')}
+                      </th>
+                      <th className="text-start px-4 py-3 font-semibold text-neutral-700">
+                        {t('reports.status')}
+                      </th>
+                      <th className="text-start px-4 py-3 font-semibold text-neutral-700">
+                        {t('requests.date')}
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {extractRequestItems.map((item) => (
+                      <tr
+                        key={item.id}
+                        className="border-b border-neutral-100 hover:bg-neutral-50"
+                      >
+                        <td className="px-4 py-3 text-neutral-800">
+                          {language === 'ar'
+                            ? item.patientName || '-'
+                            : item.patientNameEn || item.patientName || '-'}
+                        </td>
+                        <td className="px-4 py-3 text-neutral-600">
+                          {language === 'ar' ? item.documentTypeNameAr : item.documentTypeNameEn}
+                        </td>
+                        <td className="px-4 py-3 text-neutral-600">
+                          {item.recipientEntity}
+                        </td>
+                        <td className="px-4 py-3 text-neutral-600">
+                          {t(`status.${item.status.charAt(0).toLowerCase()}${item.status.slice(1)}`, item.status)}
+                        </td>
+                        <td className="px-4 py-3 text-neutral-500">
+                          {formatDate(item.createdAt, language)}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          ) : extractDocumentItems.length === 0 ? (
+            <EmptyState title={t('reports.noData')} />
+          ) : (
+            <div className="bg-white rounded-xl border border-neutral-200 overflow-hidden">
+              <div className="overflow-x-auto">
+                <table className="w-full text-sm">
+                  <thead>
+                    <tr className="border-b border-neutral-200 bg-neutral-50">
+                      <th className="text-start px-4 py-3 font-semibold text-neutral-700">
+                        {t('reports.documentNumber')}
+                      </th>
+                      <th className="text-start px-4 py-3 font-semibold text-neutral-700">
+                        {t('requests.patientName')}
+                      </th>
+                      <th className="text-start px-4 py-3 font-semibold text-neutral-700">
+                        {t('requests.documentType')}
+                      </th>
+                      <th className="text-start px-4 py-3 font-semibold text-neutral-700">
+                        {t('reports.status')}
+                      </th>
+                      <th className="text-start px-4 py-3 font-semibold text-neutral-700">
+                        {t('reports.issuedAt')}
+                      </th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {extractDocumentItems.map((item) => (
+                      <tr
+                        key={item.id}
+                        className="border-b border-neutral-100 hover:bg-neutral-50"
+                      >
+                        <td className="px-4 py-3 text-neutral-800 font-medium">
+                          {item.documentNumber}
+                        </td>
+                        <td className="px-4 py-3 text-neutral-800">
+                          {language === 'ar'
+                            ? item.patientName || '-'
+                            : item.patientNameEn || item.patientName || '-'}
+                        </td>
+                        <td className="px-4 py-3 text-neutral-600">
+                          {language === 'ar' ? item.documentTypeNameAr : item.documentTypeNameEn}
+                        </td>
+                        <td className="px-4 py-3 text-neutral-600">
+                          {t(`status.${item.status.charAt(0).toLowerCase()}${item.status.slice(1)}`, item.status)}
+                        </td>
+                        <td className="px-4 py-3 text-neutral-500">
+                          {formatDate(item.issuedAt, language)}
+                        </td>
+                      </tr>
+                    ))}
                   </tbody>
                 </table>
               </div>

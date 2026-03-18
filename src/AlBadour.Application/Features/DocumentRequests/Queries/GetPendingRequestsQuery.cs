@@ -1,24 +1,35 @@
 using AlBadour.Application.Common.Models;
 using AlBadour.Application.Features.DocumentRequests.DTOs;
+using AlBadour.Domain.Enums;
 using AlBadour.Domain.Interfaces;
+using AlBadour.Application.Common.Interfaces;
 using MediatR;
 
 namespace AlBadour.Application.Features.DocumentRequests.Queries;
 
-public record GetPendingRequestsQuery : IRequest<Result<List<RequestDto>>>;
+public record GetPendingRequestsQuery(Guid? DocumentTypeId = null) : IRequest<Result<List<RequestDto>>>;
 
 public class GetPendingRequestsQueryHandler : IRequestHandler<GetPendingRequestsQuery, Result<List<RequestDto>>>
 {
     private readonly IDocumentRequestRepository _requestRepo;
+    private readonly ICurrentUserService _currentUser;
 
-    public GetPendingRequestsQueryHandler(IDocumentRequestRepository requestRepo)
+    public GetPendingRequestsQueryHandler(IDocumentRequestRepository requestRepo, ICurrentUserService currentUser)
     {
         _requestRepo = requestRepo;
+        _currentUser = currentUser;
     }
 
     public async Task<Result<List<RequestDto>>> Handle(GetPendingRequestsQuery request, CancellationToken cancellationToken)
     {
-        var items = await _requestRepo.GetPendingAsync(cancellationToken);
+        bool? isAdministrativeLetter = _currentUser.Department switch
+        {
+            Department.HR => true,
+            Department.Statistics => false,
+            _ => null
+        };
+
+        var items = await _requestRepo.GetPendingAsync(request.DocumentTypeId, isAdministrativeLetter, cancellationToken);
 
         var dtos = items.Select(e => new RequestDto(
             e.Id,

@@ -69,6 +69,9 @@ public class GeneratePdfCommandHandler : IRequestHandler<GeneratePdfCommand, Res
             PatientName: document.Request.PatientName,
             PatientNameEn: document.Request.PatientNameEn,
             RecipientEntity: document.Request.RecipientEntity,
+            Subject: isAdminLetter
+                ? (document.Subject ?? document.Request.Notes ?? string.Empty).Trim()
+                : document.Request.DocumentType.NameAr,
             DocumentTypeNameAr: document.Request.DocumentType.NameAr,
             DocumentTypeNameEn: document.Request.DocumentType.NameEn,
             DocumentBody: document.DocumentBody ?? string.Empty,
@@ -76,12 +79,12 @@ public class GeneratePdfCommandHandler : IRequestHandler<GeneratePdfCommand, Res
             QrCodeImageBytes: qrImageBytes,
             IssuedByName: document.IssuedBy.FullName,
             IssuedAt: document.IssuedAt,
-            PatientGender: document.PatientGender,
-            PatientProfession: document.PatientProfession,
-            PatientAge: document.PatientAge,
-            AdmissionDate: document.AdmissionDate,
-            DischargeDate: document.DischargeDate,
-            LeaveGranted: document.LeaveGranted
+            PatientGender: isAdminLetter ? null : document.PatientGender,
+            PatientProfession: isAdminLetter ? null : document.PatientProfession,
+            PatientAge: isAdminLetter ? null : document.PatientAge,
+            AdmissionDate: isAdminLetter ? null : document.AdmissionDate,
+            DischargeDate: isAdminLetter ? null : document.DischargeDate,
+            LeaveGranted: isAdminLetter ? null : document.LeaveGranted
         );
 
         var pdfBytes = _docService.GenerateDocument(docData);

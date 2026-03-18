@@ -5,6 +5,8 @@ import type { PaginatedList } from '@/types/common.types';
 export const documentsApi = {
   prepare: (data: {
     requestId: string;
+    documentNumber: string;
+    subject?: string;
     documentBody?: string;
     patientGender?: string;
     patientProfession?: string;
@@ -15,7 +17,7 @@ export const documentsApi = {
   }) =>
     apiClient.post<IssuedDocument>('/documents', data).then(r => r.data),
 
-  getAll: (params: { status?: string; search?: string; fromDate?: string; toDate?: string; page?: number; pageSize?: number }) =>
+  getAll: (params: { status?: string; search?: string; documentTypeId?: string; fromDate?: string; toDate?: string; page?: number; pageSize?: number }) =>
     apiClient.get<PaginatedList<IssuedDocument>>('/documents', { params }).then(r => r.data),
 
   getById: (id: string) =>

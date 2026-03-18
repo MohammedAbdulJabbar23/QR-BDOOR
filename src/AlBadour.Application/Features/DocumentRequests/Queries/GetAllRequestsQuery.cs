@@ -1,4 +1,5 @@
 using AlBadour.Application.Common.Models;
+using AlBadour.Application.Common.Security;
 using AlBadour.Application.Features.DocumentRequests.DTOs;
 using AlBadour.Domain.Enums;
 using AlBadour.Domain.Interfaces;
@@ -9,6 +10,7 @@ namespace AlBadour.Application.Features.DocumentRequests.Queries;
 public record GetAllRequestsQuery(
     RequestStatus? Status,
     string? Search,
+    Guid? DocumentTypeId,
     DateTime? FromDate,
     DateTime? ToDate,
     int Page = 1,
@@ -28,15 +30,13 @@ public class GetAllRequestsQueryHandler : IRequestHandler<GetAllRequestsQuery, R
 
     public async Task<Result<PaginatedList<RequestDto>>> Handle(GetAllRequestsQuery request, CancellationToken cancellationToken)
     {
-        // Inquiry and HR staff only see their own requests
-        Guid? createdById = _currentUser.Department == Department.Inquiry
-            || _currentUser.Department == Department.HR
-            ? _currentUser.UserId : null;
+        Guid? createdById = null;
+        bool? isAdministrativeLetter = DepartmentVisibility.GetAdministrativeLetterFilter(_currentUser.Department);
 
         var (items, totalCount) = await _requestRepo.GetAllAsync(
-            request.Status, createdById, request.Search,
+            request.Status, createdById, request.Search, request.DocumentTypeId,
             request.FromDate, request.ToDate,
-            request.Page, request.PageSize, cancellationToken);
+            request.Page, request.PageSize, isAdministrativeLetter, cancellationToken);
 
         var dtos = items.Select(e => new RequestDto(
             e.Id,

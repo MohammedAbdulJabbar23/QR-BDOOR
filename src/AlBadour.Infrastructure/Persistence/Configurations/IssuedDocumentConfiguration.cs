@@ -20,6 +20,7 @@ public class IssuedDocumentConfiguration : IEntityTypeConfiguration<IssuedDocume
         builder.HasIndex(d => d.QrCodeUrl).IsUnique();
         builder.Property(d => d.QrCodeImagePath).HasColumnName("qr_code_image_path").HasMaxLength(500);
         builder.Property(d => d.PdfFilePath).HasColumnName("pdf_file_path").HasMaxLength(500);
+        builder.Property(d => d.Subject).HasColumnName("subject").HasMaxLength(500);
         builder.Property(d => d.DocumentBody).HasColumnName("document_body");
         builder.Property(d => d.Status).HasColumnName("status").HasMaxLength(30).HasDefaultValue(DocumentStatus.Draft)
             .HasConversion(v => v.ToString().ToLower(), v => Enum.Parse<DocumentStatus>(v, true));

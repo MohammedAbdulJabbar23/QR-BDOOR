@@ -2,6 +2,8 @@ namespace AlBadour.Application.Features.IssuedDocuments.DTOs;
 
 public record PrepareDocumentDto(
     Guid RequestId,
+    string DocumentNumber,
+    string? Subject,
     string? DocumentBody,
     string? PatientGender,
     string? PatientProfession,

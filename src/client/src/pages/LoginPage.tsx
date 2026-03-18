@@ -4,15 +4,16 @@ import { useTranslation } from 'react-i18next';
 import { useAuthStore } from '@/stores/authStore';
 import { useUiStore } from '@/stores/uiStore';
 import { authApi } from '@/api/auth.api';
-import { Cross, Eye, EyeOff, Loader2 } from 'lucide-react';
+import { Cross, Eye, EyeOff, Globe, Loader2 } from 'lucide-react';
 import type { ApiError } from '@/types/common.types';
 import type { AxiosError } from 'axios';
+import { getApiErrorMessage } from '@/utils/apiErrors';
 
 export default function LoginPage() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const navigate = useNavigate();
   const { isAuthenticated, setAuth } = useAuthStore();
-  const language = useUiStore((s) => s.language);
+  const { language, setLanguage } = useUiStore();
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -37,14 +38,18 @@ export default function LoginPage() {
       const axiosError = err as AxiosError<ApiError>;
       if (axiosError.response?.status === 401) {
         setError(t('auth.invalidCredentials'));
-      } else if (axiosError.response?.data?.error) {
-        setError(axiosError.response.data.error);
       } else {
-        setError(t('auth.loginError'));
+        setError(getApiErrorMessage(err));
       }
     } finally {
       setLoading(false);
     }
+  };
+
+  const toggleLanguage = () => {
+    const nextLanguage = language === 'ar' ? 'en' : 'ar';
+    setLanguage(nextLanguage);
+    i18n.changeLanguage(nextLanguage);
   };
 
   return (
@@ -58,6 +63,17 @@ export default function LoginPage() {
       <div className="relative w-full max-w-md">
         {/* Card */}
         <div className="bg-white rounded-2xl shadow-xl border border-neutral-200 p-8">
+          <div className="flex justify-end mb-4">
+            <button
+              type="button"
+              onClick={toggleLanguage}
+              className="inline-flex items-center gap-2 px-3 py-1.5 text-sm font-medium text-neutral-600 border border-neutral-300 rounded-lg hover:bg-neutral-50 transition-colors"
+            >
+              <Globe size={16} />
+              {language === 'ar' ? 'EN' : 'عربي'}
+            </button>
+          </div>
+
           {/* Header with hospital branding */}
           <div className="text-center mb-8">
             <div className="inline-flex items-center justify-center w-16 h-16 bg-primary rounded-2xl mb-4">

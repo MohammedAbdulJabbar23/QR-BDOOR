@@ -4,9 +4,12 @@ import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
 import { Search, Eye, Calendar, X } from 'lucide-react';
 import { documentsApi } from '@/api/documents.api';
+import { documentTypesApi } from '@/api/documentTypes.api';
+import { useAuthStore } from '@/stores/authStore';
 import { useUiStore } from '@/stores/uiStore';
 import { formatDate } from '@/utils/formatters';
 import { DOCUMENT_STATUSES } from '@/utils/constants';
+import { filterDocumentTypesForDepartment } from '@/utils/documentTypeFilters';
 import PageHeader from '@/components/common/PageHeader';
 import StatusBadge from '@/components/common/StatusBadge';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
@@ -28,11 +31,13 @@ const PAGE_SIZE = 10;
 export default function DocumentsListPage() {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const user = useAuthStore((s) => s.user);
   const language = useUiStore((s) => s.language);
 
   const [search, setSearch] = useState('');
   const [debouncedSearch, setDebouncedSearch] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
+  const [documentTypeFilter, setDocumentTypeFilter] = useState('');
   const [fromDate, setFromDate] = useState('');
   const [toDate, setToDate] = useState('');
   const [page, setPage] = useState(1);
@@ -49,14 +54,21 @@ export default function DocumentsListPage() {
   // Reset page when filters change
   useEffect(() => {
     setPage(1);
-  }, [statusFilter, fromDate, toDate]);
+  }, [statusFilter, documentTypeFilter, fromDate, toDate]);
+
+  const { data: documentTypes } = useQuery({
+    queryKey: ['documentTypes', true],
+    queryFn: () => documentTypesApi.getAll(true),
+  });
+  const visibleDocumentTypes = filterDocumentTypesForDepartment(documentTypes, user?.department);
 
   const { data, isLoading } = useQuery({
-    queryKey: ['documents', { search: debouncedSearch, status: statusFilter, fromDate, toDate, page, pageSize: PAGE_SIZE }],
+    queryKey: ['documents', { search: debouncedSearch, status: statusFilter, documentTypeId: documentTypeFilter, fromDate, toDate, page, pageSize: PAGE_SIZE }],
     queryFn: () =>
       documentsApi.getAll({
         search: debouncedSearch || undefined,
         status: statusFilter || undefined,
+        documentTypeId: documentTypeFilter || undefined,
         fromDate: fromDate || undefined,
         toDate: toDate || undefined,
         page,
@@ -68,7 +80,9 @@ export default function DocumentsListPage() {
   const totalPages = data?.totalPages ?? 0;
 
   const getPatientName = (doc: IssuedDocument) =>
-    language === 'ar' ? doc.patientName : (doc.patientNameEn || doc.patientName);
+    language === 'ar'
+      ? (doc.patientName || '-')
+      : (doc.patientNameEn || doc.patientName || '-');
 
   const getDocumentType = (doc: IssuedDocument) =>
     language === 'ar' ? doc.documentTypeNameAr : doc.documentTypeNameEn;
@@ -109,6 +123,21 @@ export default function DocumentsListPage() {
               </button>
             ))}
           </div>
+        </div>
+
+        <div className="flex flex-col sm:flex-row gap-3">
+          <select
+            value={documentTypeFilter}
+            onChange={(e) => setDocumentTypeFilter(e.target.value)}
+            className="w-full sm:w-72 px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-white"
+          >
+            <option value="">{t('common.all')} {t('requests.documentType')}</option>
+            {visibleDocumentTypes.map((documentType) => (
+              <option key={documentType.id} value={documentType.id}>
+                {language === 'ar' ? documentType.nameAr : documentType.nameEn}
+              </option>
+            ))}
+          </select>
         </div>
 
         <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2">

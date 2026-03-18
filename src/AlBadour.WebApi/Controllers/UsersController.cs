@@ -58,6 +58,23 @@ public class UsersController : ControllerBase
         if (!result.IsSuccess) return BadRequest(new { error = result.Error, code = result.ErrorCode });
         return Ok(new { message = "User deactivated." });
     }
+
+    [HttpPut("{id:guid}/activate")]
+    public async Task<IActionResult> Activate(Guid id)
+    {
+        var result = await _mediator.Send(new ActivateUserCommand(id));
+        if (!result.IsSuccess) return BadRequest(new { error = result.Error, code = result.ErrorCode });
+        return Ok(new { message = "User activated." });
+    }
+
+    [HttpPut("{id:guid}/reset-password")]
+    public async Task<IActionResult> ResetPassword(Guid id, [FromBody] ResetPasswordBody body)
+    {
+        var result = await _mediator.Send(new ResetPasswordCommand(id, body.NewPassword));
+        if (!result.IsSuccess) return BadRequest(new { error = result.Error, code = result.ErrorCode });
+        return Ok(new { message = "Password reset." });
+    }
 }
 
 public record UpdateUserBody(string FullName, string? FullNameEn, string Role, string Department);
+public record ResetPasswordBody(string NewPassword);

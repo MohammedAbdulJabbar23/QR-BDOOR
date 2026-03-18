@@ -2,7 +2,7 @@ import { useState, useCallback } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from 'react-router-dom';
-import { Pencil, UserX, Plus, X, Check } from 'lucide-react';
+import { Pencil, UserX, UserCheck, KeyRound, Plus, X, Check } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -41,6 +41,10 @@ export default function UsersListPage() {
   const [page, setPage] = useState(1);
   const [editingUserId, setEditingUserId] = useState<string | null>(null);
   const [deactivateTarget, setDeactivateTarget] = useState<UserDto | null>(null);
+  const [activateTarget, setActivateTarget] = useState<UserDto | null>(null);
+  const [resetPasswordTarget, setResetPasswordTarget] = useState<UserDto | null>(null);
+  const [newPassword, setNewPassword] = useState('');
+  const [resetPasswordError, setResetPasswordError] = useState('');
 
   const pageSize = 10;
 
@@ -54,6 +58,28 @@ export default function UsersListPage() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['users'] });
       setDeactivateTarget(null);
+    },
+  });
+
+  const activateMutation = useMutation({
+    mutationFn: (id: string) => usersApi.activate(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['users'] });
+      setActivateTarget(null);
+    },
+  });
+
+  const resetPasswordMutation = useMutation({
+    mutationFn: ({ id, password }: { id: string; password: string }) =>
+      usersApi.resetPassword(id, password),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['users'] });
+      setResetPasswordTarget(null);
+      setNewPassword('');
+      setResetPasswordError('');
+    },
+    onError: () => {
+      setResetPasswordError(t('users.resetPasswordError'));
     },
   });
 
@@ -238,12 +264,21 @@ export default function UsersListPage() {
                           </td>
                           <td className="px-4 py-3">
                             <div className="flex items-center gap-2">
+                              {userItem.isActive && (
+                                <button
+                                  onClick={() => handleStartEdit(userItem)}
+                                  className="p-1.5 text-neutral-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
+                                  title={t('common.edit')}
+                                >
+                                  <Pencil size={16} />
+                                </button>
+                              )}
                               <button
-                                onClick={() => handleStartEdit(userItem)}
-                                className="p-1.5 text-neutral-500 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors"
-                                title={t('common.edit')}
+                                onClick={() => { setResetPasswordTarget(userItem); setNewPassword(''); setResetPasswordError(''); }}
+                                className="p-1.5 text-neutral-500 hover:text-amber-600 hover:bg-amber-50 rounded-lg transition-colors"
+                                title={t('users.resetPassword')}
                               >
-                                <Pencil size={16} />
+                                <KeyRound size={16} />
                               </button>
                               {userItem.isActive && userItem.id !== user.id && (
                                 <button
@@ -252,6 +287,15 @@ export default function UsersListPage() {
                                   title={t('users.deactivate')}
                                 >
                                   <UserX size={16} />
+                                </button>
+                              )}
+                              {!userItem.isActive && (
+                                <button
+                                  onClick={() => setActivateTarget(userItem)}
+                                  className="p-1.5 text-neutral-500 hover:text-green-600 hover:bg-green-50 rounded-lg transition-colors"
+                                  title={t('users.activate')}
+                                >
+                                  <UserCheck size={16} />
                                 </button>
                               )}
                             </div>
@@ -292,6 +336,71 @@ export default function UsersListPage() {
         }}
         onCancel={() => setDeactivateTarget(null)}
       />
+
+      <ConfirmDialog
+        open={activateTarget !== null}
+        title={t('users.activateConfirm')}
+        message={t('users.activateMessage')}
+        variant="primary"
+        confirmLabel={t('users.activate')}
+        onConfirm={() => {
+          if (activateTarget) {
+            activateMutation.mutate(activateTarget.id);
+          }
+        }}
+        onCancel={() => setActivateTarget(null)}
+      />
+
+      {resetPasswordTarget && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40">
+          <div className="bg-white rounded-xl shadow-xl w-full max-w-sm p-6 space-y-4">
+            <h2 className="text-base font-semibold text-neutral-900">
+              {t('users.resetPassword')}
+            </h2>
+            <p className="text-sm text-neutral-600">
+              {isRtl
+                ? `إعادة تعيين كلمة المرور للمستخدم: ${getUserDisplayName(resetPasswordTarget)}`
+                : `Reset password for: ${getUserDisplayName(resetPasswordTarget)}`}
+            </p>
+            <div>
+              <label className="block text-sm font-medium text-neutral-700 mb-1.5">
+                {t('users.newPassword')}
+              </label>
+              <input
+                type="password"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                className="w-full px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+                dir="ltr"
+              />
+            </div>
+            {resetPasswordError && (
+              <p className="text-xs text-red-600">{resetPasswordError}</p>
+            )}
+            <div className="flex justify-end gap-2 pt-2">
+              <button
+                onClick={() => { setResetPasswordTarget(null); setNewPassword(''); setResetPasswordError(''); }}
+                className="px-4 py-2 text-sm text-neutral-600 bg-neutral-100 hover:bg-neutral-200 rounded-lg transition-colors"
+              >
+                {t('common.cancel')}
+              </button>
+              <button
+                onClick={() => {
+                  if (!newPassword || newPassword.length < 6) {
+                    setResetPasswordError(t('users.passwordMinLength'));
+                    return;
+                  }
+                  resetPasswordMutation.mutate({ id: resetPasswordTarget.id, password: newPassword });
+                }}
+                disabled={resetPasswordMutation.isPending}
+                className="px-4 py-2 text-sm text-white bg-amber-600 hover:bg-amber-700 rounded-lg transition-colors disabled:opacity-50"
+              >
+                {resetPasswordMutation.isPending ? t('common.saving') : t('users.resetPassword')}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

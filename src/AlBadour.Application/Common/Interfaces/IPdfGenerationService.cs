@@ -5,6 +5,7 @@ public record DocumentGenerationData(
     string PatientName,
     string? PatientNameEn,
     string RecipientEntity,
+    string Subject,
     string DocumentTypeNameAr,
     string DocumentTypeNameEn,
     string DocumentBody,

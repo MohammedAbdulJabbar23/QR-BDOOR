@@ -9,6 +9,7 @@ import { useUiStore } from '@/stores/uiStore';
 import { cn } from '@/utils/cn';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import PageHeader from '@/components/common/PageHeader';
+import { getApiErrorMessage } from '@/utils/apiErrors';
 
 export default function PrepareDocumentPage() {
   const { requestId } = useParams<{ requestId: string }>();
@@ -17,6 +18,8 @@ export default function PrepareDocumentPage() {
   const language = useUiStore((s) => s.language);
   const isRtl = language === 'ar';
 
+  const [documentNumber, setDocumentNumber] = useState('');
+  const [subject, setSubject] = useState('');
   const [documentBody, setDocumentBody] = useState('');
   const [patientGender, setPatientGender] = useState('');
   const [patientProfession, setPatientProfession] = useState('');
@@ -35,6 +38,8 @@ export default function PrepareDocumentPage() {
   const prepareMutation = useMutation({
     mutationFn: (data: {
       requestId: string;
+      documentNumber: string;
+      subject?: string;
       documentBody?: string;
       patientGender?: string;
       patientProfession?: string;
@@ -46,24 +51,31 @@ export default function PrepareDocumentPage() {
     onSuccess: (doc) => {
       navigate(`/documents/${doc.id}`);
     },
-    onError: () => {
-      setError(t('common.error'));
+    onError: (error) => {
+      setError(getApiErrorMessage(error));
     },
   });
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!requestId) return;
+    const isAdministrativeLetter = request?.documentTypeNameEn?.toLowerCase() === 'administrative letter';
     setError('');
+    if (!documentNumber.trim()) {
+      setError(t('documents.documentNumberRequired'));
+      return;
+    }
     prepareMutation.mutate({
       requestId,
+      documentNumber: documentNumber.trim(),
+      subject: isAdministrativeLetter ? subject.trim() || undefined : undefined,
       documentBody: documentBody.trim() || undefined,
-      patientGender: patientGender.trim() || undefined,
-      patientProfession: patientProfession.trim() || undefined,
-      patientAge: patientAge.trim() || undefined,
-      admissionDate: admissionDate.trim() || undefined,
-      dischargeDate: dischargeDate.trim() || undefined,
-      leaveGranted: leaveGranted.trim() || undefined,
+      patientGender: isAdministrativeLetter ? undefined : patientGender.trim() || undefined,
+      patientProfession: isAdministrativeLetter ? undefined : patientProfession.trim() || undefined,
+      patientAge: isAdministrativeLetter ? undefined : patientAge.trim() || undefined,
+      admissionDate: isAdministrativeLetter ? undefined : admissionDate.trim() || undefined,
+      dischargeDate: isAdministrativeLetter ? undefined : dischargeDate.trim() || undefined,
+      leaveGranted: isAdministrativeLetter ? undefined : leaveGranted.trim() || undefined,
     });
   };
 
@@ -88,6 +100,7 @@ export default function PrepareDocumentPage() {
   const documentType = language === 'ar'
     ? request.documentTypeNameAr
     : request.documentTypeNameEn;
+  const isAdministrativeLetter = request.documentTypeNameEn?.toLowerCase() === 'administrative letter';
 
   return (
     <div>
@@ -113,12 +126,14 @@ export default function PrepareDocumentPage() {
           </h2>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-          <div>
-            <p className="text-xs font-medium text-neutral-500 mb-1">
-              {t('requests.patientName')}
-            </p>
-            <p className="text-sm font-medium text-neutral-900">{patientName}</p>
-          </div>
+          {!isAdministrativeLetter && (
+            <div>
+              <p className="text-xs font-medium text-neutral-500 mb-1">
+                {t('requests.patientName')}
+              </p>
+              <p className="text-sm font-medium text-neutral-900">{patientName || '-'}</p>
+            </div>
+          )}
           <div>
             <p className="text-xs font-medium text-neutral-500 mb-1">
               {t('requests.recipientEntity')}
@@ -136,6 +151,40 @@ export default function PrepareDocumentPage() {
 
       {/* Prepare Form */}
       <form onSubmit={handleSubmit} className="bg-white rounded-xl border border-neutral-200 p-6">
+        <div className="mb-6">
+          <label
+            htmlFor="documentNumber"
+            className="block text-sm font-medium text-neutral-700 mb-2"
+          >
+            {t('documents.documentNumber')} <span className="text-red-500">*</span>
+          </label>
+          <input
+            id="documentNumber"
+            type="text"
+            value={documentNumber}
+            onChange={(e) => setDocumentNumber(e.target.value)}
+            className="w-full px-4 py-3 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+            dir="ltr"
+          />
+        </div>
+
+        {isAdministrativeLetter && (
+          <div className="mb-6">
+            <label htmlFor="subject" className="block text-sm font-medium text-neutral-700 mb-2">
+              {language === 'ar' ? 'الموضوع (م/)' : 'Subject (م/)'}
+            </label>
+            <input
+              id="subject"
+              type="text"
+              value={subject}
+              onChange={(e) => setSubject(e.target.value)}
+              className="w-full px-4 py-3 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+              dir="rtl"
+              placeholder={language === 'ar' ? 'أدخل موضوع الكتاب...' : 'Enter letter subject...'}
+            />
+          </div>
+        )}
+
         <div className="mb-6">
           <label
             htmlFor="documentBody"
@@ -174,7 +223,7 @@ export default function PrepareDocumentPage() {
           </div>
         </div>
 
-        {/* Additional Fields */}
+        {!isAdministrativeLetter && (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
           <div>
             <label htmlFor="patientGender" className="block text-sm font-medium text-neutral-700 mb-1">
@@ -254,6 +303,7 @@ export default function PrepareDocumentPage() {
             />
           </div>
         </div>
+        )}
 
         {error && (
           <div className="mb-4 p-3 bg-danger-light text-red-700 text-sm rounded-lg">
