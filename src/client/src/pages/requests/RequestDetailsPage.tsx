@@ -210,6 +210,18 @@ export default function RequestDetailsPage() {
           </div>
         </div>
 
+        {/* Language */}
+        {request.language && !isAdminLetter && (
+          <div className="mt-6 pt-6 border-t border-neutral-100">
+            <span className="text-xs font-medium text-neutral-400 uppercase tracking-wider">
+              {t('requests.language')}
+            </span>
+            <p className="mt-1 text-neutral-800">
+              {request.language === 'English' ? t('requests.languageEnglish') : t('requests.languageArabic')}
+            </p>
+          </div>
+        )}
+
         {/* Notes */}
         {request.notes && (
           <div className="mt-6 pt-6 border-t border-neutral-100">

@@ -9,6 +9,7 @@ public class DocumentRequest : BaseEntity
     public string RecipientEntity { get; set; } = string.Empty;
     public Guid DocumentTypeId { get; set; }
     public string? Notes { get; set; }
+    public string? Language { get; set; }
     public RequestStatus Status { get; set; } = RequestStatus.Pending;
     public string? RejectionReason { get; set; }
     public Guid CreatedById { get; set; }

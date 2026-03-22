@@ -38,7 +38,8 @@ public class IssuedDocumentRepository : IIssuedDocumentRepository
     public async Task<(List<IssuedDocument> Items, int TotalCount)> GetAllAsync(
         DocumentStatus? status, string? search, Guid? documentTypeId,
         DateTime? fromDate, DateTime? toDate,
-        int page, int pageSize, bool? isAdministrativeLetter = null, CancellationToken ct = default)
+        int page, int pageSize, bool? isAdministrativeLetter = null,
+        string? requiredDocumentTypeName = null, CancellationToken ct = default)
     {
         var query = _context.IssuedDocuments
             .Include(d => d.Request).ThenInclude(r => r.DocumentType)
@@ -54,7 +55,11 @@ public class IssuedDocumentRepository : IIssuedDocumentRepository
         if (documentTypeId.HasValue)
             query = query.Where(d => d.Request.DocumentTypeId == documentTypeId.Value);
 
-        if (isAdministrativeLetter.HasValue)
+        if (requiredDocumentTypeName != null)
+        {
+            query = query.Where(d => d.Request.DocumentType.NameEn.Contains(requiredDocumentTypeName));
+        }
+        else if (isAdministrativeLetter.HasValue)
         {
             query = isAdministrativeLetter.Value
                 ? query.Where(d => d.Request.DocumentType.NameEn == "Administrative Letter")

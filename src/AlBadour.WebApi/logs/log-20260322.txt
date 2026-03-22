@@ -1,0 +1,234 @@
+2026-03-22 08:54:01.299 +03:00 [INF] Application is shutting down...
+2026-03-22 08:54:01.301 +03:00 [DBG] Hosting stopping
+2026-03-22 08:54:01.317 +03:00 [DBG] Hosting stopped
+2026-03-22 08:54:07.430 +03:00 [DBG] Hosting starting
+2026-03-22 08:54:07.482 +03:00 [WRN] The WebRootPath was not found: /home/kira/Documents/freelance/bdor-hospital/src/AlBadour.WebApi/wwwroot. Static files may be unavailable.
+2026-03-22 08:54:07.517 +03:00 [INF] Now listening on: http://localhost:5293
+2026-03-22 08:54:07.517 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-03-22 08:54:07.517 +03:00 [INF] Hosting environment: Development
+2026-03-22 08:54:07.518 +03:00 [INF] Content root path: /home/kira/Documents/freelance/bdor-hospital/src/AlBadour.WebApi
+2026-03-22 08:54:07.519 +03:00 [DBG] Hosting started
+2026-03-22 08:54:09.379 +03:00 [INF] HTTP GET /api/health responded 404 in 32ms
+2026-03-22 08:54:26.577 +03:00 [INF] Handling LoginCommand
+2026-03-22 08:54:27.141 +03:00 [INF] Handled LoginCommand in 563ms
+2026-03-22 08:54:27.158 +03:00 [INF] HTTP POST /api/auth/login responded 200 in 691ms
+2026-03-22 08:54:27.177 +03:00 [INF] Handling LoginCommand
+2026-03-22 08:54:27.399 +03:00 [INF] Handled LoginCommand in 221ms
+2026-03-22 08:54:27.400 +03:00 [INF] HTTP POST /api/auth/login responded 200 in 227ms
+2026-03-22 08:54:27.413 +03:00 [INF] Handling LoginCommand
+2026-03-22 08:54:27.624 +03:00 [INF] Handled LoginCommand in 211ms
+2026-03-22 08:54:27.625 +03:00 [INF] HTTP POST /api/auth/login responded 200 in 214ms
+2026-03-22 08:54:27.640 +03:00 [INF] Handling LoginCommand
+2026-03-22 08:54:27.852 +03:00 [INF] Handled LoginCommand in 212ms
+2026-03-22 08:54:27.853 +03:00 [INF] HTTP POST /api/auth/login responded 200 in 213ms
+2026-03-22 08:54:27.866 +03:00 [INF] Handling LoginCommand
+2026-03-22 08:54:28.070 +03:00 [INF] Handled LoginCommand in 204ms
+2026-03-22 08:54:28.071 +03:00 [INF] HTTP POST /api/auth/login responded 200 in 205ms
+2026-03-22 08:54:28.130 +03:00 [INF] Handling CreateRequestCommand
+2026-03-22 08:54:28.242 +03:00 [INF] Handled CreateRequestCommand in 112ms
+2026-03-22 08:54:28.252 +03:00 [INF] HTTP POST /api/requests responded 201 in 168ms
+2026-03-22 08:54:37.534 +03:00 [INF] Handling AcceptRequestCommand
+2026-03-22 08:54:37.607 +03:00 [INF] Handled AcceptRequestCommand in 73ms
+2026-03-22 08:54:37.608 +03:00 [INF] HTTP POST /api/requests/79c8f41d-721b-48cf-9c86-fc76d684f2f7/accept responded 200 in 80ms
+2026-03-22 08:54:37.636 +03:00 [INF] Handling AcceptRequestCommand
+2026-03-22 08:54:37.639 +03:00 [INF] Handled AcceptRequestCommand in 2ms
+2026-03-22 08:54:37.640 +03:00 [INF] HTTP POST /api/requests/79c8f41d-721b-48cf-9c86-fc76d684f2f7/accept responded 400 in 5ms
+2026-03-22 08:55:30.645 +03:00 [INF] Handling GetRequestByIdQuery
+2026-03-22 08:55:30.649 +03:00 [INF] Handled GetRequestByIdQuery in 4ms
+2026-03-22 08:55:30.655 +03:00 [INF] HTTP GET /api/requests/79c8f41d-721b-48cf-9c86-fc76d684f2f7 responded 200 in 16ms
+2026-03-22 08:55:30.676 +03:00 [INF] Handling PrepareDocumentCommand
+2026-03-22 08:55:30.681 +03:00 [INF] Handled PrepareDocumentCommand in 5ms
+2026-03-22 08:55:30.682 +03:00 [INF] HTTP POST /api/documents responded 400 in 14ms
+2026-03-22 08:55:39.472 +03:00 [INF] Handling PrepareDocumentCommand
+2026-03-22 08:55:39.631 +03:00 [INF] Handled PrepareDocumentCommand in 158ms
+2026-03-22 08:55:39.641 +03:00 [INF] HTTP POST /api/documents responded 201 in 170ms
+2026-03-22 08:55:39.672 +03:00 [INF] Handling GeneratePdfCommand
+2026-03-22 08:55:39.849 +03:00 [INF] Handled GeneratePdfCommand in 176ms
+2026-03-22 08:55:39.850 +03:00 [INF] HTTP POST /api/documents/8d37d2ee-3049-4f01-96a4-03611e5dfe00/generate-pdf responded 200 in 184ms
+2026-03-22 08:55:39.861 +03:00 [INF] Handling GetDocumentByIdQuery
+2026-03-22 08:55:39.866 +03:00 [INF] Handled GetDocumentByIdQuery in 4ms
+2026-03-22 08:55:39.880 +03:00 [INF] HTTP GET /api/documents/8d37d2ee-3049-4f01-96a4-03611e5dfe00/pdf responded 200 in 22ms
+2026-03-22 08:55:56.153 +03:00 [INF] Handling GetDocumentByIdQuery
+2026-03-22 08:55:56.159 +03:00 [INF] Handled GetDocumentByIdQuery in 6ms
+2026-03-22 08:55:56.159 +03:00 [INF] HTTP GET /api/documents/128e78c4-5b61-44b4-a5b2-e0b7c4a64402 responded 200 in 12ms
+2026-03-22 08:55:56.181 +03:00 [INF] Handling UploadPdfCommand
+2026-03-22 08:55:56.198 +03:00 [INF] Handled UploadPdfCommand in 16ms
+2026-03-22 08:55:56.198 +03:00 [INF] HTTP POST /api/documents/128e78c4-5b61-44b4-a5b2-e0b7c4a64402/upload-pdf responded 200 in 27ms
+2026-03-22 08:55:56.206 +03:00 [INF] Handling GetDocumentByIdQuery
+2026-03-22 08:55:56.210 +03:00 [INF] Handled GetDocumentByIdQuery in 3ms
+2026-03-22 08:55:56.210 +03:00 [INF] HTTP GET /api/documents/128e78c4-5b61-44b4-a5b2-e0b7c4a64402 responded 200 in 4ms
+2026-03-22 08:56:08.266 +03:00 [INF] Handling GetDocumentByIdQuery
+2026-03-22 08:56:08.279 +03:00 [INF] Handled GetDocumentByIdQuery in 12ms
+2026-03-22 08:56:08.279 +03:00 [INF] HTTP GET /api/documents/128e78c4-5b61-44b4-a5b2-e0b7c4a64402 responded 200 in 14ms
+2026-03-22 08:56:37.104 +03:00 [INF] Handling TransferToAccountsCommand
+2026-03-22 08:56:37.134 +03:00 [INF] Handled TransferToAccountsCommand in 29ms
+2026-03-22 08:56:37.134 +03:00 [INF] HTTP POST /api/documents/128e78c4-5b61-44b4-a5b2-e0b7c4a64402/transfer-to-accounts responded 200 in 34ms
+2026-03-22 08:56:38.144 +03:00 [INF] Handling GetDocumentByIdQuery
+2026-03-22 08:56:38.149 +03:00 [INF] Handled GetDocumentByIdQuery in 5ms
+2026-03-22 08:56:38.149 +03:00 [INF] HTTP GET /api/documents/128e78c4-5b61-44b4-a5b2-e0b7c4a64402 responded 200 in 6ms
+2026-03-22 08:57:52.325 +03:00 [INF] Handling GetAllDocumentsQuery
+2026-03-22 08:57:52.377 +03:00 [INF] Handled GetAllDocumentsQuery in 51ms
+2026-03-22 08:57:52.384 +03:00 [INF] HTTP GET /api/documents responded 200 in 66ms
+2026-03-22 08:57:52.405 +03:00 [INF] Handling UploadAccountStatementCommand
+2026-03-22 08:57:52.430 +03:00 [INF] Handled UploadAccountStatementCommand in 25ms
+2026-03-22 08:57:52.430 +03:00 [INF] HTTP POST /api/documents/128e78c4-5b61-44b4-a5b2-e0b7c4a64402/upload-account-statement responded 200 in 34ms
+2026-03-22 08:57:53.440 +03:00 [INF] Handling GetDocumentByIdQuery
+2026-03-22 08:57:53.446 +03:00 [INF] Handled GetDocumentByIdQuery in 6ms
+2026-03-22 08:57:53.447 +03:00 [INF] HTTP GET /api/documents/128e78c4-5b61-44b4-a5b2-e0b7c4a64402 responded 200 in 7ms
+2026-03-22 09:04:23.502 +03:00 [INF] Handling GetAllRequestsQuery
+2026-03-22 09:04:23.544 +03:00 [INF] Handled GetAllRequestsQuery in 40ms
+2026-03-22 09:04:23.545 +03:00 [INF] HTTP GET /api/requests responded 200 in 50ms
+2026-03-22 09:04:23.558 +03:00 [INF] Handling GetAllDocumentsQuery
+2026-03-22 09:04:23.584 +03:00 [INF] Handled GetAllDocumentsQuery in 26ms
+2026-03-22 09:04:23.585 +03:00 [INF] HTTP GET /api/documents responded 200 in 28ms
+2026-03-22 09:04:54.527 +03:00 [INF] Handling GetDocumentByIdQuery
+2026-03-22 09:04:54.531 +03:00 [INF] Handled GetDocumentByIdQuery in 4ms
+2026-03-22 09:04:54.531 +03:00 [INF] HTTP GET /api/documents/707bf6ef-704d-417e-af73-a704ec22cc17 responded 200 in 5ms
+2026-03-22 09:04:54.542 +03:00 [INF] Handling GetDocumentByIdQuery
+2026-03-22 09:04:54.546 +03:00 [INF] Handled GetDocumentByIdQuery in 3ms
+2026-03-22 09:04:54.546 +03:00 [INF] HTTP GET /api/documents/62870524-bd50-431e-8d58-5090936122c8 responded 200 in 4ms
+2026-03-22 09:07:32.877 +03:00 [INF] Handling GetDocumentByIdQuery
+2026-03-22 09:07:32.883 +03:00 [INF] Handled GetDocumentByIdQuery in 5ms
+2026-03-22 09:07:32.883 +03:00 [INF] HTTP GET /api/documents/707bf6ef-704d-417e-af73-a704ec22cc17 responded 200 in 6ms
+2026-03-22 09:08:01.031 +03:00 [INF] Handling UploadPdfCommand
+2026-03-22 09:08:01.050 +03:00 [INF] Handled UploadPdfCommand in 19ms
+2026-03-22 09:08:01.051 +03:00 [INF] HTTP POST /api/documents/707bf6ef-704d-417e-af73-a704ec22cc17/upload-pdf responded 200 in 20ms
+2026-03-22 09:08:01.060 +03:00 [INF] Handling UploadPdfCommand
+2026-03-22 09:08:01.075 +03:00 [INF] Handled UploadPdfCommand in 15ms
+2026-03-22 09:08:01.075 +03:00 [INF] HTTP POST /api/documents/62870524-bd50-431e-8d58-5090936122c8/upload-pdf responded 200 in 16ms
+2026-03-22 09:08:02.084 +03:00 [INF] Handling GetDocumentByIdQuery
+2026-03-22 09:08:02.090 +03:00 [INF] Handled GetDocumentByIdQuery in 5ms
+2026-03-22 09:08:02.090 +03:00 [INF] HTTP GET /api/documents/707bf6ef-704d-417e-af73-a704ec22cc17 responded 200 in 6ms
+2026-03-22 09:08:02.109 +03:00 [INF] Handling GetDocumentByIdQuery
+2026-03-22 09:08:02.114 +03:00 [INF] Handled GetDocumentByIdQuery in 4ms
+2026-03-22 09:08:02.114 +03:00 [INF] HTTP GET /api/documents/62870524-bd50-431e-8d58-5090936122c8 responded 200 in 6ms
+2026-03-22 09:09:29.488 +03:00 [INF] Handling VerifyDocumentQuery
+2026-03-22 09:09:29.501 +03:00 [INF] Handled VerifyDocumentQuery in 12ms
+2026-03-22 09:09:29.504 +03:00 [INF] HTTP GET /api/verify/707bf6ef-704d-417e-af73-a704ec22cc17 responded 200 in 31ms
+2026-03-22 09:09:29.527 +03:00 [INF] Handling VerifyDocumentQuery
+2026-03-22 09:09:29.531 +03:00 [INF] Handled VerifyDocumentQuery in 3ms
+2026-03-22 09:09:29.531 +03:00 [INF] HTTP GET /api/verify/707bf6ef-704d-417e-af73-a704ec22cc17 responded 200 in 4ms
+2026-03-22 09:09:51.850 +03:00 [INF] Handling GetAllRequestsQuery
+2026-03-22 09:09:51.869 +03:00 [INF] Handled GetAllRequestsQuery in 18ms
+2026-03-22 09:09:51.869 +03:00 [INF] HTTP GET /api/requests responded 200 in 20ms
+2026-03-22 09:09:51.883 +03:00 [INF] Handling GetDocumentTypesQuery
+2026-03-22 09:09:51.889 +03:00 [INF] Handled GetDocumentTypesQuery in 5ms
+2026-03-22 09:09:51.891 +03:00 [INF] HTTP GET /api/document-types responded 200 in 11ms
+2026-03-22 09:09:51.900 +03:00 [INF] Handling GetDocumentTypesQuery
+2026-03-22 09:09:51.902 +03:00 [INF] Handled GetDocumentTypesQuery in 1ms
+2026-03-22 09:09:51.902 +03:00 [INF] HTTP GET /api/document-types responded 200 in 2ms
+2026-03-22 09:09:51.921 +03:00 [INF] Handling GetDocumentTypesQuery
+2026-03-22 09:09:51.923 +03:00 [INF] Handled GetDocumentTypesQuery in 1ms
+2026-03-22 09:09:51.923 +03:00 [INF] HTTP GET /api/document-types responded 200 in 2ms
+2026-03-22 09:09:51.942 +03:00 [INF] Handling GetDocumentTypesQuery
+2026-03-22 09:09:51.943 +03:00 [INF] Handled GetDocumentTypesQuery in 1ms
+2026-03-22 09:09:51.944 +03:00 [INF] HTTP GET /api/document-types responded 200 in 1ms
+2026-03-22 15:03:05.095 +03:00 [INF] HTTP GET /api/documents/export-excel responded 404 in 4ms
+2026-03-22 15:03:05.125 +03:00 [INF] HTTP POST /api/documents/707bf6ef-704d-417e-af73-a704ec22cc17/generate-pdf responded 401 in 9ms
+2026-03-22 15:04:25.404 +03:00 [INF] Application is shutting down...
+2026-03-22 15:04:25.407 +03:00 [DBG] Hosting stopping
+2026-03-22 15:04:25.423 +03:00 [DBG] Hosting stopped
+2026-03-22 15:14:44.049 +03:00 [DBG] Hosting starting
+2026-03-22 15:14:44.138 +03:00 [WRN] The WebRootPath was not found: /home/kira/Documents/freelance/bdor-hospital/src/AlBadour.WebApi/wwwroot. Static files may be unavailable.
+2026-03-22 15:14:44.188 +03:00 [INF] Now listening on: http://localhost:5293
+2026-03-22 15:14:44.189 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-03-22 15:14:44.189 +03:00 [INF] Hosting environment: Development
+2026-03-22 15:14:44.189 +03:00 [INF] Content root path: /home/kira/Documents/freelance/bdor-hospital/src/AlBadour.WebApi
+2026-03-22 15:14:44.191 +03:00 [DBG] Hosting started
+2026-03-22 15:14:46.845 +03:00 [INF] HTTP GET /api/document-types responded 401 in 71ms
+2026-03-22 15:23:26.789 +03:00 [INF] Handling LoginCommand
+2026-03-22 15:23:27.796 +03:00 [INF] Handled LoginCommand in 1006ms
+2026-03-22 15:23:27.832 +03:00 [INF] HTTP POST /api/auth/login responded 200 in 1184ms
+2026-03-22 15:23:27.860 +03:00 [INF] Handling LoginCommand
+2026-03-22 15:23:28.245 +03:00 [INF] Handled LoginCommand in 384ms
+2026-03-22 15:23:28.247 +03:00 [INF] HTTP POST /api/auth/login responded 200 in 392ms
+2026-03-22 15:23:28.273 +03:00 [INF] Handling LoginCommand
+2026-03-22 15:23:28.614 +03:00 [INF] Handled LoginCommand in 340ms
+2026-03-22 15:23:28.614 +03:00 [INF] HTTP POST /api/auth/login responded 200 in 348ms
+2026-03-22 15:23:28.631 +03:00 [INF] Handling LoginCommand
+2026-03-22 15:23:28.935 +03:00 [INF] Handled LoginCommand in 303ms
+2026-03-22 15:23:28.936 +03:00 [INF] HTTP POST /api/auth/login responded 200 in 305ms
+2026-03-22 15:23:28.954 +03:00 [INF] Handling LoginCommand
+2026-03-22 15:23:29.191 +03:00 [INF] Handled LoginCommand in 236ms
+2026-03-22 15:23:29.192 +03:00 [INF] HTTP POST /api/auth/login responded 200 in 239ms
+2026-03-22 15:23:29.245 +03:00 [INF] Handling GetAllDocumentsQuery
+2026-03-22 15:23:29.438 +03:00 [INF] Handled GetAllDocumentsQuery in 193ms
+2026-03-22 15:23:29.589 +03:00 [INF] HTTP GET /api/documents/export-excel responded 200 in 378ms
+2026-03-22 15:33:58.213 +03:00 [INF] Handling CreateRequestCommand
+2026-03-22 15:33:58.356 +03:00 [INF] Handled CreateRequestCommand in 142ms
+2026-03-22 15:33:58.380 +03:00 [INF] HTTP POST /api/requests responded 201 in 221ms
+2026-03-22 15:33:58.434 +03:00 [INF] Handling AcceptRequestCommand
+2026-03-22 15:33:58.493 +03:00 [INF] Handled AcceptRequestCommand in 58ms
+2026-03-22 15:33:58.495 +03:00 [INF] HTTP POST /api/requests/56a9e51e-7585-4330-aecc-f97c40162b51/accept responded 200 in 70ms
+2026-03-22 15:33:58.523 +03:00 [INF] Handling GetAllDocumentsQuery
+2026-03-22 15:33:58.597 +03:00 [INF] Handled GetAllDocumentsQuery in 74ms
+2026-03-22 15:33:58.634 +03:00 [INF] HTTP GET /api/documents responded 200 in 121ms
+2026-03-22 15:34:22.372 +03:00 [INF] Handling PrepareDocumentCommand
+2026-03-22 15:34:22.530 +03:00 [INF] Handled PrepareDocumentCommand in 157ms
+2026-03-22 15:34:22.532 +03:00 [INF] HTTP POST /api/documents responded 201 in 173ms
+2026-03-22 15:34:22.593 +03:00 [INF] Handling GeneratePdfCommand
+2026-03-22 15:34:22.914 +03:00 [INF] Handled GeneratePdfCommand in 321ms
+2026-03-22 15:34:22.915 +03:00 [INF] HTTP POST /api/documents/01132986-5af3-4b4d-9dc8-f2a0c0ba0ac0/generate-pdf responded 200 in 335ms
+2026-03-22 15:34:22.950 +03:00 [INF] Handling UploadAccountStatementCommand
+2026-03-22 15:34:22.967 +03:00 [INF] Handled UploadAccountStatementCommand in 16ms
+2026-03-22 15:34:22.968 +03:00 [INF] HTTP POST /api/documents/01132986-5af3-4b4d-9dc8-f2a0c0ba0ac0/upload-account-statement responded 200 in 41ms
+2026-03-22 15:34:22.986 +03:00 [INF] Handling GetDocumentByIdQuery
+2026-03-22 15:34:23.002 +03:00 [INF] Handled GetDocumentByIdQuery in 15ms
+2026-03-22 15:34:23.003 +03:00 [INF] HTTP GET /api/documents/01132986-5af3-4b4d-9dc8-f2a0c0ba0ac0 responded 200 in 23ms
+2026-03-22 15:34:41.656 +03:00 [INF] Handling UploadPdfCommand
+2026-03-22 15:34:41.695 +03:00 [INF] Handled UploadPdfCommand in 38ms
+2026-03-22 15:34:41.695 +03:00 [INF] HTTP POST /api/documents/01132986-5af3-4b4d-9dc8-f2a0c0ba0ac0/upload-pdf responded 200 in 50ms
+2026-03-22 15:34:42.712 +03:00 [INF] Handling GetDocumentByIdQuery
+2026-03-22 15:34:42.720 +03:00 [INF] Handled GetDocumentByIdQuery in 7ms
+2026-03-22 15:34:42.720 +03:00 [INF] HTTP GET /api/documents/01132986-5af3-4b4d-9dc8-f2a0c0ba0ac0 responded 200 in 11ms
+2026-03-22 15:34:55.081 +03:00 [INF] Handling CreateRequestCommand
+2026-03-22 15:34:55.091 +03:00 [INF] Handled CreateRequestCommand in 9ms
+2026-03-22 15:34:55.091 +03:00 [INF] HTTP POST /api/requests responded 201 in 14ms
+2026-03-22 15:34:55.136 +03:00 [INF] Handling AcceptRequestCommand
+2026-03-22 15:34:55.149 +03:00 [INF] Handled AcceptRequestCommand in 13ms
+2026-03-22 15:34:55.149 +03:00 [INF] HTTP POST /api/requests/a8914d30-1679-4374-9dd9-2584f9d0147a/accept responded 200 in 15ms
+2026-03-22 15:34:55.161 +03:00 [INF] Handling PrepareDocumentCommand
+2026-03-22 15:34:55.202 +03:00 [INF] Handled PrepareDocumentCommand in 40ms
+2026-03-22 15:34:55.203 +03:00 [INF] HTTP POST /api/documents responded 201 in 43ms
+2026-03-22 15:34:55.248 +03:00 [INF] Handling GeneratePdfCommand
+2026-03-22 15:34:55.381 +03:00 [INF] Handled GeneratePdfCommand in 132ms
+2026-03-22 15:34:55.382 +03:00 [INF] HTTP POST /api/documents/9495dee0-e304-407f-a6af-0430e1557db8/generate-pdf responded 200 in 135ms
+2026-03-22 15:34:55.393 +03:00 [INF] Handling UploadPdfCommand
+2026-03-22 15:34:55.411 +03:00 [INF] Handled UploadPdfCommand in 17ms
+2026-03-22 15:34:55.412 +03:00 [INF] HTTP POST /api/documents/9495dee0-e304-407f-a6af-0430e1557db8/upload-pdf responded 200 in 20ms
+2026-03-22 15:34:55.423 +03:00 [INF] Handling GetDocumentByIdQuery
+2026-03-22 15:34:55.429 +03:00 [INF] Handled GetDocumentByIdQuery in 6ms
+2026-03-22 15:34:55.430 +03:00 [INF] HTTP GET /api/documents/9495dee0-e304-407f-a6af-0430e1557db8 responded 200 in 8ms
+2026-03-22 15:34:55.462 +03:00 [INF] Handling UploadAccountStatementCommand
+2026-03-22 15:34:55.489 +03:00 [INF] Handled UploadAccountStatementCommand in 26ms
+2026-03-22 15:34:55.490 +03:00 [INF] HTTP POST /api/documents/9495dee0-e304-407f-a6af-0430e1557db8/upload-account-statement responded 200 in 30ms
+2026-03-22 15:34:55.500 +03:00 [INF] Handling GetDocumentByIdQuery
+2026-03-22 15:34:55.507 +03:00 [INF] Handled GetDocumentByIdQuery in 5ms
+2026-03-22 15:34:55.507 +03:00 [INF] HTTP GET /api/documents/9495dee0-e304-407f-a6af-0430e1557db8 responded 200 in 7ms
+2026-03-22 15:35:40.056 +03:00 [DBG] Hosting starting
+2026-03-22 15:35:40.111 +03:00 [WRN] The WebRootPath was not found: /home/kira/Documents/freelance/bdor-hospital/src/AlBadour.WebApi/wwwroot. Static files may be unavailable.
+2026-03-22 15:35:40.150 +03:00 [ERR] Hosting failed to start
+System.IO.IOException: Failed to bind to address http://127.0.0.1:5293: address already in use.
+ ---> Microsoft.AspNetCore.Connections.AddressInUseException: Address already in use
+ ---> System.Net.Sockets.SocketException (98): Address already in use
+   at System.Net.Sockets.Socket.UpdateStatusAfterSocketErrorAndThrowException(SocketError error, Boolean disconnectOnFailure, String callerName)
+   at System.Net.Sockets.Socket.DoBind(EndPoint endPointSnapshot, SocketAddress socketAddress)
+   at System.Net.Sockets.Socket.Bind(EndPoint localEP)
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportOptions.CreateDefaultBoundListenSocket(EndPoint endpoint)
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+   --- End of inner exception stack trace ---
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketConnectionListener.Bind()
+   at Microsoft.AspNetCore.Server.Kestrel.Transport.Sockets.SocketTransportFactory.BindAsync(EndPoint endpoint, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.Infrastructure.TransportManager.BindAsync(EndPoint endPoint, ConnectionDelegate connectionDelegate, EndpointConfig endpointConfig, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.<>c__DisplayClass28_0`1.<<StartAsync>g__OnBind|0>d.MoveNext()
+--- End of stack trace from previous location ---
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
+   --- End of inner exception stack trace ---
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.BindEndpointAsync(ListenOptions endpoint, AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.LocalhostListenOptions.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.Internal.AddressBinder.AddressesStrategy.BindAsync(AddressBindContext context, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.BindAsync(CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Server.Kestrel.Core.KestrelServerImpl.StartAsync[TContext](IHttpApplication`1 application, CancellationToken cancellationToken)
+   at Microsoft.AspNetCore.Hosting.GenericWebHostService.StartAsync(CancellationToken cancellationToken)
+   at Microsoft.Extensions.Hosting.Internal.Host.<StartAsync>b__14_1(IHostedService service, CancellationToken token)
+   at Microsoft.Extensions.Hosting.Internal.Host.ForeachService[T](IEnumerable`1 services, CancellationToken token, Boolean concurrent, Boolean abortOnFirstException, List`1 exceptions, Func`3 operation)

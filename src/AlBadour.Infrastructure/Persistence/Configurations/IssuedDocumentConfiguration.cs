@@ -34,6 +34,7 @@ public class IssuedDocumentConfiguration : IEntityTypeConfiguration<IssuedDocume
         builder.Property(d => d.DischargeDate).HasColumnName("discharge_date").HasMaxLength(50);
         builder.Property(d => d.LeaveGranted).HasColumnName("leave_granted").HasMaxLength(500);
         builder.Property(d => d.AccountStatementPath).HasColumnName("account_statement_path").HasMaxLength(500);
+        builder.Property(d => d.TreatingPhysicianName).HasColumnName("treating_physician_name").HasMaxLength(255);
         builder.Property(d => d.IssuedById).HasColumnName("issued_by");
         builder.Property(d => d.RevokedById).HasColumnName("revoked_by");
         builder.Property(d => d.ApprovedById).HasColumnName("approved_by");
@@ -41,6 +42,7 @@ public class IssuedDocumentConfiguration : IEntityTypeConfiguration<IssuedDocume
         builder.Property(d => d.IssuedAt).HasColumnName("issued_at").HasDefaultValueSql("NOW()");
         builder.Property(d => d.ArchivedAt).HasColumnName("archived_at");
         builder.Property(d => d.RevokedAt).HasColumnName("revoked_at");
+        builder.Property(d => d.MedicalReportUploadedAt).HasColumnName("medical_report_uploaded_at");
         builder.Property(d => d.UpdatedAt).HasColumnName("updated_at").HasDefaultValueSql("NOW()");
 
         builder.HasOne(d => d.Request).WithMany(r => r.IssuedDocuments).HasForeignKey(d => d.RequestId);

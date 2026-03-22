@@ -32,5 +32,8 @@ public record DocumentDto(
     DateTime IssuedAt,
     DateTime? ArchivedAt,
     DateTime? RevokedAt,
-    bool HasAccountStatement
+    bool HasAccountStatement,
+    bool HasSignedMedicalReport,
+    string? TreatingPhysicianName,
+    string? Language
 );

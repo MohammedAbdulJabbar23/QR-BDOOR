@@ -31,7 +31,9 @@ public class DocumentRequestRepository : IDocumentRequestRepository
     public async Task<(List<DocumentRequest> Items, int TotalCount)> GetAllAsync(
         RequestStatus? status, Guid? createdById, string? search,
         Guid? documentTypeId, DateTime? fromDate, DateTime? toDate,
-        int page, int pageSize, bool? isAdministrativeLetter = null, CancellationToken ct = default)
+        int page, int pageSize, bool? isAdministrativeLetter = null,
+        string? requiredDocumentTypeName = null, bool requiresAwaitingAccountStatement = false,
+        CancellationToken ct = default)
     {
         var query = _context.DocumentRequests
             .Include(r => r.DocumentType)
@@ -48,11 +50,21 @@ public class DocumentRequestRepository : IDocumentRequestRepository
         if (documentTypeId.HasValue)
             query = query.Where(r => r.DocumentTypeId == documentTypeId.Value);
 
-        if (isAdministrativeLetter.HasValue)
+        if (requiredDocumentTypeName != null)
+        {
+            query = query.Where(r => r.DocumentType.NameEn.Contains(requiredDocumentTypeName));
+        }
+        else if (isAdministrativeLetter.HasValue)
         {
             query = isAdministrativeLetter.Value
                 ? query.Where(r => r.DocumentType.NameEn == "Administrative Letter")
                 : query.Where(r => r.DocumentType.NameEn != "Administrative Letter");
+        }
+
+        if (requiresAwaitingAccountStatement)
+        {
+            query = query.Where(r => r.IssuedDocuments.Any(d =>
+                d.Status == DocumentStatus.AwaitingAccountStatement && !d.IsDeleted));
         }
 
         if (!string.IsNullOrWhiteSpace(search))

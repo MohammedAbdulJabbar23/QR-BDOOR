@@ -1,7 +1,7 @@
 namespace AlBadour.Application.Features.DocumentRequests.DTOs;
 
 public record UpdateRequestDto(
-    string PatientName,
+    string? PatientName,
     string? PatientNameEn,
     string RecipientEntity,
     Guid DocumentTypeId,

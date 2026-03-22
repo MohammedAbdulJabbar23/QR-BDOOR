@@ -61,11 +61,12 @@ public class CreateRequestCommandHandler : IRequestHandler<CreateRequestCommand,
         var entity = new DocumentRequest
         {
             Id = Guid.NewGuid(),
-            PatientName = isAdministrativeLetter ? string.Empty : request.Dto.PatientName.Trim(),
+            PatientName = isAdministrativeLetter ? string.Empty : request.Dto.PatientName?.Trim() ?? string.Empty,
             PatientNameEn = request.Dto.PatientNameEn,
             RecipientEntity = request.Dto.RecipientEntity,
             DocumentTypeId = request.Dto.DocumentTypeId,
             Notes = request.Dto.Notes?.Trim(),
+            Language = request.Dto.Language?.Trim(),
             Status = RequestStatus.Pending,
             CreatedById = _currentUser.UserId
         };

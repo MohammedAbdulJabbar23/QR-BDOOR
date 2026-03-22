@@ -33,7 +33,8 @@
     "recipientEntity": "الجهة المستلمة", "documentType": "نوع الوثيقة",
     "notes": "ملاحظات", "status": "الحالة", "date": "التاريخ", "actions": "إجراءات",
     "accept": "قبول", "reject": "رفض", "rejectionReason": "سبب الرفض",
-    "noRequests": "لا توجد طلبات"
+    "noRequests": "لا توجد طلبات",
+    "language": "لغة الوثيقة", "languageArabic": "عربي", "languageEnglish": "إنجليزي"
   },
   "documents": {
     "title": "الوثائق الصادرة", "prepare": "إعداد وثيقة", "generatePdf": "إنشاء PDF",
@@ -48,7 +49,10 @@
     "accountStatementUploaded": "تم رفع كشف الحساب بنجاح",
     "viewAccountStatement": "عرض كشف الحساب",
     "patientGender": "الجنس", "patientProfession": "المهنة", "patientAge": "العمر",
-    "admissionDate": "تاريخ الدخول", "dischargeDate": "تاريخ الخروج", "leaveGranted": "الاجازة الممنوحة"
+    "admissionDate": "تاريخ الدخول", "dischargeDate": "تاريخ الخروج", "leaveGranted": "الاجازة الممنوحة",
+    "treatingPhysicianName": "اسم الطبيب المعالج",
+    "exportExcel": "تصدير Excel",
+    "includeDirectorSignature": "تضمين توقيع المدير"
   },
   "verification": {
     "title": "التحقق من الوثيقة", "verified": "وثيقة موثقة",

@@ -3,6 +3,7 @@ using AlBadour.Application.Common.Models;
 using AlBadour.Domain.Enums;
 using AlBadour.Domain.Interfaces;
 using MediatR;
+using System;
 
 namespace AlBadour.Application.Features.DocumentRequests.Commands;
 
@@ -66,6 +67,18 @@ public class AcceptRequestCommandHandler : IRequestHandler<AcceptRequestCommand,
             "تم قبول طلبك وهو قيد المعالجة الآن",
             "Your request has been accepted and is now being processed.",
             "request", entity.Id.ToString(), cancellationToken);
+
+        // Notify Accounts department if this is an Account Statement type
+        if (entity.DocumentType.NameEn.Contains("Account Statement", StringComparison.OrdinalIgnoreCase))
+        {
+            await _notificationService.SendToDepartmentAsync(
+                Department.Accounts,
+                "طلب جديد يتطلب كشف حساب",
+                "New Account Statement Request",
+                $"يوجد طلب جديد بانتظار رفع كشف الحساب",
+                $"A new request requires an account statement upload.",
+                "request", entity.Id.ToString(), cancellationToken);
+        }
 
         return Result.Success();
     }

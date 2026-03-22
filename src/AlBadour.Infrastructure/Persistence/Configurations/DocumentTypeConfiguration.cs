@@ -25,8 +25,8 @@ public class DocumentTypeConfiguration : IEntityTypeConfiguration<DocumentType>
             new DocumentType
             {
                 Id = Guid.Parse("00000000-0000-0000-0000-000000000010"),
-                NameAr = "تقرير طبي",
-                NameEn = "Medical Report",
+                NameAr = "تقرير طبي مع جدول",
+                NameEn = "Medical Report with Table",
                 IsActive = true,
                 CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc),
                 UpdatedAt = new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc)
@@ -43,8 +43,26 @@ public class DocumentTypeConfiguration : IEntityTypeConfiguration<DocumentType>
             new DocumentType
             {
                 Id = Guid.Parse("00000000-0000-0000-0000-000000000012"),
-                NameAr = "تقرير طبي + كشف حساب",
-                NameEn = "Medical Report + Account Statement",
+                NameAr = "تقرير طبي مع جدول + كشف حساب",
+                NameEn = "Medical Report with Table + Account Statement",
+                IsActive = true,
+                CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+                UpdatedAt = new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc)
+            },
+            new DocumentType
+            {
+                Id = Guid.Parse("00000000-0000-0000-0000-000000000013"),
+                NameAr = "تقرير طبي بدون جدول",
+                NameEn = "Medical Report without Table",
+                IsActive = true,
+                CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+                UpdatedAt = new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc)
+            },
+            new DocumentType
+            {
+                Id = Guid.Parse("00000000-0000-0000-0000-000000000014"),
+                NameAr = "تقرير طبي بدون جدول + كشف حساب",
+                NameEn = "Medical Report without Table + Account Statement",
                 IsActive = true,
                 CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc),
                 UpdatedAt = new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc)

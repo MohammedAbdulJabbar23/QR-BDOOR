@@ -52,34 +52,63 @@ public class UploadPdfCommandHandler : IRequestHandler<UploadPdfCommand, Result>
             return Result.Failure("PDF can only be uploaded for draft documents.", "INVALID_STATUS");
 
         var pdfPath = await _fileStorage.SavePdfAsync(request.PdfStream, $"{document.Id}.pdf", cancellationToken);
-
         document.PdfFilePath = pdfPath;
-        document.Status = DocumentStatus.Archived;
-        document.ArchivedAt = DateTime.UtcNow;
         document.UpdatedAt = DateTime.UtcNow;
 
-        // Mark the request as Completed now that the document is archived
-        var req = await _requestRepo.GetByIdAsync(document.RequestId, cancellationToken);
-        if (req is not null)
+        var isMedReportWithStatement = document.Request.DocumentType.NameEn
+            .Contains("Account Statement", StringComparison.OrdinalIgnoreCase);
+
+        if (isMedReportWithStatement)
         {
-            req.Status = RequestStatus.Completed;
-            req.UpdatedAt = DateTime.UtcNow;
-            _requestRepo.Update(req);
+            document.MedicalReportUploadedAt = DateTime.UtcNow;
+
+            if (!string.IsNullOrEmpty(document.AccountStatementPath))
+            {
+                // Account statement already uploaded — archive now
+                document.Status = DocumentStatus.Archived;
+                document.ArchivedAt = DateTime.UtcNow;
+
+                var req2 = await _requestRepo.GetByIdAsync(document.RequestId, cancellationToken);
+                if (req2 is not null)
+                {
+                    req2.Status = RequestStatus.Completed;
+                    req2.UpdatedAt = DateTime.UtcNow;
+                    _requestRepo.Update(req2);
+                }
+            }
+
+            _documentRepo.Update(document);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
+            await _auditService.LogAsync("document.medical_report_uploaded", "document", document.Id.ToString(),
+                new { document.DocumentNumber, FileName = request.FileName }, cancellationToken);
         }
+        else
+        {
+            document.Status = DocumentStatus.Archived;
+            document.ArchivedAt = DateTime.UtcNow;
 
-        _documentRepo.Update(document);
-        await _unitOfWork.SaveChangesAsync(cancellationToken);
+            var req = await _requestRepo.GetByIdAsync(document.RequestId, cancellationToken);
+            if (req is not null)
+            {
+                req.Status = RequestStatus.Completed;
+                req.UpdatedAt = DateTime.UtcNow;
+                _requestRepo.Update(req);
+            }
 
-        await _auditService.LogAsync("document.pdf_uploaded", "document", document.Id.ToString(),
-            new { document.DocumentNumber, FileName = request.FileName }, cancellationToken);
+            _documentRepo.Update(document);
+            await _unitOfWork.SaveChangesAsync(cancellationToken);
 
-        await _notificationService.SendToUserAsync(
-            document.Request.CreatedById,
-            "تم أرشفة وثيقتك",
-            "Document Archived",
-            $"تم رفع النسخة الموقعة وأرشفة الوثيقة رقم {document.DocumentNumber}",
-            $"The signed copy has been uploaded and document #{document.DocumentNumber} is now archived.",
-            "document", document.Id.ToString(), cancellationToken);
+            await _auditService.LogAsync("document.pdf_uploaded", "document", document.Id.ToString(),
+                new { document.DocumentNumber, FileName = request.FileName }, cancellationToken);
+
+            await _notificationService.SendToUserAsync(
+                document.Request.CreatedById,
+                "تم أرشفة وثيقتك",
+                "Document Archived",
+                $"تم رفع النسخة الموقعة وأرشفة الوثيقة رقم {document.DocumentNumber}",
+                $"The signed copy has been uploaded and document #{document.DocumentNumber} is now archived.",
+                "document", document.Id.ToString(), cancellationToken);
+        }
 
         return Result.Success();
     }

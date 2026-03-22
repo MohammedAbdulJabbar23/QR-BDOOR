@@ -43,6 +43,7 @@ public class GetCancelledReportQueryHandler : IRequestHandler<GetCancelledReport
                 page,
                 pageSize,
                 isAdministrativeLetter,
+                null,
                 cancellationToken);
 
             if (items.Count == 0)

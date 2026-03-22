@@ -11,7 +11,8 @@ public interface IIssuedDocumentRepository
     Task<(List<IssuedDocument> Items, int TotalCount)> GetAllAsync(
         DocumentStatus? status, string? search, Guid? documentTypeId,
         DateTime? fromDate, DateTime? toDate,
-        int page, int pageSize, bool? isAdministrativeLetter = null, CancellationToken ct = default);
+        int page, int pageSize, bool? isAdministrativeLetter = null,
+        string? requiredDocumentTypeName = null, CancellationToken ct = default);
     Task<List<IssuedDocument>> GetByRequestIdAsync(Guid requestId, bool? isAdministrativeLetter = null, CancellationToken ct = default);
     Task<int> CountAsync(
         DocumentStatus? status,

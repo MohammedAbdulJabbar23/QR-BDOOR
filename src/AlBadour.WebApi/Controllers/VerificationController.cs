@@ -46,8 +46,18 @@ public class VerificationController : ControllerBase
     }
 
     [HttpGet("{documentId:guid}/account-statement")]
-    public async Task<IActionResult> GetAccountStatement(Guid documentId)
+    public async Task<IActionResult> GetAccountStatement(Guid documentId, CancellationToken cancellationToken)
     {
-        return NotFound(new { error = "Account statement not available." });
+        var doc = await _documentRepo.GetByIdAsync(documentId, cancellationToken);
+        if (doc is null || doc.IsDeleted || string.IsNullOrEmpty(doc.AccountStatementPath))
+            return NotFound(new { error = "Account statement not available." });
+
+        if (doc.Status != Domain.Enums.DocumentStatus.Archived)
+            return NotFound(new { error = "Account statement not available." });
+
+        var stream = await _fileStorage.GetFileAsync(doc.AccountStatementPath, cancellationToken);
+        if (stream is null) return NotFound(new { error = "Account statement file not found." });
+
+        return File(stream, "application/pdf", $"{doc.DocumentNumber}_account_statement.pdf");
     }
 }

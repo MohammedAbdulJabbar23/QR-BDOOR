@@ -11,8 +11,18 @@ public static class DepartmentVisibility
         _ => null
     };
 
+    // Returns a fragment to match against document type name (Contains), or null for no restriction.
+    public static string? GetRequiredDocumentTypeName(Department department) => department switch
+    {
+        Department.Accounts => "Account Statement",
+        _ => null
+    };
+
     public static bool CanAccessDocumentType(Department department, string documentTypeNameEn)
     {
+        if (department == Department.Accounts)
+            return documentTypeNameEn.Contains("Account Statement", StringComparison.OrdinalIgnoreCase);
+
         var filter = GetAdministrativeLetterFilter(department);
         if (!filter.HasValue)
             return true;

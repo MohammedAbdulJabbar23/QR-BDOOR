@@ -32,10 +32,11 @@ public class GetAllDocumentsQueryHandler : IRequestHandler<GetAllDocumentsQuery,
     public async Task<Result<PaginatedList<DocumentDto>>> Handle(GetAllDocumentsQuery request, CancellationToken cancellationToken)
     {
         var isAdministrativeLetter = DepartmentVisibility.GetAdministrativeLetterFilter(_currentUser.Department);
+        var requiredDocumentTypeName = DepartmentVisibility.GetRequiredDocumentTypeName(_currentUser.Department);
         var (items, totalCount) = await _documentRepo.GetAllAsync(
             request.Status, request.Search, request.DocumentTypeId,
             request.FromDate, request.ToDate,
-            request.Page, request.PageSize, isAdministrativeLetter, cancellationToken);
+            request.Page, request.PageSize, isAdministrativeLetter, requiredDocumentTypeName, cancellationToken);
 
         var dtos = items.Select(GetDocumentByIdQueryHandler.MapToDto).ToList();
         return Result.Success(new PaginatedList<DocumentDto>(dtos, totalCount, request.Page, request.PageSize));

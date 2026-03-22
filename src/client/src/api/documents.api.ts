@@ -14,6 +14,7 @@ export const documentsApi = {
     admissionDate?: string;
     dischargeDate?: string;
     leaveGranted?: string;
+    treatingPhysicianName?: string;
   }) =>
     apiClient.post<IssuedDocument>('/documents', data).then(r => r.data),
 
@@ -26,8 +27,11 @@ export const documentsApi = {
   getByRequest: (requestId: string) =>
     apiClient.get<IssuedDocument[]>(`/documents/by-request/${requestId}`).then(r => r.data),
 
-  generatePdf: (id: string) =>
-    apiClient.post(`/documents/${id}/generate-pdf`).then(r => r.data),
+  generatePdf: (id: string, includeDirectorSignature = false) =>
+    apiClient.post(`/documents/${id}/generate-pdf`, { includeDirectorSignature }).then(r => r.data),
+
+  exportExcel: (params: { status?: string; search?: string; documentTypeId?: string; fromDate?: string; toDate?: string }) =>
+    apiClient.get(`/documents/export-excel`, { params, responseType: 'blob' }).then(r => r),
 
   revoke: (id: string, reason: string) =>
     apiClient.post(`/documents/${id}/revoke`, { reason }).then(r => r.data),

@@ -18,6 +18,7 @@ public class DocumentRequestConfiguration : IEntityTypeConfiguration<DocumentReq
         builder.Property(r => r.RecipientEntity).HasColumnName("recipient_entity").HasMaxLength(255).IsRequired();
         builder.Property(r => r.DocumentTypeId).HasColumnName("document_type_id");
         builder.Property(r => r.Notes).HasColumnName("notes");
+        builder.Property(r => r.Language).HasColumnName("language").HasMaxLength(20);
         builder.Property(r => r.Status).HasColumnName("status").HasMaxLength(20).HasDefaultValue(RequestStatus.Pending)
             .HasConversion(v => v.ToString().ToLower(), v => Enum.Parse<RequestStatus>(v, true));
         builder.Property(r => r.RejectionReason).HasColumnName("rejection_reason");

@@ -11,4 +11,5 @@ public interface IReportGenerationService
     byte[] GenerateCancelledReport(DateTime from, DateTime to, IEnumerable<CancelledDocumentDto> data);
     byte[] GenerateRequestsExtractReport(DateTime? from, DateTime? to, IEnumerable<RequestDto> data);
     byte[] GenerateDocumentsExtractReport(DateTime? from, DateTime? to, IEnumerable<DocumentDto> data);
+    byte[] GenerateDocumentsExcel(IEnumerable<DocumentDto> data);
 }

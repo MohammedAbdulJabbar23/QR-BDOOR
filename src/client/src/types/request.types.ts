@@ -15,6 +15,7 @@ export interface DocumentRequest {
   assignedToName: string | null;
   createdAt: string;
   updatedAt: string;
+  language: string | null;
 }
 
 export interface CreateRequestDto {
@@ -23,4 +24,5 @@ export interface CreateRequestDto {
   recipientEntity: string;
   documentTypeId: string;
   notes?: string;
+  language?: string;
 }

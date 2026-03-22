@@ -9,7 +9,7 @@ import {
 import { documentsApi } from '@/api/documents.api';
 import { useAuthStore } from '@/stores/authStore';
 import { useUiStore } from '@/stores/uiStore';
-import { canUploadPdf, canRevokeDocument, canDeleteDocument, canTransferToAccounts, canUploadAccountStatement } from '@/utils/permissions';
+import { canUploadPdf, canRevokeDocument, canDeleteDocument, canUploadAccountStatement } from '@/utils/permissions';
 import { formatDateTime } from '@/utils/formatters';
 import { cn } from '@/utils/cn';
 import PageHeader from '@/components/common/PageHeader';
@@ -37,6 +37,7 @@ export default function DocumentDetailsPage() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const accountStatementInputRef = useRef<HTMLInputElement>(null);
   const [accountStatementError, setAccountStatementError] = useState('');
+  const [includeDirectorSignature, setIncludeDirectorSignature] = useState(false);
   const blobUrlsRef = useRef<string[]>([]);
 
   const { data: document, isLoading } = useQuery({
@@ -73,7 +74,7 @@ export default function DocumentDetailsPage() {
   }, [id]);
 
   const generateMutation = useMutation({
-    mutationFn: () => documentsApi.generatePdf(id!),
+    mutationFn: () => documentsApi.generatePdf(id!, includeDirectorSignature),
     onSuccess: () => {
       setGenerateError('');
       queryClient.invalidateQueries({ queryKey: ['document', id] });
@@ -106,13 +107,6 @@ export default function DocumentDetailsPage() {
     }
     e.target.value = '';
   };
-
-  const transferToAccountsMutation = useMutation({
-    mutationFn: () => documentsApi.transferToAccounts(id!),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['document', id] });
-    },
-  });
 
   const uploadAccountStatementMutation = useMutation({
     mutationFn: (file: File) => documentsApi.uploadAccountStatement(id!, file),
@@ -215,15 +209,15 @@ export default function DocumentDetailsPage() {
 
   const isRevoked = document.status === 'Revoked';
   const isDraft = document.status === 'Draft';
-  const isAwaitingAccountStatement = document.status === 'AwaitingAccountStatement';
   const isAdminLetter = document.documentTypeNameEn?.toLowerCase() === 'administrative letter';
   const isResponsibleDept = user && (isAdminLetter ? user.department === 'HR' : user.department === 'Statistics');
   const isAccounts = user && canUploadAccountStatement(user.department);
   const showGenerate = isResponsibleDept && isDraft && !isRevoked;
-  const showUpload = isResponsibleDept && isDraft && !isRevoked && document.hasPdf;
-  const isMedicalReportAccountStatement = document.documentTypeNameEn?.toLowerCase() === 'medical report + account statement';
-  const showTransferToAccounts = isResponsibleDept && isDraft && !isRevoked && document.hasPdf && isMedicalReportAccountStatement;
-  const showUploadAccountStatement = isAccounts && isAwaitingAccountStatement;
+  const isMedicalReportAccountStatement = document.documentTypeNameEn?.toLowerCase().includes('account statement');
+  const showUpload = !isMedicalReportAccountStatement && isResponsibleDept && isDraft && !isRevoked && document.hasPdf;
+  const showUploadMedicalReport = isMedicalReportAccountStatement && isResponsibleDept && isDraft && !isRevoked && document.hasPdf && !document.hasSignedMedicalReport;
+  const isArchived = document.status === 'Archived';
+  const showUploadAccountStatement = isAccounts && isMedicalReportAccountStatement && !isArchived && !isRevoked && !document.hasAccountStatement;
   const showRevoke = user && canRevokeDocument(user.role) && !isRevoked;
   const showDelete = user && canDeleteDocument(user.role);
 
@@ -302,6 +296,15 @@ export default function DocumentDetailsPage() {
               )}
               {document.leaveGranted && (
                 <InfoItem label={t('documents.leaveGranted')} value={document.leaveGranted} />
+              )}
+              {document.treatingPhysicianName && (
+                <InfoItem label={t('documents.treatingPhysicianName')} value={document.treatingPhysicianName} />
+              )}
+              {document.language && (
+                <InfoItem
+                  label={t('requests.language')}
+                  value={document.language === 'English' ? t('requests.languageEnglish') : t('requests.languageArabic')}
+                />
               )}
             </div>
           </div>
@@ -411,6 +414,15 @@ export default function DocumentDetailsPage() {
               {/* Generate PDF */}
               {showGenerate && (
                 <>
+                  <label className="flex items-center gap-2 cursor-pointer select-none text-sm text-neutral-700">
+                    <input
+                      type="checkbox"
+                      checked={includeDirectorSignature}
+                      onChange={(e) => setIncludeDirectorSignature(e.target.checked)}
+                      className="w-4 h-4 rounded border-neutral-300 text-primary focus:ring-primary/20"
+                    />
+                    {t('documents.includeDirectorSignature')}
+                  </label>
                   <button
                     onClick={() => generateMutation.mutate()}
                     disabled={generateMutation.isPending}
@@ -434,8 +446,35 @@ export default function DocumentDetailsPage() {
                 </>
               )}
 
-              {/* Upload signed PDF (visible after generating) */}
+              {/* Upload signed PDF — archives immediately (all types except Medical Report + Account Statement) */}
               {showUpload && (
+                <>
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept=".pdf"
+                    className="hidden"
+                    onChange={handleFileSelect}
+                  />
+                  <button
+                    onClick={() => fileInputRef.current?.click()}
+                    disabled={uploadMutation.isPending}
+                    className={cn(
+                      'flex items-center gap-2 px-4 py-2.5 text-sm font-medium rounded-lg transition-colors w-full',
+                      'bg-emerald-600 text-white hover:bg-emerald-700',
+                      'disabled:opacity-50 disabled:cursor-not-allowed'
+                    )}
+                  >
+                    <Upload size={16} />
+                    {uploadMutation.isPending ? t('common.loading') : t('documents.uploadPdf')}
+                  </button>
+                  {uploadError && <p className="text-xs text-red-600">{uploadError}</p>}
+                  {uploadMutation.isSuccess && <p className="text-xs text-green-600">{t('documents.pdfUploaded')}</p>}
+                </>
+              )}
+
+              {/* Upload signed medical report (Medical Report + Account Statement only — stays Draft) */}
+              {showUploadMedicalReport && (
                 <>
                   <input
                     ref={fileInputRef}
@@ -456,39 +495,10 @@ export default function DocumentDetailsPage() {
                     <Upload size={16} />
                     {uploadMutation.isPending
                       ? t('common.loading')
-                      : t('documents.uploadPdf')}
+                      : (language === 'ar' ? 'رفع التقرير الطبي الموقع' : 'Upload Signed Medical Report')}
                   </button>
-                  {uploadError && (
-                    <p className="text-xs text-red-600">{uploadError}</p>
-                  )}
-                  {uploadMutation.isSuccess && (
-                    <p className="text-xs text-green-600">{t('documents.pdfUploaded')}</p>
-                  )}
-                </>
-              )}
-
-              {/* Transfer to Accounts */}
-              {showTransferToAccounts && (
-                <>
-                  <button
-                    onClick={() => transferToAccountsMutation.mutate()}
-                    disabled={transferToAccountsMutation.isPending}
-                    className={cn(
-                      'flex items-center gap-2 px-4 py-2.5 text-sm font-medium rounded-lg transition-colors w-full',
-                      'bg-purple-600 text-white hover:bg-purple-700',
-                      'disabled:opacity-50 disabled:cursor-not-allowed'
-                    )}
-                  >
-                    <FileText size={16} />
-                    {transferToAccountsMutation.isPending
-                      ? t('common.loading')
-                      : t('documents.transferToAccounts')}
-                  </button>
-                  {transferToAccountsMutation.isSuccess && (
-                    <p className="text-xs text-green-600">
-                      {language === 'ar' ? 'تم التحويل بنجاح' : 'Transferred successfully'}
-                    </p>
-                  )}
+                  {uploadError && <p className="text-xs text-red-600">{uploadError}</p>}
+                  {uploadMutation.isSuccess && <p className="text-xs text-green-600">{t('documents.pdfUploaded')}</p>}
                 </>
               )}
 

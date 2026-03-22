@@ -22,6 +22,7 @@ public class IssuedDocument : BaseEntity
     public string? DischargeDate { get; set; }
     public string? LeaveGranted { get; set; }
     public string? AccountStatementPath { get; set; }
+    public string? TreatingPhysicianName { get; set; }
     public Guid IssuedById { get; set; }
     public Guid? RevokedById { get; set; }
     public Guid? ApprovedById { get; set; }
@@ -30,6 +31,7 @@ public class IssuedDocument : BaseEntity
     public DateTime IssuedAt { get; set; } = DateTime.UtcNow;
     public DateTime? ArchivedAt { get; set; }
     public DateTime? RevokedAt { get; set; }
+    public DateTime? MedicalReportUploadedAt { get; set; }
 
     public DocumentRequest Request { get; set; } = null!;
     public IssuedDocument? ReplacementDocument { get; set; }

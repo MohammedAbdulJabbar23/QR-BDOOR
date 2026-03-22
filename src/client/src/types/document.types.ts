@@ -30,6 +30,9 @@ export interface IssuedDocument {
   archivedAt: string | null;
   revokedAt: string | null;
   hasAccountStatement: boolean;
+  hasSignedMedicalReport: boolean;
+  treatingPhysicianName: string | null;
+  language: string | null;
 }
 
 export interface VerificationResult {

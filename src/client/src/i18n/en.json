@@ -31,7 +31,8 @@
     "recipientEntity": "Recipient Entity", "documentType": "Document Type",
     "notes": "Notes", "status": "Status", "date": "Date", "actions": "Actions",
     "accept": "Accept", "reject": "Reject", "rejectionReason": "Rejection Reason",
-    "noRequests": "No requests found"
+    "noRequests": "No requests found",
+    "language": "Document Language", "languageArabic": "Arabic", "languageEnglish": "English"
   },
   "documents": {
     "title": "Issued Documents", "prepare": "Prepare Document", "generatePdf": "Generate PDF",
@@ -46,7 +47,10 @@
     "accountStatementUploaded": "Account statement uploaded successfully",
     "viewAccountStatement": "View Account Statement",
     "patientGender": "Gender", "patientProfession": "Profession", "patientAge": "Age",
-    "admissionDate": "Admission Date", "dischargeDate": "Discharge Date", "leaveGranted": "Leave Granted"
+    "admissionDate": "Admission Date", "dischargeDate": "Discharge Date", "leaveGranted": "Leave Granted",
+    "treatingPhysicianName": "Treating Physician Name",
+    "exportExcel": "Export Excel",
+    "includeDirectorSignature": "Include Director Signature"
   },
   "verification": {
     "title": "Document Verification", "verified": "Document Verified",

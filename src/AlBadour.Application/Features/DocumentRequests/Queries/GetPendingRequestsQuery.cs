@@ -47,7 +47,8 @@ public class GetPendingRequestsQueryHandler : IRequestHandler<GetPendingRequests
             e.AssignedToId,
             e.AssignedTo?.FullName,
             e.CreatedAt,
-            e.UpdatedAt
+            e.UpdatedAt,
+            e.Language
         )).ToList();
 
         return Result.Success(dtos);

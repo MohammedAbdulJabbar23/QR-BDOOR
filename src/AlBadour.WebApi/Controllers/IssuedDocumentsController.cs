@@ -1,3 +1,4 @@
+using AlBadour.Application.Common.Interfaces;
 using AlBadour.Application.Features.IssuedDocuments.Commands;
 using AlBadour.Application.Features.IssuedDocuments.DTOs;
 using AlBadour.Application.Features.IssuedDocuments.Queries;
@@ -17,12 +18,14 @@ public class IssuedDocumentsController : ControllerBase
     private readonly IMediator _mediator;
     private readonly IFileStorageService _fileStorage;
     private readonly IIssuedDocumentRepository _documentRepo;
+    private readonly IReportGenerationService _reportService;
 
-    public IssuedDocumentsController(IMediator mediator, IFileStorageService fileStorage, IIssuedDocumentRepository documentRepo)
+    public IssuedDocumentsController(IMediator mediator, IFileStorageService fileStorage, IIssuedDocumentRepository documentRepo, IReportGenerationService reportService)
     {
         _mediator = mediator;
         _fileStorage = fileStorage;
         _documentRepo = documentRepo;
+        _reportService = reportService;
     }
 
     [HttpPost]
@@ -53,6 +56,24 @@ public class IssuedDocumentsController : ControllerBase
         return Ok(result.Value);
     }
 
+    [HttpGet("export-excel")]
+    public async Task<IActionResult> ExportExcel(
+        [FromQuery] string? status, [FromQuery] string? search,
+        [FromQuery] Guid? documentTypeId,
+        [FromQuery] DateTime? fromDate, [FromQuery] DateTime? toDate)
+    {
+        DocumentStatus? statusEnum = null;
+        if (!string.IsNullOrEmpty(status) && Enum.TryParse<DocumentStatus>(status, true, out var parsed))
+            statusEnum = parsed;
+
+        var result = await _mediator.Send(new GetAllDocumentsQuery(statusEnum, search, documentTypeId, fromDate, toDate, 1, 10000));
+        if (!result.IsSuccess) return BadRequest(new { error = result.Error, code = result.ErrorCode });
+
+        var bytes = _reportService.GenerateDocumentsExcel(result.Value!.Items);
+        var fileName = $"documents_{DateTime.UtcNow:yyyyMMdd}.xlsx";
+        return File(bytes, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", fileName);
+    }
+
     [HttpGet("{id:guid}")]
     public async Task<IActionResult> GetById(Guid id)
     {
@@ -70,9 +91,9 @@ public class IssuedDocumentsController : ControllerBase
     }
 
     [HttpPost("{id:guid}/generate-pdf")]
-    public async Task<IActionResult> GeneratePdf(Guid id)
+    public async Task<IActionResult> GeneratePdf(Guid id, [FromBody] GeneratePdfBody? body = null)
     {
-        var result = await _mediator.Send(new GeneratePdfCommand(id));
+        var result = await _mediator.Send(new GeneratePdfCommand(id, body?.IncludeDirectorSignature ?? false));
         if (!result.IsSuccess) return BadRequest(new { error = result.Error, code = result.ErrorCode });
         return Ok(new { message = "PDF generated. Print, sign, then upload the signed copy." });
     }
@@ -181,3 +202,4 @@ public class IssuedDocumentsController : ControllerBase
 }
 
 public record RevokeDocumentBody(string Reason);
+public record GeneratePdfBody(bool IncludeDirectorSignature = false);

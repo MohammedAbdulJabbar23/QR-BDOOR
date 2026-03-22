@@ -45,7 +45,8 @@ public class GetRequestByIdQueryHandler : IRequestHandler<GetRequestByIdQuery, R
             entity.AssignedToId,
             entity.AssignedTo?.FullName,
             entity.CreatedAt,
-            entity.UpdatedAt
+            entity.UpdatedAt,
+            entity.Language
         );
 
         return Result.Success(dto);

@@ -20,6 +20,7 @@ const requestSchema = z.object({
   recipientEntity: z.string().min(1, 'required'),
   documentTypeId: z.string().min(1, 'required'),
   notes: z.string().optional(),
+  language: z.string().optional(),
 });
 
 type RequestFormValues = z.infer<typeof requestSchema>;
@@ -66,6 +67,7 @@ export default function CreateRequestPage() {
       recipientEntity: '',
       documentTypeId: '',
       notes: '',
+      language: 'Arabic',
     },
   });
 
@@ -77,6 +79,7 @@ export default function CreateRequestPage() {
         recipientEntity: existingRequest.recipientEntity,
         documentTypeId: existingRequest.documentTypeId,
         notes: existingRequest.notes || '',
+        language: existingRequest.language || 'Arabic',
       });
     }
   }, [existingRequest, reset]);
@@ -140,6 +143,7 @@ export default function CreateRequestPage() {
       recipientEntity: values.recipientEntity,
       documentTypeId: values.documentTypeId,
       notes: values.notes?.trim() || undefined,
+      language: isAdministrativeLetter ? undefined : (values.language || 'Arabic'),
     };
 
     if (isEditMode) {
@@ -177,6 +181,22 @@ export default function CreateRequestPage() {
                   className="w-full px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                   dir="rtl"
                 />
+              </div>
+            )}
+
+            {/* Language (only for medical reports) */}
+            {!isAdministrativeLetter && (
+              <div>
+                <label className="block text-sm font-medium text-neutral-700 mb-1.5">
+                  {t('requests.language')}
+                </label>
+                <select
+                  {...register('language')}
+                  className="w-full px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-white"
+                >
+                  <option value="Arabic">{t('requests.languageArabic')}</option>
+                  <option value="English">{t('requests.languageEnglish')}</option>
+                </select>
               </div>
             )}
 

@@ -1,9 +1,10 @@
 namespace AlBadour.Application.Features.DocumentRequests.DTOs;
 
 public record CreateRequestDto(
-    string PatientName,
+    string? PatientName,
     string? PatientNameEn,
     string RecipientEntity,
     Guid DocumentTypeId,
-    string? Notes
+    string? Notes,
+    string? Language
 );

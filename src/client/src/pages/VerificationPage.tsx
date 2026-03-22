@@ -255,17 +255,30 @@ export default function VerificationPage() {
                   )}
 
                   {/* PDF downloads */}
-                  {data.hasPdf && status === 'verified' && documentId && (
+                  {status === 'verified' && documentId && (data.hasPdf || data.hasAccountStatement) && (
                     <div className="mt-6 pt-4 space-y-3">
-                      <a
-                        href={verifyApi.getPdfUrl(documentId)}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="flex items-center justify-center gap-2 w-full py-3 px-4 bg-primary hover:bg-primary-700 text-white text-sm font-medium rounded-lg transition-colors"
-                      >
-                        <FileDown size={18} />
-                        {t.downloadPdf}
-                      </a>
+                      {data.hasPdf && (
+                        <a
+                          href={verifyApi.getPdfUrl(documentId)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center justify-center gap-2 w-full py-3 px-4 bg-primary hover:bg-primary-700 text-white text-sm font-medium rounded-lg transition-colors"
+                        >
+                          <FileDown size={18} />
+                          {t.downloadPdf}
+                        </a>
+                      )}
+                      {data.hasAccountStatement && (
+                        <a
+                          href={verifyApi.getAccountStatementUrl(documentId)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center justify-center gap-2 w-full py-3 px-4 bg-purple-600 hover:bg-purple-700 text-white text-sm font-medium rounded-lg transition-colors"
+                        >
+                          <FileDown size={18} />
+                          {t.downloadAccountStatement}
+                        </a>
+                      )}
                     </div>
                   )}
                 </div>

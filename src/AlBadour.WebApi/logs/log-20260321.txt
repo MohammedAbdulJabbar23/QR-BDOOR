@@ -1,0 +1,1077 @@
+2026-03-21 21:18:34.764 +03:00 [DBG] Hosting starting
+2026-03-21 21:18:34.846 +03:00 [WRN] No XML encryptor configured. Key {306e4f06-8d94-45de-8382-528c5bf05dad} may be persisted to storage in unencrypted form.
+2026-03-21 21:18:34.861 +03:00 [WRN] The WebRootPath was not found: /home/kira/Documents/freelance/bdor-hospital/src/AlBadour.WebApi/wwwroot. Static files may be unavailable.
+2026-03-21 21:18:34.920 +03:00 [INF] Now listening on: http://localhost:5293
+2026-03-21 21:18:34.921 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-03-21 21:18:34.923 +03:00 [INF] Hosting environment: Development
+2026-03-21 21:18:34.923 +03:00 [INF] Content root path: /home/kira/Documents/freelance/bdor-hospital/src/AlBadour.WebApi
+2026-03-21 21:18:34.929 +03:00 [DBG] Hosting started
+2026-03-21 21:18:50.585 +03:00 [INF] Handling LoginCommand
+2026-03-21 21:18:51.493 +03:00 [INF] Handled LoginCommand in 906ms
+2026-03-21 21:18:51.526 +03:00 [INF] HTTP POST /api/auth/login responded 200 in 1130ms
+2026-03-21 21:18:51.885 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:18:51.885 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:18:51.889 +03:00 [INF] Handling GetAllRequestsQuery
+2026-03-21 21:18:51.889 +03:00 [INF] Handling GetAllRequestsQuery
+2026-03-21 21:18:51.889 +03:00 [INF] Handling GetAllRequestsQuery
+2026-03-21 21:18:51.892 +03:00 [INF] Handling GetAllDocumentsQuery
+2026-03-21 21:18:52.041 +03:00 [INF] Handled GetUnreadCountQuery in 155ms
+2026-03-21 21:18:52.043 +03:00 [INF] Handled GetUnreadCountQuery in 157ms
+2026-03-21 21:18:52.051 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 287ms
+2026-03-21 21:18:52.051 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 282ms
+2026-03-21 21:18:52.066 +03:00 [INF] Handling GetAllDocumentsQuery
+2026-03-21 21:18:52.134 +03:00 [INF] Handled GetAllRequestsQuery in 244ms
+2026-03-21 21:18:52.134 +03:00 [INF] Handled GetAllRequestsQuery in 244ms
+2026-03-21 21:18:52.154 +03:00 [INF] Handled GetAllDocumentsQuery in 261ms
+2026-03-21 21:18:52.154 +03:00 [INF] HTTP GET /api/requests responded 200 in 391ms
+2026-03-21 21:18:52.154 +03:00 [INF] HTTP GET /api/requests responded 200 in 386ms
+2026-03-21 21:18:52.164 +03:00 [INF] HTTP GET /api/documents responded 200 in 397ms
+2026-03-21 21:18:52.202 +03:00 [INF] Handled GetAllRequestsQuery in 312ms
+2026-03-21 21:18:52.211 +03:00 [INF] HTTP GET /api/requests responded 200 in 443ms
+2026-03-21 21:18:52.260 +03:00 [INF] Handled GetAllDocumentsQuery in 193ms
+2026-03-21 21:18:52.267 +03:00 [INF] HTTP GET /api/documents responded 200 in 206ms
+2026-03-21 21:18:55.191 +03:00 [INF] Handling GetAllRequestsQuery
+2026-03-21 21:18:55.199 +03:00 [INF] Handling GetDocumentTypesQuery
+2026-03-21 21:18:55.208 +03:00 [INF] Handled GetAllRequestsQuery in 15ms
+2026-03-21 21:18:55.209 +03:00 [INF] HTTP GET /api/requests responded 200 in 20ms
+2026-03-21 21:18:55.218 +03:00 [INF] Handled GetDocumentTypesQuery in 18ms
+2026-03-21 21:18:55.222 +03:00 [INF] HTTP GET /api/document-types responded 200 in 34ms
+2026-03-21 21:18:57.565 +03:00 [INF] Handling GetDocumentTypesQuery
+2026-03-21 21:18:57.570 +03:00 [INF] Handled GetDocumentTypesQuery in 4ms
+2026-03-21 21:18:57.571 +03:00 [INF] HTTP GET /api/document-types responded 200 in 8ms
+2026-03-21 21:19:21.762 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:19:21.768 +03:00 [INF] Handled GetUnreadCountQuery in 5ms
+2026-03-21 21:19:21.768 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 7ms
+2026-03-21 21:19:26.048 +03:00 [INF] Handling CreateRequestCommand
+2026-03-21 21:19:26.184 +03:00 [INF] Handled CreateRequestCommand in 135ms
+2026-03-21 21:19:26.209 +03:00 [INF] HTTP POST /api/requests responded 201 in 211ms
+2026-03-21 21:19:26.287 +03:00 [INF] Handling GetAllRequestsQuery
+2026-03-21 21:19:26.287 +03:00 [INF] Handling GetDocumentTypesQuery
+2026-03-21 21:19:26.291 +03:00 [INF] Handled GetDocumentTypesQuery in 3ms
+2026-03-21 21:19:26.291 +03:00 [INF] HTTP GET /api/document-types responded 200 in 5ms
+2026-03-21 21:19:26.294 +03:00 [INF] Handled GetAllRequestsQuery in 6ms
+2026-03-21 21:19:26.295 +03:00 [INF] HTTP GET /api/requests responded 200 in 9ms
+2026-03-21 21:19:34.118 +03:00 [INF] Handling LoginCommand
+2026-03-21 21:19:34.435 +03:00 [INF] Handled LoginCommand in 317ms
+2026-03-21 21:19:34.438 +03:00 [INF] HTTP POST /api/auth/login responded 400 in 323ms
+2026-03-21 21:19:38.199 +03:00 [INF] Handling LoginCommand
+2026-03-21 21:19:38.436 +03:00 [INF] Handled LoginCommand in 236ms
+2026-03-21 21:19:38.436 +03:00 [INF] HTTP POST /api/auth/login responded 200 in 241ms
+2026-03-21 21:19:38.504 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:19:38.506 +03:00 [INF] Handling GetAllRequestsQuery
+2026-03-21 21:19:38.507 +03:00 [INF] Handling GetAllRequestsQuery
+2026-03-21 21:19:38.507 +03:00 [INF] Handling GetAllRequestsQuery
+2026-03-21 21:19:38.508 +03:00 [INF] Handled GetUnreadCountQuery in 3ms
+2026-03-21 21:19:38.508 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 5ms
+2026-03-21 21:19:38.510 +03:00 [INF] Handling GetAllDocumentsQuery
+2026-03-21 21:19:38.512 +03:00 [INF] Handled GetAllRequestsQuery in 5ms
+2026-03-21 21:19:38.513 +03:00 [INF] Handled GetAllRequestsQuery in 5ms
+2026-03-21 21:19:38.513 +03:00 [INF] HTTP GET /api/requests responded 200 in 8ms
+2026-03-21 21:19:38.513 +03:00 [INF] Handling GetAllDocumentsQuery
+2026-03-21 21:19:38.513 +03:00 [INF] Handled GetAllRequestsQuery in 6ms
+2026-03-21 21:19:38.513 +03:00 [INF] HTTP GET /api/requests responded 200 in 6ms
+2026-03-21 21:19:38.514 +03:00 [INF] HTTP GET /api/requests responded 200 in 8ms
+2026-03-21 21:19:38.516 +03:00 [INF] Handled GetAllDocumentsQuery in 5ms
+2026-03-21 21:19:38.516 +03:00 [INF] Handling GetPendingRequestsQuery
+2026-03-21 21:19:38.516 +03:00 [INF] HTTP GET /api/documents responded 200 in 9ms
+2026-03-21 21:19:38.518 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:19:38.521 +03:00 [INF] Handled GetUnreadCountQuery in 1ms
+2026-03-21 21:19:38.521 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 3ms
+2026-03-21 21:19:38.531 +03:00 [INF] Handled GetAllDocumentsQuery in 17ms
+2026-03-21 21:19:38.531 +03:00 [INF] HTTP GET /api/documents responded 200 in 19ms
+2026-03-21 21:19:38.542 +03:00 [INF] Handled GetPendingRequestsQuery in 25ms
+2026-03-21 21:19:38.543 +03:00 [INF] HTTP GET /api/requests/pending responded 200 in 35ms
+2026-03-21 21:19:40.455 +03:00 [INF] Handling GetAllRequestsQuery
+2026-03-21 21:19:40.455 +03:00 [INF] Handling GetDocumentTypesQuery
+2026-03-21 21:19:40.457 +03:00 [INF] Handled GetDocumentTypesQuery in 2ms
+2026-03-21 21:19:40.458 +03:00 [INF] HTTP GET /api/document-types responded 200 in 4ms
+2026-03-21 21:19:40.460 +03:00 [INF] Handled GetAllRequestsQuery in 5ms
+2026-03-21 21:19:40.460 +03:00 [INF] HTTP GET /api/requests responded 200 in 6ms
+2026-03-21 21:19:42.329 +03:00 [INF] Handling GetDocumentsByRequestQuery
+2026-03-21 21:19:42.329 +03:00 [INF] Handling GetRequestByIdQuery
+2026-03-21 21:19:42.356 +03:00 [INF] Handled GetRequestByIdQuery in 26ms
+2026-03-21 21:19:42.356 +03:00 [INF] HTTP GET /api/requests/365208a6-0fe4-4a79-9199-03ae239b435c responded 200 in 35ms
+2026-03-21 21:19:42.378 +03:00 [INF] Handled GetDocumentsByRequestQuery in 48ms
+2026-03-21 21:19:42.379 +03:00 [INF] HTTP GET /api/documents/by-request/365208a6-0fe4-4a79-9199-03ae239b435c responded 200 in 58ms
+2026-03-21 21:19:43.713 +03:00 [INF] Handling AcceptRequestCommand
+2026-03-21 21:19:43.742 +03:00 [INF] Handled AcceptRequestCommand in 28ms
+2026-03-21 21:19:43.744 +03:00 [INF] HTTP POST /api/requests/365208a6-0fe4-4a79-9199-03ae239b435c/accept responded 200 in 39ms
+2026-03-21 21:19:43.756 +03:00 [INF] Handling GetRequestByIdQuery
+2026-03-21 21:19:43.759 +03:00 [INF] Handled GetRequestByIdQuery in 3ms
+2026-03-21 21:19:43.760 +03:00 [INF] HTTP GET /api/requests/365208a6-0fe4-4a79-9199-03ae239b435c responded 200 in 5ms
+2026-03-21 21:19:44.821 +03:00 [INF] Handling GetRequestByIdQuery
+2026-03-21 21:19:44.824 +03:00 [INF] Handled GetRequestByIdQuery in 3ms
+2026-03-21 21:19:44.825 +03:00 [INF] HTTP GET /api/requests/365208a6-0fe4-4a79-9199-03ae239b435c responded 200 in 5ms
+2026-03-21 21:20:08.481 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:20:08.484 +03:00 [INF] Handled GetUnreadCountQuery in 3ms
+2026-03-21 21:20:08.485 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 4ms
+2026-03-21 21:20:19.168 +03:00 [INF] Handling PrepareDocumentCommand
+2026-03-21 21:20:19.327 +03:00 [INF] Handled PrepareDocumentCommand in 158ms
+2026-03-21 21:20:19.329 +03:00 [INF] HTTP POST /api/documents responded 201 in 180ms
+2026-03-21 21:20:19.508 +03:00 [INF] Handling GetDocumentByIdQuery
+2026-03-21 21:20:19.508 +03:00 [INF] Handling GetDocumentByIdQuery
+2026-03-21 21:20:19.508 +03:00 [INF] Handling GetDocumentByIdQuery
+2026-03-21 21:20:19.548 +03:00 [INF] Handled GetDocumentByIdQuery in 39ms
+2026-03-21 21:20:19.548 +03:00 [INF] Handled GetDocumentByIdQuery in 40ms
+2026-03-21 21:20:19.548 +03:00 [INF] Handled GetDocumentByIdQuery in 39ms
+2026-03-21 21:20:19.549 +03:00 [INF] HTTP GET /api/documents/64eaa809-4cd3-4ac0-86fe-403b6815bfb1 responded 200 in 48ms
+2026-03-21 21:20:19.574 +03:00 [INF] HTTP GET /api/documents/64eaa809-4cd3-4ac0-86fe-403b6815bfb1/qr-image responded 200 in 72ms
+2026-03-21 21:20:19.574 +03:00 [INF] HTTP GET /api/documents/64eaa809-4cd3-4ac0-86fe-403b6815bfb1/qr-image responded 200 in 72ms
+2026-03-21 21:20:20.691 +03:00 [INF] Handling GeneratePdfCommand
+2026-03-21 21:20:20.963 +03:00 [INF] Handled GeneratePdfCommand in 271ms
+2026-03-21 21:20:20.963 +03:00 [INF] HTTP POST /api/documents/64eaa809-4cd3-4ac0-86fe-403b6815bfb1/generate-pdf responded 200 in 281ms
+2026-03-21 21:20:20.979 +03:00 [INF] Handling GetDocumentByIdQuery
+2026-03-21 21:20:20.987 +03:00 [INF] Handled GetDocumentByIdQuery in 7ms
+2026-03-21 21:20:20.987 +03:00 [INF] HTTP GET /api/documents/64eaa809-4cd3-4ac0-86fe-403b6815bfb1 responded 200 in 10ms
+2026-03-21 21:20:22.364 +03:00 [INF] Handling GetDocumentByIdQuery
+2026-03-21 21:20:22.371 +03:00 [INF] Handled GetDocumentByIdQuery in 6ms
+2026-03-21 21:20:22.390 +03:00 [INF] HTTP GET /api/documents/64eaa809-4cd3-4ac0-86fe-403b6815bfb1/pdf responded 200 in 34ms
+2026-03-21 21:20:38.750 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:20:38.765 +03:00 [INF] Handled GetUnreadCountQuery in 14ms
+2026-03-21 21:20:38.765 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 16ms
+2026-03-21 21:20:47.495 +03:00 [INF] Handling LoginCommand
+2026-03-21 21:20:47.714 +03:00 [INF] Handled LoginCommand in 218ms
+2026-03-21 21:20:47.714 +03:00 [INF] HTTP POST /api/auth/login responded 200 in 221ms
+2026-03-21 21:20:47.776 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:20:47.776 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:20:47.777 +03:00 [INF] Handling GetAllRequestsQuery
+2026-03-21 21:20:47.777 +03:00 [INF] Handled GetUnreadCountQuery in 1ms
+2026-03-21 21:20:47.778 +03:00 [INF] Handling GetAllRequestsQuery
+2026-03-21 21:20:47.778 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 2ms
+2026-03-21 21:20:47.778 +03:00 [INF] Handling GetAllRequestsQuery
+2026-03-21 21:20:47.778 +03:00 [INF] Handling GetAllDocumentsQuery
+2026-03-21 21:20:47.778 +03:00 [INF] Handled GetUnreadCountQuery in 1ms
+2026-03-21 21:20:47.779 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 2ms
+2026-03-21 21:20:47.782 +03:00 [INF] Handled GetAllRequestsQuery in 3ms
+2026-03-21 21:20:47.782 +03:00 [INF] Handled GetAllRequestsQuery in 4ms
+2026-03-21 21:20:47.782 +03:00 [INF] HTTP GET /api/requests responded 200 in 4ms
+2026-03-21 21:20:47.782 +03:00 [INF] HTTP GET /api/requests responded 200 in 5ms
+2026-03-21 21:20:47.782 +03:00 [INF] Handled GetAllRequestsQuery in 4ms
+2026-03-21 21:20:47.783 +03:00 [INF] HTTP GET /api/requests responded 200 in 5ms
+2026-03-21 21:20:47.783 +03:00 [INF] Handling GetAllDocumentsQuery
+2026-03-21 21:20:47.785 +03:00 [INF] Handled GetAllDocumentsQuery in 6ms
+2026-03-21 21:20:47.786 +03:00 [INF] HTTP GET /api/documents responded 200 in 8ms
+2026-03-21 21:20:47.790 +03:00 [INF] Handled GetAllDocumentsQuery in 6ms
+2026-03-21 21:20:47.790 +03:00 [INF] HTTP GET /api/documents responded 200 in 7ms
+2026-03-21 21:20:50.801 +03:00 [INF] Handling GetAllRequestsQuery
+2026-03-21 21:20:50.801 +03:00 [INF] Handling GetDocumentTypesQuery
+2026-03-21 21:20:50.803 +03:00 [INF] Handled GetDocumentTypesQuery in 1ms
+2026-03-21 21:20:50.803 +03:00 [INF] HTTP GET /api/document-types responded 200 in 3ms
+2026-03-21 21:20:50.805 +03:00 [INF] Handled GetAllRequestsQuery in 4ms
+2026-03-21 21:20:50.806 +03:00 [INF] HTTP GET /api/requests responded 200 in 6ms
+2026-03-21 21:20:52.679 +03:00 [INF] Handling GetDocumentTypesQuery
+2026-03-21 21:20:52.681 +03:00 [INF] Handled GetDocumentTypesQuery in 2ms
+2026-03-21 21:20:52.681 +03:00 [INF] HTTP GET /api/document-types responded 200 in 3ms
+2026-03-21 21:21:10.471 +03:00 [INF] Handling CreateRequestCommand
+2026-03-21 21:21:10.488 +03:00 [INF] Handled CreateRequestCommand in 17ms
+2026-03-21 21:21:10.489 +03:00 [INF] HTTP POST /api/requests responded 201 in 21ms
+2026-03-21 21:21:10.578 +03:00 [INF] Handling GetDocumentTypesQuery
+2026-03-21 21:21:10.578 +03:00 [INF] Handling GetAllRequestsQuery
+2026-03-21 21:21:10.581 +03:00 [INF] Handled GetDocumentTypesQuery in 2ms
+2026-03-21 21:21:10.581 +03:00 [INF] HTTP GET /api/document-types responded 200 in 3ms
+2026-03-21 21:21:10.584 +03:00 [INF] Handled GetAllRequestsQuery in 5ms
+2026-03-21 21:21:10.584 +03:00 [INF] HTTP GET /api/requests responded 200 in 6ms
+2026-03-21 21:21:18.096 +03:00 [INF] Handling LoginCommand
+2026-03-21 21:21:18.323 +03:00 [INF] Handled LoginCommand in 226ms
+2026-03-21 21:21:18.323 +03:00 [INF] HTTP POST /api/auth/login responded 200 in 228ms
+2026-03-21 21:21:18.386 +03:00 [INF] Handling GetAllRequestsQuery
+2026-03-21 21:21:18.387 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:21:18.387 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:21:18.388 +03:00 [INF] Handling GetAllRequestsQuery
+2026-03-21 21:21:18.388 +03:00 [INF] Handling GetAllRequestsQuery
+2026-03-21 21:21:18.389 +03:00 [INF] Handling GetPendingRequestsQuery
+2026-03-21 21:21:18.389 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 21:21:18.389 +03:00 [INF] Handled GetUnreadCountQuery in 1ms
+2026-03-21 21:21:18.390 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 3ms
+2026-03-21 21:21:18.390 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 3ms
+2026-03-21 21:21:18.392 +03:00 [INF] Handled GetAllRequestsQuery in 5ms
+2026-03-21 21:21:18.392 +03:00 [INF] Handled GetAllRequestsQuery in 3ms
+2026-03-21 21:21:18.393 +03:00 [INF] HTTP GET /api/requests responded 200 in 4ms
+2026-03-21 21:21:18.393 +03:00 [INF] HTTP GET /api/requests responded 200 in 8ms
+2026-03-21 21:21:18.393 +03:00 [INF] Handled GetAllRequestsQuery in 5ms
+2026-03-21 21:21:18.393 +03:00 [INF] Handled GetPendingRequestsQuery in 4ms
+2026-03-21 21:21:18.394 +03:00 [INF] HTTP GET /api/requests responded 200 in 6ms
+2026-03-21 21:21:18.394 +03:00 [INF] HTTP GET /api/requests/pending responded 200 in 6ms
+2026-03-21 21:21:18.396 +03:00 [INF] Handling GetAllDocumentsQuery
+2026-03-21 21:21:18.396 +03:00 [INF] Handling GetAllDocumentsQuery
+2026-03-21 21:21:18.401 +03:00 [INF] Handled GetAllDocumentsQuery in 4ms
+2026-03-21 21:21:18.402 +03:00 [INF] HTTP GET /api/documents responded 200 in 5ms
+2026-03-21 21:21:18.402 +03:00 [INF] Handled GetAllDocumentsQuery in 5ms
+2026-03-21 21:21:18.402 +03:00 [INF] HTTP GET /api/documents responded 200 in 6ms
+2026-03-21 21:21:21.252 +03:00 [INF] Handling GetAllRequestsQuery
+2026-03-21 21:21:21.252 +03:00 [INF] Handling GetDocumentTypesQuery
+2026-03-21 21:21:21.255 +03:00 [INF] Handled GetDocumentTypesQuery in 2ms
+2026-03-21 21:21:21.255 +03:00 [INF] HTTP GET /api/document-types responded 200 in 3ms
+2026-03-21 21:21:21.258 +03:00 [INF] Handled GetAllRequestsQuery in 5ms
+2026-03-21 21:21:21.258 +03:00 [INF] HTTP GET /api/requests responded 200 in 6ms
+2026-03-21 21:21:22.871 +03:00 [INF] Handling GetRequestByIdQuery
+2026-03-21 21:21:22.872 +03:00 [INF] Handling GetDocumentsByRequestQuery
+2026-03-21 21:21:22.874 +03:00 [INF] Handled GetRequestByIdQuery in 3ms
+2026-03-21 21:21:22.875 +03:00 [INF] HTTP GET /api/requests/c21ce450-b83f-415b-9cbc-7890c79e2c50 responded 200 in 5ms
+2026-03-21 21:21:22.877 +03:00 [INF] Handled GetDocumentsByRequestQuery in 5ms
+2026-03-21 21:21:22.878 +03:00 [INF] HTTP GET /api/documents/by-request/c21ce450-b83f-415b-9cbc-7890c79e2c50 responded 200 in 8ms
+2026-03-21 21:21:23.908 +03:00 [INF] Handling AcceptRequestCommand
+2026-03-21 21:21:23.926 +03:00 [INF] Handled AcceptRequestCommand in 17ms
+2026-03-21 21:21:23.926 +03:00 [INF] HTTP POST /api/requests/c21ce450-b83f-415b-9cbc-7890c79e2c50/accept responded 200 in 19ms
+2026-03-21 21:21:23.939 +03:00 [INF] Handling GetRequestByIdQuery
+2026-03-21 21:21:23.943 +03:00 [INF] Handled GetRequestByIdQuery in 3ms
+2026-03-21 21:21:23.943 +03:00 [INF] HTTP GET /api/requests/c21ce450-b83f-415b-9cbc-7890c79e2c50 responded 200 in 4ms
+2026-03-21 21:21:26.044 +03:00 [INF] Handling GetRequestByIdQuery
+2026-03-21 21:21:26.048 +03:00 [INF] Handled GetRequestByIdQuery in 3ms
+2026-03-21 21:21:26.048 +03:00 [INF] HTTP GET /api/requests/c21ce450-b83f-415b-9cbc-7890c79e2c50 responded 200 in 4ms
+2026-03-21 21:21:48.364 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:21:48.367 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 21:21:48.367 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 3ms
+2026-03-21 21:22:17.587 +03:00 [INF] Handling PrepareDocumentCommand
+2026-03-21 21:22:17.629 +03:00 [INF] Handled PrepareDocumentCommand in 42ms
+2026-03-21 21:22:17.630 +03:00 [INF] HTTP POST /api/documents responded 201 in 45ms
+2026-03-21 21:22:17.706 +03:00 [INF] Handling GetDocumentByIdQuery
+2026-03-21 21:22:17.706 +03:00 [INF] Handling GetDocumentByIdQuery
+2026-03-21 21:22:17.706 +03:00 [INF] Handling GetDocumentByIdQuery
+2026-03-21 21:22:17.711 +03:00 [INF] Handled GetDocumentByIdQuery in 4ms
+2026-03-21 21:22:17.711 +03:00 [INF] HTTP GET /api/documents/097b0683-1192-4c2e-9b0f-af9a168757c1 responded 200 in 6ms
+2026-03-21 21:22:17.711 +03:00 [INF] Handled GetDocumentByIdQuery in 5ms
+2026-03-21 21:22:17.711 +03:00 [INF] Handled GetDocumentByIdQuery in 4ms
+2026-03-21 21:22:17.715 +03:00 [INF] HTTP GET /api/documents/097b0683-1192-4c2e-9b0f-af9a168757c1/qr-image responded 200 in 9ms
+2026-03-21 21:22:17.715 +03:00 [INF] HTTP GET /api/documents/097b0683-1192-4c2e-9b0f-af9a168757c1/qr-image responded 200 in 10ms
+2026-03-21 21:22:18.362 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:22:18.365 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 21:22:18.365 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 3ms
+2026-03-21 21:22:18.906 +03:00 [INF] Handling GeneratePdfCommand
+2026-03-21 21:22:19.002 +03:00 [INF] Handled GeneratePdfCommand in 95ms
+2026-03-21 21:22:19.002 +03:00 [INF] HTTP POST /api/documents/097b0683-1192-4c2e-9b0f-af9a168757c1/generate-pdf responded 200 in 97ms
+2026-03-21 21:22:19.017 +03:00 [INF] Handling GetDocumentByIdQuery
+2026-03-21 21:22:19.023 +03:00 [INF] Handled GetDocumentByIdQuery in 6ms
+2026-03-21 21:22:19.023 +03:00 [INF] HTTP GET /api/documents/097b0683-1192-4c2e-9b0f-af9a168757c1 responded 200 in 7ms
+2026-03-21 21:22:20.209 +03:00 [INF] Handling GetDocumentByIdQuery
+2026-03-21 21:22:20.216 +03:00 [INF] Handled GetDocumentByIdQuery in 6ms
+2026-03-21 21:22:20.225 +03:00 [INF] HTTP GET /api/documents/097b0683-1192-4c2e-9b0f-af9a168757c1/pdf responded 200 in 16ms
+2026-03-21 21:22:31.913 +03:00 [INF] Handling GetDocumentTypesQuery
+2026-03-21 21:22:31.913 +03:00 [INF] Handling GetAllDocumentsQuery
+2026-03-21 21:22:31.915 +03:00 [INF] Handled GetDocumentTypesQuery in 1ms
+2026-03-21 21:22:31.915 +03:00 [INF] HTTP GET /api/document-types responded 200 in 2ms
+2026-03-21 21:22:31.959 +03:00 [INF] Handled GetAllDocumentsQuery in 45ms
+2026-03-21 21:22:31.960 +03:00 [INF] HTTP GET /api/documents responded 200 in 47ms
+2026-03-21 21:22:33.927 +03:00 [INF] Handling GetDocumentByIdQuery
+2026-03-21 21:22:33.927 +03:00 [INF] Handling GetDocumentByIdQuery
+2026-03-21 21:22:33.934 +03:00 [INF] Handling GetDocumentByIdQuery
+2026-03-21 21:22:33.934 +03:00 [INF] Handled GetDocumentByIdQuery in 6ms
+2026-03-21 21:22:33.934 +03:00 [INF] Handled GetDocumentByIdQuery in 6ms
+2026-03-21 21:22:33.934 +03:00 [INF] HTTP GET /api/documents/097b0683-1192-4c2e-9b0f-af9a168757c1 responded 200 in 7ms
+2026-03-21 21:22:33.938 +03:00 [INF] HTTP GET /api/documents/097b0683-1192-4c2e-9b0f-af9a168757c1/qr-image responded 200 in 11ms
+2026-03-21 21:22:33.939 +03:00 [INF] Handled GetDocumentByIdQuery in 5ms
+2026-03-21 21:22:33.942 +03:00 [INF] HTTP GET /api/documents/097b0683-1192-4c2e-9b0f-af9a168757c1/qr-image responded 200 in 8ms
+2026-03-21 21:22:36.837 +03:00 [INF] Handling GetDocumentTypesQuery
+2026-03-21 21:22:36.837 +03:00 [INF] Handling GetAllDocumentsQuery
+2026-03-21 21:22:36.839 +03:00 [INF] Handled GetDocumentTypesQuery in 1ms
+2026-03-21 21:22:36.840 +03:00 [INF] HTTP GET /api/document-types responded 200 in 2ms
+2026-03-21 21:22:36.846 +03:00 [INF] Handled GetAllDocumentsQuery in 8ms
+2026-03-21 21:22:36.846 +03:00 [INF] HTTP GET /api/documents responded 200 in 9ms
+2026-03-21 21:22:43.703 +03:00 [INF] Handling LoginCommand
+2026-03-21 21:22:43.919 +03:00 [INF] Handled LoginCommand in 215ms
+2026-03-21 21:22:43.919 +03:00 [INF] HTTP POST /api/auth/login responded 200 in 217ms
+2026-03-21 21:22:43.984 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:22:43.987 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 21:22:43.987 +03:00 [INF] Handling GetAllRequestsQuery
+2026-03-21 21:22:43.987 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 3ms
+2026-03-21 21:22:43.988 +03:00 [INF] Handling GetAllRequestsQuery
+2026-03-21 21:22:43.989 +03:00 [INF] Handling GetAllRequestsQuery
+2026-03-21 21:22:43.990 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:22:43.990 +03:00 [INF] Handling GetAllDocumentsQuery
+2026-03-21 21:22:43.991 +03:00 [INF] Handled GetAllRequestsQuery in 3ms
+2026-03-21 21:22:43.991 +03:00 [INF] Handled GetAllRequestsQuery in 3ms
+2026-03-21 21:22:43.991 +03:00 [INF] Handling GetAllDocumentsQuery
+2026-03-21 21:22:43.991 +03:00 [INF] HTTP GET /api/requests responded 200 in 3ms
+2026-03-21 21:22:43.991 +03:00 [INF] HTTP GET /api/requests responded 200 in 4ms
+2026-03-21 21:22:43.991 +03:00 [INF] Handled GetUnreadCountQuery in 1ms
+2026-03-21 21:22:43.992 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 2ms
+2026-03-21 21:22:43.991 +03:00 [INF] Handled GetAllRequestsQuery in 2ms
+2026-03-21 21:22:43.992 +03:00 [INF] HTTP GET /api/requests responded 200 in 3ms
+2026-03-21 21:22:43.996 +03:00 [INF] Handled GetAllDocumentsQuery in 4ms
+2026-03-21 21:22:43.996 +03:00 [INF] HTTP GET /api/documents responded 200 in 5ms
+2026-03-21 21:22:44.007 +03:00 [INF] Handled GetAllDocumentsQuery in 17ms
+2026-03-21 21:22:44.008 +03:00 [INF] HTTP GET /api/documents responded 200 in 18ms
+2026-03-21 21:22:46.298 +03:00 [INF] Handling GetDocumentTypesQuery
+2026-03-21 21:22:46.300 +03:00 [INF] Handled GetDocumentTypesQuery in 2ms
+2026-03-21 21:22:46.300 +03:00 [INF] HTTP GET /api/document-types responded 200 in 3ms
+2026-03-21 21:23:11.793 +03:00 [INF] Handling CreateRequestCommand
+2026-03-21 21:23:11.812 +03:00 [INF] Handled CreateRequestCommand in 18ms
+2026-03-21 21:23:11.812 +03:00 [INF] HTTP POST /api/requests responded 201 in 22ms
+2026-03-21 21:23:11.899 +03:00 [INF] Handling GetAllRequestsQuery
+2026-03-21 21:23:11.899 +03:00 [INF] Handling GetDocumentTypesQuery
+2026-03-21 21:23:11.902 +03:00 [INF] Handled GetDocumentTypesQuery in 2ms
+2026-03-21 21:23:11.902 +03:00 [INF] HTTP GET /api/document-types responded 200 in 3ms
+2026-03-21 21:23:11.906 +03:00 [INF] Handled GetAllRequestsQuery in 6ms
+2026-03-21 21:23:11.906 +03:00 [INF] HTTP GET /api/requests responded 200 in 7ms
+2026-03-21 21:23:17.558 +03:00 [INF] Handling LoginCommand
+2026-03-21 21:23:17.790 +03:00 [INF] Handled LoginCommand in 231ms
+2026-03-21 21:23:17.791 +03:00 [INF] HTTP POST /api/auth/login responded 200 in 233ms
+2026-03-21 21:23:17.850 +03:00 [INF] Handling GetAllRequestsQuery
+2026-03-21 21:23:17.852 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:23:17.852 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:23:17.853 +03:00 [INF] Handling GetAllRequestsQuery
+2026-03-21 21:23:17.853 +03:00 [INF] Handling GetAllRequestsQuery
+2026-03-21 21:23:17.853 +03:00 [INF] Handling GetAllDocumentsQuery
+2026-03-21 21:23:17.864 +03:00 [INF] Handled GetUnreadCountQuery in 12ms
+2026-03-21 21:23:17.864 +03:00 [INF] Handled GetUnreadCountQuery in 12ms
+2026-03-21 21:23:17.864 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 13ms
+2026-03-21 21:23:17.865 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 13ms
+2026-03-21 21:23:17.870 +03:00 [INF] Handling GetAllDocumentsQuery
+2026-03-21 21:23:17.890 +03:00 [INF] Handled GetAllRequestsQuery in 39ms
+2026-03-21 21:23:17.891 +03:00 [INF] HTTP GET /api/requests responded 200 in 40ms
+2026-03-21 21:23:17.893 +03:00 [INF] Handled GetAllRequestsQuery in 40ms
+2026-03-21 21:23:17.893 +03:00 [INF] HTTP GET /api/requests responded 200 in 40ms
+2026-03-21 21:23:17.904 +03:00 [INF] Handled GetAllRequestsQuery in 51ms
+2026-03-21 21:23:17.905 +03:00 [INF] HTTP GET /api/requests responded 200 in 52ms
+2026-03-21 21:23:17.908 +03:00 [INF] Handled GetAllDocumentsQuery in 55ms
+2026-03-21 21:23:17.908 +03:00 [INF] HTTP GET /api/documents responded 200 in 55ms
+2026-03-21 21:23:17.919 +03:00 [INF] Handled GetAllDocumentsQuery in 49ms
+2026-03-21 21:23:17.919 +03:00 [INF] HTTP GET /api/documents responded 200 in 50ms
+2026-03-21 21:23:21.367 +03:00 [INF] Handling GetAllRequestsQuery
+2026-03-21 21:23:21.367 +03:00 [INF] Handling GetDocumentTypesQuery
+2026-03-21 21:23:21.369 +03:00 [INF] Handled GetDocumentTypesQuery in 1ms
+2026-03-21 21:23:21.369 +03:00 [INF] HTTP GET /api/document-types responded 200 in 2ms
+2026-03-21 21:23:21.372 +03:00 [INF] Handled GetAllRequestsQuery in 4ms
+2026-03-21 21:23:21.372 +03:00 [INF] HTTP GET /api/requests responded 200 in 5ms
+2026-03-21 21:23:23.104 +03:00 [INF] Handling GetRequestByIdQuery
+2026-03-21 21:23:23.108 +03:00 [INF] Handled GetRequestByIdQuery in 4ms
+2026-03-21 21:23:23.109 +03:00 [INF] HTTP GET /api/requests/8ab8d265-8ec7-4581-92c9-85252528ee83 responded 200 in 5ms
+2026-03-21 21:23:23.146 +03:00 [INF] Handling GetDocumentsByRequestQuery
+2026-03-21 21:23:23.186 +03:00 [INF] Handled GetDocumentsByRequestQuery in 39ms
+2026-03-21 21:23:23.186 +03:00 [INF] HTTP GET /api/documents/by-request/8ab8d265-8ec7-4581-92c9-85252528ee83 responded 200 in 40ms
+2026-03-21 21:23:31.403 +03:00 [INF] Handling LoginCommand
+2026-03-21 21:23:31.614 +03:00 [INF] Handled LoginCommand in 210ms
+2026-03-21 21:23:31.614 +03:00 [INF] HTTP POST /api/auth/login responded 200 in 211ms
+2026-03-21 21:23:31.668 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:23:31.668 +03:00 [INF] Handling GetAllRequestsQuery
+2026-03-21 21:23:31.669 +03:00 [INF] Handling GetAllRequestsQuery
+2026-03-21 21:23:31.669 +03:00 [INF] Handling GetAllRequestsQuery
+2026-03-21 21:23:31.670 +03:00 [INF] Handled GetUnreadCountQuery in 1ms
+2026-03-21 21:23:31.670 +03:00 [INF] Handling GetAllDocumentsQuery
+2026-03-21 21:23:31.670 +03:00 [INF] Handling GetAllDocumentsQuery
+2026-03-21 21:23:31.670 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 2ms
+2026-03-21 21:23:31.672 +03:00 [INF] Handled GetAllRequestsQuery in 4ms
+2026-03-21 21:23:31.672 +03:00 [INF] Handled GetAllRequestsQuery in 2ms
+2026-03-21 21:23:31.672 +03:00 [INF] HTTP GET /api/requests responded 200 in 4ms
+2026-03-21 21:23:31.673 +03:00 [INF] HTTP GET /api/requests responded 200 in 3ms
+2026-03-21 21:23:31.673 +03:00 [INF] Handled GetAllRequestsQuery in 3ms
+2026-03-21 21:23:31.673 +03:00 [INF] HTTP GET /api/requests responded 200 in 3ms
+2026-03-21 21:23:31.676 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:23:31.677 +03:00 [INF] Handled GetAllDocumentsQuery in 6ms
+2026-03-21 21:23:31.677 +03:00 [INF] Handled GetAllDocumentsQuery in 6ms
+2026-03-21 21:23:31.677 +03:00 [INF] HTTP GET /api/documents responded 200 in 7ms
+2026-03-21 21:23:31.677 +03:00 [INF] HTTP GET /api/documents responded 200 in 7ms
+2026-03-21 21:23:31.678 +03:00 [INF] Handling GetPendingRequestsQuery
+2026-03-21 21:23:31.678 +03:00 [INF] Handled GetUnreadCountQuery in 1ms
+2026-03-21 21:23:31.678 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 2ms
+2026-03-21 21:23:31.681 +03:00 [INF] Handled GetPendingRequestsQuery in 2ms
+2026-03-21 21:23:31.681 +03:00 [INF] HTTP GET /api/requests/pending responded 200 in 4ms
+2026-03-21 21:23:33.924 +03:00 [INF] Handling GetDocumentTypesQuery
+2026-03-21 21:23:33.924 +03:00 [INF] Handling GetAllRequestsQuery
+2026-03-21 21:23:33.926 +03:00 [INF] Handled GetDocumentTypesQuery in 1ms
+2026-03-21 21:23:33.926 +03:00 [INF] HTTP GET /api/document-types responded 200 in 2ms
+2026-03-21 21:23:33.929 +03:00 [INF] Handled GetAllRequestsQuery in 4ms
+2026-03-21 21:23:33.929 +03:00 [INF] HTTP GET /api/requests responded 200 in 5ms
+2026-03-21 21:23:35.927 +03:00 [INF] Handling GetRequestByIdQuery
+2026-03-21 21:23:35.927 +03:00 [INF] Handling GetDocumentsByRequestQuery
+2026-03-21 21:23:35.930 +03:00 [INF] Handled GetRequestByIdQuery in 3ms
+2026-03-21 21:23:35.931 +03:00 [INF] HTTP GET /api/requests/8ab8d265-8ec7-4581-92c9-85252528ee83 responded 200 in 4ms
+2026-03-21 21:23:35.948 +03:00 [INF] Handled GetDocumentsByRequestQuery in 20ms
+2026-03-21 21:23:35.948 +03:00 [INF] HTTP GET /api/documents/by-request/8ab8d265-8ec7-4581-92c9-85252528ee83 responded 200 in 21ms
+2026-03-21 21:23:37.499 +03:00 [INF] Handling AcceptRequestCommand
+2026-03-21 21:23:37.516 +03:00 [INF] Handled AcceptRequestCommand in 16ms
+2026-03-21 21:23:37.516 +03:00 [INF] HTTP POST /api/requests/8ab8d265-8ec7-4581-92c9-85252528ee83/accept responded 200 in 18ms
+2026-03-21 21:23:37.529 +03:00 [INF] Handling GetRequestByIdQuery
+2026-03-21 21:23:37.533 +03:00 [INF] Handled GetRequestByIdQuery in 3ms
+2026-03-21 21:23:37.533 +03:00 [INF] HTTP GET /api/requests/8ab8d265-8ec7-4581-92c9-85252528ee83 responded 200 in 4ms
+2026-03-21 21:23:38.663 +03:00 [INF] Handling GetRequestByIdQuery
+2026-03-21 21:23:38.668 +03:00 [INF] Handled GetRequestByIdQuery in 4ms
+2026-03-21 21:23:38.668 +03:00 [INF] HTTP GET /api/requests/8ab8d265-8ec7-4581-92c9-85252528ee83 responded 200 in 5ms
+2026-03-21 21:23:49.798 +03:00 [INF] Handling LoginCommand
+2026-03-21 21:23:50.028 +03:00 [INF] Handled LoginCommand in 230ms
+2026-03-21 21:23:50.028 +03:00 [INF] HTTP POST /api/auth/login responded 200 in 231ms
+2026-03-21 21:23:50.092 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:23:50.093 +03:00 [INF] Handling GetAllRequestsQuery
+2026-03-21 21:23:50.094 +03:00 [INF] Handling GetAllRequestsQuery
+2026-03-21 21:23:50.094 +03:00 [INF] Handling GetAllRequestsQuery
+2026-03-21 21:23:50.094 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 21:23:50.094 +03:00 [INF] Handling GetAllDocumentsQuery
+2026-03-21 21:23:50.094 +03:00 [INF] Handling GetAllDocumentsQuery
+2026-03-21 21:23:50.094 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 2ms
+2026-03-21 21:23:50.097 +03:00 [INF] Handled GetAllRequestsQuery in 4ms
+2026-03-21 21:23:50.098 +03:00 [INF] HTTP GET /api/requests responded 200 in 5ms
+2026-03-21 21:23:50.098 +03:00 [INF] Handled GetAllRequestsQuery in 3ms
+2026-03-21 21:23:50.098 +03:00 [INF] HTTP GET /api/requests responded 200 in 4ms
+2026-03-21 21:23:50.101 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:23:50.102 +03:00 [INF] Handled GetUnreadCountQuery in 1ms
+2026-03-21 21:23:50.103 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 1ms
+2026-03-21 21:23:50.107 +03:00 [INF] Handled GetAllRequestsQuery in 12ms
+2026-03-21 21:23:50.107 +03:00 [INF] HTTP GET /api/requests responded 200 in 13ms
+2026-03-21 21:23:50.110 +03:00 [INF] Handled GetAllDocumentsQuery in 15ms
+2026-03-21 21:23:50.110 +03:00 [INF] HTTP GET /api/documents responded 200 in 15ms
+2026-03-21 21:23:50.112 +03:00 [INF] Handled GetAllDocumentsQuery in 17ms
+2026-03-21 21:23:50.112 +03:00 [INF] HTTP GET /api/documents responded 200 in 17ms
+2026-03-21 21:23:52.399 +03:00 [INF] Handling GetDocumentTypesQuery
+2026-03-21 21:23:52.403 +03:00 [INF] Handled GetDocumentTypesQuery in 3ms
+2026-03-21 21:23:52.403 +03:00 [INF] HTTP GET /api/document-types responded 200 in 4ms
+2026-03-21 21:24:20.100 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:24:20.103 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 21:24:20.104 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 3ms
+2026-03-21 21:24:20.191 +03:00 [INF] Handling CreateRequestCommand
+2026-03-21 21:24:20.208 +03:00 [INF] Handled CreateRequestCommand in 16ms
+2026-03-21 21:24:20.208 +03:00 [INF] HTTP POST /api/requests responded 201 in 18ms
+2026-03-21 21:24:20.272 +03:00 [INF] Handling GetAllRequestsQuery
+2026-03-21 21:24:20.272 +03:00 [INF] Handling GetDocumentTypesQuery
+2026-03-21 21:24:20.275 +03:00 [INF] Handled GetDocumentTypesQuery in 2ms
+2026-03-21 21:24:20.275 +03:00 [INF] HTTP GET /api/document-types responded 200 in 3ms
+2026-03-21 21:24:20.278 +03:00 [INF] Handled GetAllRequestsQuery in 5ms
+2026-03-21 21:24:20.278 +03:00 [INF] HTTP GET /api/requests responded 200 in 6ms
+2026-03-21 21:24:25.962 +03:00 [INF] Handling LoginCommand
+2026-03-21 21:24:26.171 +03:00 [INF] Handled LoginCommand in 208ms
+2026-03-21 21:24:26.171 +03:00 [INF] HTTP POST /api/auth/login responded 200 in 209ms
+2026-03-21 21:24:26.229 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:24:26.231 +03:00 [INF] Handling GetAllRequestsQuery
+2026-03-21 21:24:26.231 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:24:26.231 +03:00 [INF] Handling GetAllRequestsQuery
+2026-03-21 21:24:26.231 +03:00 [INF] Handling GetAllRequestsQuery
+2026-03-21 21:24:26.232 +03:00 [INF] Handling GetPendingRequestsQuery
+2026-03-21 21:24:26.232 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 21:24:26.232 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 3ms
+2026-03-21 21:24:26.233 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 21:24:26.233 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 2ms
+2026-03-21 21:24:26.234 +03:00 [INF] Handled GetPendingRequestsQuery in 2ms
+2026-03-21 21:24:26.234 +03:00 [INF] HTTP GET /api/requests/pending responded 200 in 2ms
+2026-03-21 21:24:26.235 +03:00 [INF] Handled GetAllRequestsQuery in 4ms
+2026-03-21 21:24:26.236 +03:00 [INF] HTTP GET /api/requests responded 200 in 5ms
+2026-03-21 21:24:26.236 +03:00 [INF] Handled GetAllRequestsQuery in 4ms
+2026-03-21 21:24:26.236 +03:00 [INF] Handled GetAllRequestsQuery in 4ms
+2026-03-21 21:24:26.236 +03:00 [INF] HTTP GET /api/requests responded 200 in 4ms
+2026-03-21 21:24:26.236 +03:00 [INF] HTTP GET /api/requests responded 200 in 5ms
+2026-03-21 21:24:26.239 +03:00 [INF] Handling GetAllDocumentsQuery
+2026-03-21 21:24:26.239 +03:00 [INF] Handling GetAllDocumentsQuery
+2026-03-21 21:24:26.244 +03:00 [INF] Handled GetAllDocumentsQuery in 4ms
+2026-03-21 21:24:26.244 +03:00 [INF] HTTP GET /api/documents responded 200 in 5ms
+2026-03-21 21:24:26.246 +03:00 [INF] Handled GetAllDocumentsQuery in 7ms
+2026-03-21 21:24:26.246 +03:00 [INF] HTTP GET /api/documents responded 200 in 7ms
+2026-03-21 21:24:28.050 +03:00 [INF] Handling GetDocumentTypesQuery
+2026-03-21 21:24:28.050 +03:00 [INF] Handling GetAllRequestsQuery
+2026-03-21 21:24:28.053 +03:00 [INF] Handled GetDocumentTypesQuery in 2ms
+2026-03-21 21:24:28.053 +03:00 [INF] HTTP GET /api/document-types responded 200 in 3ms
+2026-03-21 21:24:28.056 +03:00 [INF] Handled GetAllRequestsQuery in 5ms
+2026-03-21 21:24:28.056 +03:00 [INF] HTTP GET /api/requests responded 200 in 6ms
+2026-03-21 21:24:30.052 +03:00 [INF] Handling GetRequestByIdQuery
+2026-03-21 21:24:30.052 +03:00 [INF] Handling GetDocumentsByRequestQuery
+2026-03-21 21:24:30.055 +03:00 [INF] Handled GetRequestByIdQuery in 2ms
+2026-03-21 21:24:30.055 +03:00 [INF] HTTP GET /api/requests/e09c788a-840c-41ac-b952-4004ec75e2f7 responded 200 in 3ms
+2026-03-21 21:24:30.057 +03:00 [INF] Handled GetDocumentsByRequestQuery in 4ms
+2026-03-21 21:24:30.057 +03:00 [INF] HTTP GET /api/documents/by-request/e09c788a-840c-41ac-b952-4004ec75e2f7 responded 200 in 5ms
+2026-03-21 21:24:31.309 +03:00 [INF] Handling AcceptRequestCommand
+2026-03-21 21:24:31.324 +03:00 [INF] Handled AcceptRequestCommand in 15ms
+2026-03-21 21:24:31.325 +03:00 [INF] HTTP POST /api/requests/e09c788a-840c-41ac-b952-4004ec75e2f7/accept responded 200 in 16ms
+2026-03-21 21:24:31.337 +03:00 [INF] Handling GetRequestByIdQuery
+2026-03-21 21:24:31.341 +03:00 [INF] Handled GetRequestByIdQuery in 3ms
+2026-03-21 21:24:31.341 +03:00 [INF] HTTP GET /api/requests/e09c788a-840c-41ac-b952-4004ec75e2f7 responded 200 in 3ms
+2026-03-21 21:24:32.440 +03:00 [INF] Handling GetRequestByIdQuery
+2026-03-21 21:24:32.443 +03:00 [INF] Handled GetRequestByIdQuery in 2ms
+2026-03-21 21:24:32.444 +03:00 [INF] HTTP GET /api/requests/e09c788a-840c-41ac-b952-4004ec75e2f7 responded 200 in 3ms
+2026-03-21 21:24:56.221 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:24:56.224 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 21:24:56.224 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 2ms
+2026-03-21 21:25:19.395 +03:00 [INF] HTTP PUT /api/auth/me/language responded 200 in 41ms
+2026-03-21 21:25:26.781 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:25:26.784 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 21:25:26.784 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 3ms
+2026-03-21 21:25:56.785 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:25:56.787 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 21:25:56.787 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 3ms
+2026-03-21 21:25:59.497 +03:00 [INF] Handling GetRequestByIdQuery
+2026-03-21 21:25:59.501 +03:00 [INF] Handled GetRequestByIdQuery in 3ms
+2026-03-21 21:25:59.502 +03:00 [INF] HTTP GET /api/requests/e09c788a-840c-41ac-b952-4004ec75e2f7 responded 200 in 4ms
+2026-03-21 21:26:08.004 +03:00 [INF] Handling GetRequestByIdQuery
+2026-03-21 21:26:08.008 +03:00 [INF] Handled GetRequestByIdQuery in 3ms
+2026-03-21 21:26:08.008 +03:00 [INF] HTTP GET /api/requests/e09c788a-840c-41ac-b952-4004ec75e2f7 responded 200 in 4ms
+2026-03-21 21:26:12.851 +03:00 [INF] Handling GetRequestByIdQuery
+2026-03-21 21:26:12.854 +03:00 [INF] Handled GetRequestByIdQuery in 2ms
+2026-03-21 21:26:12.855 +03:00 [INF] HTTP GET /api/requests/e09c788a-840c-41ac-b952-4004ec75e2f7 responded 200 in 4ms
+2026-03-21 21:26:21.246 +03:00 [INF] Handling GetRequestByIdQuery
+2026-03-21 21:26:21.250 +03:00 [INF] Handled GetRequestByIdQuery in 3ms
+2026-03-21 21:26:21.250 +03:00 [INF] HTTP GET /api/requests/e09c788a-840c-41ac-b952-4004ec75e2f7 responded 200 in 4ms
+2026-03-21 21:26:26.781 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:26:26.783 +03:00 [INF] Handled GetUnreadCountQuery in 1ms
+2026-03-21 21:26:26.783 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 2ms
+2026-03-21 21:26:58.192 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:26:58.195 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 21:26:58.195 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 3ms
+2026-03-21 21:27:15.829 +03:00 [INF] HTTP PUT /api/auth/me/language responded 200 in 8ms
+2026-03-21 21:27:28.194 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:27:28.197 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 21:27:28.197 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 3ms
+2026-03-21 21:27:58.193 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:27:58.195 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 21:27:58.195 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 2ms
+2026-03-21 21:28:05.776 +03:00 [INF] Handling GetRequestByIdQuery
+2026-03-21 21:28:05.781 +03:00 [INF] Handled GetRequestByIdQuery in 4ms
+2026-03-21 21:28:05.781 +03:00 [INF] HTTP GET /api/requests/e09c788a-840c-41ac-b952-4004ec75e2f7 responded 200 in 6ms
+2026-03-21 21:28:28.195 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:28:28.197 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 21:28:28.198 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 3ms
+2026-03-21 21:28:34.659 +03:00 [INF] Handling PrepareDocumentCommand
+2026-03-21 21:28:34.701 +03:00 [INF] Handled PrepareDocumentCommand in 41ms
+2026-03-21 21:28:34.702 +03:00 [INF] HTTP POST /api/documents responded 201 in 46ms
+2026-03-21 21:28:34.777 +03:00 [INF] Handling GetDocumentByIdQuery
+2026-03-21 21:28:34.777 +03:00 [INF] Handling GetDocumentByIdQuery
+2026-03-21 21:28:34.777 +03:00 [INF] Handling GetDocumentByIdQuery
+2026-03-21 21:28:34.784 +03:00 [INF] Handled GetDocumentByIdQuery in 6ms
+2026-03-21 21:28:34.789 +03:00 [INF] HTTP GET /api/documents/cf094a27-b09a-4f47-b4d9-8a1352332f34/qr-image responded 200 in 12ms
+2026-03-21 21:28:34.796 +03:00 [INF] Handled GetDocumentByIdQuery in 18ms
+2026-03-21 21:28:34.796 +03:00 [INF] HTTP GET /api/documents/cf094a27-b09a-4f47-b4d9-8a1352332f34 responded 200 in 19ms
+2026-03-21 21:28:34.797 +03:00 [INF] Handled GetDocumentByIdQuery in 18ms
+2026-03-21 21:28:34.801 +03:00 [INF] HTTP GET /api/documents/cf094a27-b09a-4f47-b4d9-8a1352332f34/qr-image responded 200 in 23ms
+2026-03-21 21:28:35.659 +03:00 [INF] Handling GeneratePdfCommand
+2026-03-21 21:28:35.753 +03:00 [INF] Handled GeneratePdfCommand in 93ms
+2026-03-21 21:28:35.753 +03:00 [INF] HTTP POST /api/documents/cf094a27-b09a-4f47-b4d9-8a1352332f34/generate-pdf responded 200 in 95ms
+2026-03-21 21:28:35.767 +03:00 [INF] Handling GetDocumentByIdQuery
+2026-03-21 21:28:35.773 +03:00 [INF] Handled GetDocumentByIdQuery in 6ms
+2026-03-21 21:28:35.774 +03:00 [INF] HTTP GET /api/documents/cf094a27-b09a-4f47-b4d9-8a1352332f34 responded 200 in 7ms
+2026-03-21 21:28:36.728 +03:00 [INF] Handling GetDocumentByIdQuery
+2026-03-21 21:28:36.735 +03:00 [INF] Handled GetDocumentByIdQuery in 7ms
+2026-03-21 21:28:36.741 +03:00 [INF] HTTP GET /api/documents/cf094a27-b09a-4f47-b4d9-8a1352332f34/pdf responded 200 in 13ms
+2026-03-21 21:28:58.701 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:28:58.704 +03:00 [INF] Handled GetUnreadCountQuery in 3ms
+2026-03-21 21:28:58.705 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 3ms
+2026-03-21 21:29:03.834 +03:00 [INF] Handling UploadPdfCommand
+2026-03-21 21:29:03.860 +03:00 [INF] Handled UploadPdfCommand in 25ms
+2026-03-21 21:29:03.861 +03:00 [INF] HTTP POST /api/documents/cf094a27-b09a-4f47-b4d9-8a1352332f34/upload-pdf responded 200 in 47ms
+2026-03-21 21:29:03.877 +03:00 [INF] Handling GetDocumentByIdQuery
+2026-03-21 21:29:03.884 +03:00 [INF] Handled GetDocumentByIdQuery in 6ms
+2026-03-21 21:29:03.885 +03:00 [INF] HTTP GET /api/documents/cf094a27-b09a-4f47-b4d9-8a1352332f34 responded 200 in 8ms
+2026-03-21 21:29:05.806 +03:00 [INF] Handling TransferToAccountsCommand
+2026-03-21 21:29:05.829 +03:00 [INF] Handled TransferToAccountsCommand in 22ms
+2026-03-21 21:29:05.830 +03:00 [INF] HTTP POST /api/documents/cf094a27-b09a-4f47-b4d9-8a1352332f34/transfer-to-accounts responded 200 in 33ms
+2026-03-21 21:29:05.842 +03:00 [INF] Handling GetDocumentByIdQuery
+2026-03-21 21:29:05.849 +03:00 [INF] Handled GetDocumentByIdQuery in 6ms
+2026-03-21 21:29:05.850 +03:00 [INF] HTTP GET /api/documents/cf094a27-b09a-4f47-b4d9-8a1352332f34 responded 200 in 7ms
+2026-03-21 21:29:28.663 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:29:28.666 +03:00 [INF] Handled GetUnreadCountQuery in 3ms
+2026-03-21 21:29:28.667 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 4ms
+2026-03-21 21:29:58.660 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:29:58.663 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 21:29:58.663 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 3ms
+2026-03-21 21:30:28.666 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:30:28.668 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 21:30:28.668 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 3ms
+2026-03-21 21:30:58.662 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:30:58.665 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 21:30:58.665 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 3ms
+2026-03-21 21:31:28.662 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:31:28.664 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 21:31:28.664 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 3ms
+2026-03-21 21:31:58.662 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:31:58.665 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 21:31:58.665 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 2ms
+2026-03-21 21:32:28.660 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:32:28.662 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 21:32:28.662 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 3ms
+2026-03-21 21:32:58.662 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:32:58.665 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 21:32:58.665 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 3ms
+2026-03-21 21:33:28.664 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:33:28.667 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 21:33:28.667 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 4ms
+2026-03-21 21:33:58.664 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:33:58.677 +03:00 [INF] Handled GetUnreadCountQuery in 12ms
+2026-03-21 21:33:58.677 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 13ms
+2026-03-21 21:34:28.664 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:34:28.668 +03:00 [INF] Handled GetUnreadCountQuery in 3ms
+2026-03-21 21:34:28.668 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 4ms
+2026-03-21 21:34:58.815 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:34:58.819 +03:00 [INF] Handled GetUnreadCountQuery in 3ms
+2026-03-21 21:34:58.819 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 5ms
+2026-03-21 21:35:28.815 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:35:28.818 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 21:35:28.818 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 3ms
+2026-03-21 21:35:58.816 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:35:58.818 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 21:35:58.818 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 3ms
+2026-03-21 21:36:12.712 +03:00 [INF] HTTP GET /health responded 404 in 0ms
+2026-03-21 21:36:28.815 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:36:28.818 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 21:36:28.818 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 3ms
+2026-03-21 21:36:33.925 +03:00 [INF] HTTP GET /api/v1/document-types responded 404 in 0ms
+2026-03-21 21:36:47.548 +03:00 [INF] HTTP GET /api/document-types responded 401 in 6ms
+2026-03-21 21:36:47.557 +03:00 [INF] HTTP GET /api/document-requests responded 404 in 0ms
+2026-03-21 21:36:58.815 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:36:58.817 +03:00 [INF] Handled GetUnreadCountQuery in 1ms
+2026-03-21 21:36:58.817 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 2ms
+2026-03-21 21:37:05.667 +03:00 [INF] Handling LoginCommand
+2026-03-21 21:37:05.879 +03:00 [INF] Handled LoginCommand in 211ms
+2026-03-21 21:37:05.879 +03:00 [INF] HTTP POST /api/auth/login responded 400 in 213ms
+2026-03-21 21:37:28.815 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:37:28.819 +03:00 [INF] Handled GetUnreadCountQuery in 3ms
+2026-03-21 21:37:28.819 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 4ms
+2026-03-21 21:37:34.886 +03:00 [INF] Handling LoginCommand
+2026-03-21 21:37:35.094 +03:00 [INF] Handled LoginCommand in 207ms
+2026-03-21 21:37:35.095 +03:00 [INF] HTTP POST /api/auth/login responded 400 in 209ms
+2026-03-21 21:37:35.109 +03:00 [INF] Handling LoginCommand
+2026-03-21 21:37:35.314 +03:00 [INF] Handled LoginCommand in 204ms
+2026-03-21 21:37:35.314 +03:00 [INF] HTTP POST /api/auth/login responded 400 in 205ms
+2026-03-21 21:37:35.329 +03:00 [INF] Handling LoginCommand
+2026-03-21 21:37:35.530 +03:00 [INF] Handled LoginCommand in 200ms
+2026-03-21 21:37:35.530 +03:00 [INF] HTTP POST /api/auth/login responded 400 in 201ms
+2026-03-21 21:37:35.544 +03:00 [INF] Handling LoginCommand
+2026-03-21 21:37:35.751 +03:00 [INF] Handled LoginCommand in 205ms
+2026-03-21 21:37:35.751 +03:00 [INF] HTTP POST /api/auth/login responded 400 in 207ms
+2026-03-21 21:37:35.765 +03:00 [INF] Handling LoginCommand
+2026-03-21 21:37:35.968 +03:00 [INF] Handled LoginCommand in 203ms
+2026-03-21 21:37:35.968 +03:00 [INF] HTTP POST /api/auth/login responded 400 in 204ms
+2026-03-21 21:37:35.983 +03:00 [INF] Handling LoginCommand
+2026-03-21 21:37:36.189 +03:00 [INF] Handled LoginCommand in 206ms
+2026-03-21 21:37:36.190 +03:00 [INF] HTTP POST /api/auth/login responded 400 in 207ms
+2026-03-21 21:37:36.204 +03:00 [INF] Handling LoginCommand
+2026-03-21 21:37:36.411 +03:00 [INF] Handled LoginCommand in 206ms
+2026-03-21 21:37:36.411 +03:00 [INF] HTTP POST /api/auth/login responded 400 in 207ms
+2026-03-21 21:37:36.425 +03:00 [INF] Handling LoginCommand
+2026-03-21 21:37:36.625 +03:00 [INF] Handled LoginCommand in 200ms
+2026-03-21 21:37:36.626 +03:00 [INF] HTTP POST /api/auth/login responded 400 in 201ms
+2026-03-21 21:37:58.817 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:37:58.819 +03:00 [INF] Handled GetUnreadCountQuery in 1ms
+2026-03-21 21:37:58.819 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 2ms
+2026-03-21 21:38:28.818 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:38:28.820 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 21:38:28.821 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 3ms
+2026-03-21 21:38:32.811 +03:00 [INF] Handling LoginCommand
+2026-03-21 21:38:33.018 +03:00 [INF] Handled LoginCommand in 207ms
+2026-03-21 21:38:33.019 +03:00 [INF] HTTP POST /api/auth/login responded 400 in 208ms
+2026-03-21 21:38:58.816 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:38:58.829 +03:00 [INF] Handled GetUnreadCountQuery in 12ms
+2026-03-21 21:38:58.830 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 13ms
+2026-03-21 21:39:28.817 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:39:28.820 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 21:39:28.821 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 3ms
+2026-03-21 21:39:58.818 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:39:58.820 +03:00 [INF] Handled GetUnreadCountQuery in 1ms
+2026-03-21 21:39:58.820 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 2ms
+2026-03-21 21:40:28.823 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:40:28.826 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 21:40:28.827 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 3ms
+2026-03-21 21:40:58.820 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:40:58.823 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 21:40:58.824 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 3ms
+2026-03-21 21:41:28.824 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:41:28.826 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 21:41:28.826 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 3ms
+2026-03-21 21:41:51.581 +03:00 [INF] Application is shutting down...
+2026-03-21 21:41:51.582 +03:00 [DBG] Hosting stopping
+2026-03-21 21:41:51.591 +03:00 [DBG] Hosting stopped
+2026-03-21 21:42:39.741 +03:00 [DBG] Hosting starting
+2026-03-21 21:42:39.816 +03:00 [WRN] The WebRootPath was not found: /home/kira/Documents/freelance/bdor-hospital/src/AlBadour.WebApi/wwwroot. Static files may be unavailable.
+2026-03-21 21:42:39.865 +03:00 [INF] Now listening on: http://localhost:5293
+2026-03-21 21:42:39.865 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-03-21 21:42:39.865 +03:00 [INF] Hosting environment: Development
+2026-03-21 21:42:39.865 +03:00 [INF] Content root path: /home/kira/Documents/freelance/bdor-hospital/src/AlBadour.WebApi
+2026-03-21 21:42:39.867 +03:00 [DBG] Hosting started
+2026-03-21 21:42:59.031 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:42:59.355 +03:00 [INF] Handled GetUnreadCountQuery in 321ms
+2026-03-21 21:42:59.467 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 563ms
+2026-03-21 21:43:06.070 +03:00 [INF] Handling LoginCommand
+2026-03-21 21:43:06.621 +03:00 [INF] Handled LoginCommand in 550ms
+2026-03-21 21:43:06.625 +03:00 [INF] HTTP POST /api/auth/login responded 400 in 637ms
+2026-03-21 21:43:28.844 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:43:28.854 +03:00 [INF] Handled GetUnreadCountQuery in 8ms
+2026-03-21 21:43:28.854 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 31ms
+2026-03-21 21:43:35.479 +03:00 [INF] Handling LoginCommand
+2026-03-21 21:43:36.023 +03:00 [INF] Handled LoginCommand in 544ms
+2026-03-21 21:43:36.044 +03:00 [INF] HTTP POST /api/auth/login responded 200 in 569ms
+2026-03-21 21:43:53.294 +03:00 [INF] Handling LoginCommand
+2026-03-21 21:43:53.506 +03:00 [INF] Handled LoginCommand in 211ms
+2026-03-21 21:43:53.507 +03:00 [INF] HTTP POST /api/auth/login responded 200 in 217ms
+2026-03-21 21:43:53.525 +03:00 [INF] Handling LoginCommand
+2026-03-21 21:43:53.739 +03:00 [INF] Handled LoginCommand in 213ms
+2026-03-21 21:43:53.740 +03:00 [INF] HTTP POST /api/auth/login responded 200 in 215ms
+2026-03-21 21:43:53.760 +03:00 [INF] Handling LoginCommand
+2026-03-21 21:43:53.974 +03:00 [INF] Handled LoginCommand in 213ms
+2026-03-21 21:43:53.975 +03:00 [INF] HTTP POST /api/auth/login responded 200 in 216ms
+2026-03-21 21:43:53.991 +03:00 [INF] Handling LoginCommand
+2026-03-21 21:43:54.202 +03:00 [INF] Handled LoginCommand in 210ms
+2026-03-21 21:43:54.203 +03:00 [INF] HTTP POST /api/auth/login responded 200 in 213ms
+2026-03-21 21:43:54.222 +03:00 [INF] Handling LoginCommand
+2026-03-21 21:43:54.443 +03:00 [INF] Handled LoginCommand in 221ms
+2026-03-21 21:43:54.444 +03:00 [INF] HTTP POST /api/auth/login responded 200 in 223ms
+2026-03-21 21:43:58.825 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:43:58.829 +03:00 [INF] Handled GetUnreadCountQuery in 3ms
+2026-03-21 21:43:58.829 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 7ms
+2026-03-21 21:44:01.513 +03:00 [INF] Handling LoginCommand
+2026-03-21 21:44:01.743 +03:00 [INF] Handled LoginCommand in 229ms
+2026-03-21 21:44:01.743 +03:00 [INF] HTTP POST /api/auth/login responded 200 in 231ms
+2026-03-21 21:44:01.766 +03:00 [INF] Handling LoginCommand
+2026-03-21 21:44:01.978 +03:00 [INF] Handled LoginCommand in 211ms
+2026-03-21 21:44:01.979 +03:00 [INF] HTTP POST /api/auth/login responded 200 in 213ms
+2026-03-21 21:44:02.001 +03:00 [INF] Handling LoginCommand
+2026-03-21 21:44:02.217 +03:00 [INF] Handled LoginCommand in 216ms
+2026-03-21 21:44:02.218 +03:00 [INF] HTTP POST /api/auth/login responded 200 in 217ms
+2026-03-21 21:44:02.238 +03:00 [INF] Handling LoginCommand
+2026-03-21 21:44:02.455 +03:00 [INF] Handled LoginCommand in 216ms
+2026-03-21 21:44:02.456 +03:00 [INF] HTTP POST /api/auth/login responded 200 in 218ms
+2026-03-21 21:44:02.484 +03:00 [INF] Handling GetDocumentTypesQuery
+2026-03-21 21:44:02.521 +03:00 [INF] Handled GetDocumentTypesQuery in 37ms
+2026-03-21 21:44:02.535 +03:00 [INF] HTTP GET /api/document-types responded 200 in 58ms
+2026-03-21 21:44:28.825 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:44:28.829 +03:00 [INF] Handled GetUnreadCountQuery in 4ms
+2026-03-21 21:44:28.830 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 6ms
+2026-03-21 21:44:58.824 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:44:58.827 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 21:44:58.828 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 4ms
+2026-03-21 21:45:28.822 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:45:28.824 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 21:45:28.824 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 3ms
+2026-03-21 21:45:58.823 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:45:58.826 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 21:45:58.827 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 4ms
+2026-03-21 21:46:14.970 +03:00 [INF] HTTP GET /health responded 404 in 1ms
+2026-03-21 21:46:28.824 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:46:28.827 +03:00 [INF] Handled GetUnreadCountQuery in 3ms
+2026-03-21 21:46:28.828 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 4ms
+2026-03-21 21:46:32.439 +03:00 [INF] Handling LoginCommand
+2026-03-21 21:46:32.677 +03:00 [INF] Handled LoginCommand in 238ms
+2026-03-21 21:46:32.678 +03:00 [INF] HTTP POST /api/auth/login responded 200 in 239ms
+2026-03-21 21:46:32.695 +03:00 [INF] Handling LoginCommand
+2026-03-21 21:46:32.909 +03:00 [INF] Handled LoginCommand in 213ms
+2026-03-21 21:46:32.909 +03:00 [INF] HTTP POST /api/auth/login responded 200 in 214ms
+2026-03-21 21:46:32.928 +03:00 [INF] Handling LoginCommand
+2026-03-21 21:46:33.139 +03:00 [INF] Handled LoginCommand in 211ms
+2026-03-21 21:46:33.140 +03:00 [INF] HTTP POST /api/auth/login responded 200 in 212ms
+2026-03-21 21:46:33.156 +03:00 [INF] Handling LoginCommand
+2026-03-21 21:46:33.350 +03:00 [INF] Handled LoginCommand in 193ms
+2026-03-21 21:46:33.350 +03:00 [INF] HTTP POST /api/auth/login responded 200 in 195ms
+2026-03-21 21:46:33.371 +03:00 [INF] Handling LoginCommand
+2026-03-21 21:46:33.586 +03:00 [INF] Handled LoginCommand in 214ms
+2026-03-21 21:46:33.587 +03:00 [INF] HTTP POST /api/auth/login responded 200 in 216ms
+2026-03-21 21:46:50.670 +03:00 [INF] Handling LoginCommand
+2026-03-21 21:46:50.882 +03:00 [INF] Handled LoginCommand in 211ms
+2026-03-21 21:46:50.882 +03:00 [INF] HTTP POST /api/auth/login responded 200 in 212ms
+2026-03-21 21:46:50.905 +03:00 [INF] Handling LoginCommand
+2026-03-21 21:46:51.113 +03:00 [INF] Handled LoginCommand in 207ms
+2026-03-21 21:46:51.113 +03:00 [INF] HTTP POST /api/auth/login responded 200 in 209ms
+2026-03-21 21:46:58.722 +03:00 [INF] Handling LoginCommand
+2026-03-21 21:46:58.822 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:46:58.825 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 21:46:58.826 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 4ms
+2026-03-21 21:46:58.935 +03:00 [INF] Handled LoginCommand in 212ms
+2026-03-21 21:46:58.935 +03:00 [INF] HTTP POST /api/auth/login responded 200 in 214ms
+2026-03-21 21:46:58.959 +03:00 [INF] Handling LoginCommand
+2026-03-21 21:46:59.170 +03:00 [INF] Handled LoginCommand in 211ms
+2026-03-21 21:46:59.170 +03:00 [INF] HTTP POST /api/auth/login responded 200 in 213ms
+2026-03-21 21:46:59.191 +03:00 [INF] Handling LoginCommand
+2026-03-21 21:46:59.404 +03:00 [INF] Handled LoginCommand in 212ms
+2026-03-21 21:46:59.404 +03:00 [INF] HTTP POST /api/auth/login responded 200 in 213ms
+2026-03-21 21:46:59.422 +03:00 [INF] Handling LoginCommand
+2026-03-21 21:46:59.642 +03:00 [INF] Handled LoginCommand in 219ms
+2026-03-21 21:46:59.642 +03:00 [INF] HTTP POST /api/auth/login responded 200 in 220ms
+2026-03-21 21:46:59.662 +03:00 [INF] Handling LoginCommand
+2026-03-21 21:46:59.794 +03:00 [INF] Handled LoginCommand in 132ms
+2026-03-21 21:46:59.795 +03:00 [INF] HTTP POST /api/auth/login responded 200 in 133ms
+2026-03-21 21:46:59.810 +03:00 [INF] Handling GetDocumentTypesQuery
+2026-03-21 21:46:59.812 +03:00 [INF] Handled GetDocumentTypesQuery in 2ms
+2026-03-21 21:46:59.812 +03:00 [INF] HTTP GET /api/document-types responded 200 in 4ms
+2026-03-21 21:47:28.824 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:47:28.827 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 21:47:28.827 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 3ms
+2026-03-21 21:47:42.370 +03:00 [INF] Handling GetDocumentTypesQuery
+2026-03-21 21:47:42.383 +03:00 [INF] Handled GetDocumentTypesQuery in 13ms
+2026-03-21 21:47:42.384 +03:00 [INF] HTTP GET /api/document-types responded 200 in 15ms
+2026-03-21 21:47:58.823 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:47:58.827 +03:00 [INF] Handled GetUnreadCountQuery in 4ms
+2026-03-21 21:47:58.827 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 5ms
+2026-03-21 21:48:28.825 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:48:28.828 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 21:48:28.828 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 4ms
+2026-03-21 21:48:58.825 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:48:58.827 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 21:48:58.828 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 4ms
+2026-03-21 21:49:28.826 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:49:28.830 +03:00 [INF] Handled GetUnreadCountQuery in 4ms
+2026-03-21 21:49:28.831 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 6ms
+2026-03-21 21:49:41.032 +03:00 [INF] Handling GetDocumentTypesQuery
+2026-03-21 21:49:41.036 +03:00 [INF] Handled GetDocumentTypesQuery in 4ms
+2026-03-21 21:49:41.037 +03:00 [INF] HTTP GET /api/document-types responded 200 in 6ms
+2026-03-21 21:49:58.827 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:49:58.830 +03:00 [INF] Handled GetUnreadCountQuery in 3ms
+2026-03-21 21:49:58.830 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 5ms
+2026-03-21 21:50:02.499 +03:00 [INF] Handling CreateRequestCommand
+2026-03-21 21:50:02.753 +03:00 [INF] Handled CreateRequestCommand in 253ms
+2026-03-21 21:50:02.779 +03:00 [INF] HTTP POST /api/requests responded 201 in 355ms
+2026-03-21 21:50:02.839 +03:00 [INF] Handling CreateRequestCommand
+2026-03-21 21:50:02.866 +03:00 [INF] Handled CreateRequestCommand in 26ms
+2026-03-21 21:50:02.868 +03:00 [INF] HTTP POST /api/requests responded 201 in 35ms
+2026-03-21 21:50:28.828 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:50:28.831 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 21:50:28.831 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 4ms
+2026-03-21 21:50:58.832 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:50:58.835 +03:00 [INF] Handled GetUnreadCountQuery in 3ms
+2026-03-21 21:50:58.835 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 4ms
+2026-03-21 21:51:28.870 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:51:28.873 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 21:51:28.873 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 4ms
+2026-03-21 21:51:58.871 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:51:58.874 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 21:51:58.875 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 4ms
+2026-03-21 21:52:28.873 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:52:28.879 +03:00 [INF] Handled GetUnreadCountQuery in 5ms
+2026-03-21 21:52:28.879 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 6ms
+2026-03-21 21:52:58.876 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:52:58.894 +03:00 [INF] Handled GetUnreadCountQuery in 17ms
+2026-03-21 21:52:58.895 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 19ms
+2026-03-21 21:53:28.877 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:53:28.880 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 21:53:28.880 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 3ms
+2026-03-21 21:53:58.877 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:53:58.880 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 21:53:58.880 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 4ms
+2026-03-21 21:54:28.879 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:54:28.882 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 21:54:28.882 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 4ms
+2026-03-21 21:54:58.881 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:54:58.886 +03:00 [INF] Handled GetUnreadCountQuery in 4ms
+2026-03-21 21:54:58.887 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 7ms
+2026-03-21 21:55:28.881 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:55:28.884 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 21:55:28.884 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 4ms
+2026-03-21 21:55:58.879 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:55:58.882 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 21:55:58.882 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 4ms
+2026-03-21 21:56:28.881 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:56:28.884 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 21:56:28.884 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 3ms
+2026-03-21 21:56:58.878 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:56:58.881 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 21:56:58.881 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 4ms
+2026-03-21 21:57:28.880 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:57:28.883 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 21:57:28.884 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 3ms
+2026-03-21 21:57:58.884 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:57:58.892 +03:00 [INF] Handled GetUnreadCountQuery in 7ms
+2026-03-21 21:57:58.892 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 8ms
+2026-03-21 21:58:28.880 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:58:28.894 +03:00 [INF] Handled GetUnreadCountQuery in 13ms
+2026-03-21 21:58:28.895 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 15ms
+2026-03-21 21:58:58.883 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:58:58.889 +03:00 [INF] Handled GetUnreadCountQuery in 4ms
+2026-03-21 21:58:58.889 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 6ms
+2026-03-21 21:59:28.883 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:59:28.886 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 21:59:28.887 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 3ms
+2026-03-21 21:59:58.886 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 21:59:58.890 +03:00 [INF] Handled GetUnreadCountQuery in 3ms
+2026-03-21 21:59:58.890 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 5ms
+2026-03-21 22:00:29.436 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 22:00:29.439 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 22:00:29.439 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 4ms
+2026-03-21 22:00:59.439 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 22:00:59.443 +03:00 [INF] Handled GetUnreadCountQuery in 3ms
+2026-03-21 22:00:59.443 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 5ms
+2026-03-21 22:01:29.435 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 22:01:29.438 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 22:01:29.438 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 3ms
+2026-03-21 22:01:59.436 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 22:01:59.440 +03:00 [INF] Handled GetUnreadCountQuery in 3ms
+2026-03-21 22:01:59.440 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 4ms
+2026-03-21 22:02:29.438 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 22:02:29.442 +03:00 [INF] Handled GetUnreadCountQuery in 3ms
+2026-03-21 22:02:29.442 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 3ms
+2026-03-21 22:02:59.438 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 22:02:59.440 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 22:02:59.441 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 3ms
+2026-03-21 22:03:29.437 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 22:03:29.456 +03:00 [INF] Handled GetUnreadCountQuery in 18ms
+2026-03-21 22:03:29.456 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 19ms
+2026-03-21 22:03:59.440 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 22:03:59.443 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 22:03:59.443 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 3ms
+2026-03-21 22:04:29.438 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 22:04:29.441 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 22:04:29.441 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 3ms
+2026-03-21 22:04:59.439 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 22:04:59.442 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 22:04:59.442 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 3ms
+2026-03-21 22:05:29.441 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 22:05:29.444 +03:00 [INF] Handled GetUnreadCountQuery in 3ms
+2026-03-21 22:05:29.445 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 5ms
+2026-03-21 22:05:59.441 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 22:05:59.444 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 22:05:59.444 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 3ms
+2026-03-21 22:06:29.441 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 22:06:29.443 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 22:06:29.443 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 2ms
+2026-03-21 22:06:59.441 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 22:06:59.444 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 22:06:59.444 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 3ms
+2026-03-21 22:07:29.441 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 22:07:29.444 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 22:07:29.444 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 3ms
+2026-03-21 22:07:57.689 +03:00 [INF] Handling GetDocumentTypesQuery
+2026-03-21 22:07:57.694 +03:00 [INF] Handled GetDocumentTypesQuery in 4ms
+2026-03-21 22:07:57.694 +03:00 [INF] HTTP GET /api/document-types responded 200 in 15ms
+2026-03-21 22:07:57.705 +03:00 [INF] Handling GetAllDocumentsQuery
+2026-03-21 22:07:57.986 +03:00 [INF] Handled GetAllDocumentsQuery in 280ms
+2026-03-21 22:07:58.015 +03:00 [INF] HTTP GET /api/documents responded 200 in 336ms
+2026-03-21 22:07:59.444 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 22:07:59.446 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 22:07:59.446 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 3ms
+2026-03-21 22:08:00.966 +03:00 [INF] Handling AcceptRequestCommand
+2026-03-21 22:08:01.030 +03:00 [INF] Handled AcceptRequestCommand in 64ms
+2026-03-21 22:08:01.033 +03:00 [INF] HTTP POST /api/requests/0873a473-fee7-4495-805c-761d44cf031e/accept responded 200 in 79ms
+2026-03-21 22:08:01.060 +03:00 [INF] Handling AcceptRequestCommand
+2026-03-21 22:08:01.081 +03:00 [INF] Handled AcceptRequestCommand in 20ms
+2026-03-21 22:08:01.081 +03:00 [INF] HTTP POST /api/requests/ee55a913-0a58-4784-9893-ae15c86d8cba/accept responded 200 in 23ms
+2026-03-21 22:08:16.913 +03:00 [INF] Handling PrepareDocumentCommand
+2026-03-21 22:08:17.139 +03:00 [INF] Handled PrepareDocumentCommand in 226ms
+2026-03-21 22:08:17.140 +03:00 [INF] HTTP POST /api/documents responded 201 in 249ms
+2026-03-21 22:08:17.194 +03:00 [INF] Handling PrepareDocumentCommand
+2026-03-21 22:08:17.229 +03:00 [INF] Handled PrepareDocumentCommand in 34ms
+2026-03-21 22:08:17.230 +03:00 [INF] HTTP POST /api/documents responded 201 in 40ms
+2026-03-21 22:08:25.304 +03:00 [INF] Handling GetMyNotificationsQuery
+2026-03-21 22:08:25.328 +03:00 [INF] Handled GetMyNotificationsQuery in 23ms
+2026-03-21 22:08:25.337 +03:00 [INF] HTTP GET /api/notifications responded 200 in 43ms
+2026-03-21 22:08:26.487 +03:00 [INF] Handling MarkAsReadCommand
+2026-03-21 22:08:26.522 +03:00 [INF] Handled MarkAsReadCommand in 35ms
+2026-03-21 22:08:26.523 +03:00 [INF] HTTP PUT /api/notifications/read-all responded 200 in 48ms
+2026-03-21 22:08:29.439 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 22:08:29.441 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 22:08:29.441 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 2ms
+2026-03-21 22:08:30.739 +03:00 [INF] Handling GetDailyReportQuery
+2026-03-21 22:08:30.849 +03:00 [INF] Handled GetDailyReportQuery in 110ms
+2026-03-21 22:08:30.853 +03:00 [INF] HTTP GET /api/reports/daily responded 200 in 125ms
+2026-03-21 22:08:32.407 +03:00 [INF] Handling GetStatusBreakdownQuery
+2026-03-21 22:08:32.416 +03:00 [INF] Handled GetStatusBreakdownQuery in 8ms
+2026-03-21 22:08:32.419 +03:00 [INF] HTTP GET /api/reports/status-breakdown responded 200 in 22ms
+2026-03-21 22:08:33.282 +03:00 [INF] Handling GetCancelledReportQuery
+2026-03-21 22:08:33.364 +03:00 [INF] Handled GetCancelledReportQuery in 81ms
+2026-03-21 22:08:33.366 +03:00 [INF] HTTP GET /api/reports/cancelled responded 200 in 94ms
+2026-03-21 22:08:34.035 +03:00 [INF] Handling GetDocumentTypesQuery
+2026-03-21 22:08:34.039 +03:00 [INF] Handled GetDocumentTypesQuery in 3ms
+2026-03-21 22:08:34.039 +03:00 [INF] HTTP GET /api/document-types responded 200 in 3ms
+2026-03-21 22:08:34.047 +03:00 [INF] Handling GetAllRequestsQuery
+2026-03-21 22:08:34.092 +03:00 [INF] Handled GetAllRequestsQuery in 44ms
+2026-03-21 22:08:34.100 +03:00 [INF] HTTP GET /api/requests responded 200 in 65ms
+2026-03-21 22:08:45.587 +03:00 [INF] Handling GeneratePdfCommand
+2026-03-21 22:08:46.017 +03:00 [INF] Handled GeneratePdfCommand in 430ms
+2026-03-21 22:08:46.018 +03:00 [INF] HTTP POST /api/documents/707bf6ef-704d-417e-af73-a704ec22cc17/generate-pdf responded 200 in 440ms
+2026-03-21 22:08:46.035 +03:00 [INF] Handling GeneratePdfCommand
+2026-03-21 22:08:46.139 +03:00 [INF] Handled GeneratePdfCommand in 104ms
+2026-03-21 22:08:46.140 +03:00 [INF] HTTP POST /api/documents/128e78c4-5b61-44b4-a5b2-e0b7c4a64402/generate-pdf responded 200 in 106ms
+2026-03-21 22:08:51.764 +03:00 [INF] Handling GetDocumentByIdQuery
+2026-03-21 22:08:51.771 +03:00 [INF] Handled GetDocumentByIdQuery in 7ms
+2026-03-21 22:08:51.797 +03:00 [INF] HTTP GET /api/documents/707bf6ef-704d-417e-af73-a704ec22cc17/pdf responded 200 in 44ms
+2026-03-21 22:09:00.295 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 22:09:00.299 +03:00 [INF] Handled GetUnreadCountQuery in 4ms
+2026-03-21 22:09:00.299 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 5ms
+2026-03-21 22:09:30.296 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 22:09:30.299 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 22:09:30.299 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 3ms
+2026-03-21 22:09:39.382 +03:00 [INF] Handling CreateRequestCommand
+2026-03-21 22:09:39.399 +03:00 [INF] Handled CreateRequestCommand in 16ms
+2026-03-21 22:09:39.399 +03:00 [INF] HTTP POST /api/requests responded 201 in 24ms
+2026-03-21 22:09:39.452 +03:00 [INF] Handling AcceptRequestCommand
+2026-03-21 22:09:39.465 +03:00 [INF] Handled AcceptRequestCommand in 13ms
+2026-03-21 22:09:39.465 +03:00 [INF] HTTP POST /api/requests/246f6f2e-935d-4814-b1d1-fcd96f0a60d1/accept responded 200 in 14ms
+2026-03-21 22:09:39.492 +03:00 [INF] Handling PrepareDocumentCommand
+2026-03-21 22:09:39.525 +03:00 [INF] Handled PrepareDocumentCommand in 32ms
+2026-03-21 22:09:39.525 +03:00 [INF] HTTP POST /api/documents responded 201 in 37ms
+2026-03-21 22:09:39.579 +03:00 [INF] Handling GeneratePdfCommand
+2026-03-21 22:09:39.679 +03:00 [INF] Handled GeneratePdfCommand in 100ms
+2026-03-21 22:09:39.680 +03:00 [INF] HTTP POST /api/documents/62870524-bd50-431e-8d58-5090936122c8/generate-pdf responded 200 in 101ms
+2026-03-21 22:09:52.725 +03:00 [INF] Handling GetDocumentByIdQuery
+2026-03-21 22:09:52.732 +03:00 [INF] Handled GetDocumentByIdQuery in 6ms
+2026-03-21 22:09:52.740 +03:00 [INF] HTTP GET /api/documents/62870524-bd50-431e-8d58-5090936122c8/pdf responded 200 in 16ms
+2026-03-21 22:10:00.294 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 22:10:00.297 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 22:10:00.297 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 3ms
+2026-03-21 22:10:06.573 +03:00 [INF] HTTP POST /api/requests responded 400 in 39ms
+2026-03-21 22:10:30.300 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 22:10:30.304 +03:00 [INF] Handled GetUnreadCountQuery in 3ms
+2026-03-21 22:10:30.304 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 4ms
+2026-03-21 22:10:34.501 +03:00 [INF] Handling GetDocumentTypesQuery
+2026-03-21 22:10:34.503 +03:00 [INF] Handling GetAllRequestsQuery
+2026-03-21 22:10:34.504 +03:00 [INF] Handled GetDocumentTypesQuery in 2ms
+2026-03-21 22:10:34.504 +03:00 [INF] HTTP GET /api/document-types responded 200 in 3ms
+2026-03-21 22:10:34.546 +03:00 [INF] Handled GetAllRequestsQuery in 43ms
+2026-03-21 22:10:34.547 +03:00 [INF] HTTP GET /api/requests responded 200 in 45ms
+2026-03-21 22:11:00.295 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 22:11:00.298 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 22:11:00.298 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 3ms
+2026-03-21 22:11:30.295 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 22:11:30.299 +03:00 [INF] Handled GetUnreadCountQuery in 3ms
+2026-03-21 22:11:30.299 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 5ms
+2026-03-21 22:12:00.295 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 22:12:00.297 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 22:12:00.297 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 3ms
+2026-03-21 22:12:30.294 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 22:12:30.297 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 22:12:30.297 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 3ms
+2026-03-21 22:13:00.295 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 22:13:00.298 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 22:13:00.298 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 3ms
+2026-03-21 22:13:30.300 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 22:13:30.302 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 22:13:30.302 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 2ms
+2026-03-21 22:14:00.298 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 22:14:00.314 +03:00 [INF] Handled GetUnreadCountQuery in 14ms
+2026-03-21 22:14:00.314 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 16ms
+2026-03-21 22:14:30.298 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 22:14:30.301 +03:00 [INF] Handled GetUnreadCountQuery in 3ms
+2026-03-21 22:14:30.301 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 4ms
+2026-03-21 22:15:00.298 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 22:15:00.301 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 22:15:00.301 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 3ms
+2026-03-21 22:15:30.298 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 22:15:30.300 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 22:15:30.301 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 3ms
+2026-03-21 22:16:00.305 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 22:16:00.309 +03:00 [INF] Handled GetUnreadCountQuery in 3ms
+2026-03-21 22:16:00.309 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 4ms
+2026-03-21 22:16:30.299 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 22:16:30.302 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 22:16:30.302 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 3ms
+2026-03-21 22:17:00.302 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 22:17:00.307 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 22:17:00.307 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 5ms
+2026-03-21 22:17:30.301 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 22:17:30.304 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 22:17:30.304 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 2ms
+2026-03-21 22:18:00.301 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 22:18:00.304 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 22:18:00.304 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 2ms
+2026-03-21 22:18:30.303 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 22:18:30.305 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 22:18:30.305 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 3ms
+2026-03-21 22:19:00.303 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 22:19:00.305 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 22:19:00.305 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 3ms
+2026-03-21 22:19:30.301 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 22:19:30.313 +03:00 [INF] Handled GetUnreadCountQuery in 11ms
+2026-03-21 22:19:30.313 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 12ms
+2026-03-21 22:20:00.302 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 22:20:00.305 +03:00 [INF] Handled GetUnreadCountQuery in 3ms
+2026-03-21 22:20:00.305 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 3ms
+2026-03-21 22:20:30.302 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 22:20:30.305 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 22:20:30.305 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 3ms
+2026-03-21 22:21:00.304 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 22:21:00.306 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 22:21:00.307 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 3ms
+2026-03-21 22:21:30.304 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 22:21:30.306 +03:00 [INF] Handled GetUnreadCountQuery in 1ms
+2026-03-21 22:21:30.306 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 2ms
+2026-03-21 22:22:00.304 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 22:22:00.307 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 22:22:00.307 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 3ms
+2026-03-21 22:22:30.303 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 22:22:30.308 +03:00 [INF] Handled GetUnreadCountQuery in 4ms
+2026-03-21 22:22:30.308 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 5ms
+2026-03-21 22:23:00.303 +03:00 [INF] Handling GetUnreadCountQuery
+2026-03-21 22:23:00.305 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-03-21 22:23:00.305 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 2ms
+2026-03-21 22:31:16.790 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 401 in 20ms
+2026-03-21 22:31:16.967 +03:00 [INF] Handling RefreshTokenCommand
+2026-03-21 22:31:16.980 +03:00 [INF] Handled RefreshTokenCommand in 12ms
+2026-03-21 22:31:16.980 +03:00 [INF] HTTP POST /api/auth/refresh responded 401 in 25ms

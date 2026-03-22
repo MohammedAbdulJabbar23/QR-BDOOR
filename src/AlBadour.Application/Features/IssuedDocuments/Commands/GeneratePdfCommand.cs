@@ -6,7 +6,7 @@ using MediatR;
 
 namespace AlBadour.Application.Features.IssuedDocuments.Commands;
 
-public record GeneratePdfCommand(Guid DocumentId) : IRequest<Result>;
+public record GeneratePdfCommand(Guid DocumentId, bool IncludeDirectorSignature = false) : IRequest<Result>;
 
 public class GeneratePdfCommandHandler : IRequestHandler<GeneratePdfCommand, Result>
 {
@@ -84,7 +84,10 @@ public class GeneratePdfCommandHandler : IRequestHandler<GeneratePdfCommand, Res
             PatientAge: isAdminLetter ? null : document.PatientAge,
             AdmissionDate: isAdminLetter ? null : document.AdmissionDate,
             DischargeDate: isAdminLetter ? null : document.DischargeDate,
-            LeaveGranted: isAdminLetter ? null : document.LeaveGranted
+            LeaveGranted: isAdminLetter ? null : document.LeaveGranted,
+            TreatingPhysicianName: isAdminLetter ? null : document.TreatingPhysicianName,
+            Language: document.Request.Language,
+            IncludeDirectorSignature: request.IncludeDirectorSignature
         );
 
         var pdfBytes = _docService.GenerateDocument(docData);

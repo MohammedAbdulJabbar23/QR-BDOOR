@@ -27,6 +27,7 @@ export default function PrepareDocumentPage() {
   const [admissionDate, setAdmissionDate] = useState('');
   const [dischargeDate, setDischargeDate] = useState('');
   const [leaveGranted, setLeaveGranted] = useState('');
+  const [treatingPhysicianName, setTreatingPhysicianName] = useState('');
   const [error, setError] = useState('');
 
   const { data: request, isLoading: requestLoading } = useQuery({
@@ -47,6 +48,7 @@ export default function PrepareDocumentPage() {
       admissionDate?: string;
       dischargeDate?: string;
       leaveGranted?: string;
+      treatingPhysicianName?: string;
     }) => documentsApi.prepare(data),
     onSuccess: (doc) => {
       navigate(`/documents/${doc.id}`);
@@ -59,7 +61,8 @@ export default function PrepareDocumentPage() {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!requestId) return;
-    const isAdministrativeLetter = request?.documentTypeNameEn?.toLowerCase() === 'administrative letter';
+    const _isAdminLetter = request?.documentTypeNameEn?.toLowerCase() === 'administrative letter';
+    const _hasTable = request?.documentTypeNameEn?.toLowerCase().includes('with table') ?? false;
     setError('');
     if (!documentNumber.trim()) {
       setError(t('documents.documentNumberRequired'));
@@ -68,14 +71,15 @@ export default function PrepareDocumentPage() {
     prepareMutation.mutate({
       requestId,
       documentNumber: documentNumber.trim(),
-      subject: isAdministrativeLetter ? subject.trim() || undefined : undefined,
+      subject: _isAdminLetter ? subject.trim() || undefined : undefined,
       documentBody: documentBody.trim() || undefined,
-      patientGender: isAdministrativeLetter ? undefined : patientGender.trim() || undefined,
-      patientProfession: isAdministrativeLetter ? undefined : patientProfession.trim() || undefined,
-      patientAge: isAdministrativeLetter ? undefined : patientAge.trim() || undefined,
-      admissionDate: isAdministrativeLetter ? undefined : admissionDate.trim() || undefined,
-      dischargeDate: isAdministrativeLetter ? undefined : dischargeDate.trim() || undefined,
-      leaveGranted: isAdministrativeLetter ? undefined : leaveGranted.trim() || undefined,
+      patientGender: _hasTable ? patientGender.trim() || undefined : undefined,
+      patientProfession: _hasTable ? patientProfession.trim() || undefined : undefined,
+      patientAge: _hasTable ? patientAge.trim() || undefined : undefined,
+      admissionDate: _hasTable ? admissionDate.trim() || undefined : undefined,
+      dischargeDate: _hasTable ? dischargeDate.trim() || undefined : undefined,
+      leaveGranted: _hasTable ? leaveGranted.trim() || undefined : undefined,
+      treatingPhysicianName: !_isAdminLetter ? treatingPhysicianName.trim() || undefined : undefined,
     });
   };
 
@@ -101,6 +105,7 @@ export default function PrepareDocumentPage() {
     ? request.documentTypeNameAr
     : request.documentTypeNameEn;
   const isAdministrativeLetter = request.documentTypeNameEn?.toLowerCase() === 'administrative letter';
+  const hasTable = request.documentTypeNameEn?.toLowerCase().includes('with table') ?? false;
 
   return (
     <div>
@@ -146,6 +151,16 @@ export default function PrepareDocumentPage() {
             </p>
             <p className="text-sm font-medium text-neutral-900">{documentType}</p>
           </div>
+          {!isAdministrativeLetter && request.language && (
+            <div>
+              <p className="text-xs font-medium text-neutral-500 mb-1">
+                {t('requests.language')}
+              </p>
+              <p className="text-sm font-medium text-neutral-900">
+                {request.language === 'English' ? t('requests.languageEnglish') : t('requests.languageArabic')}
+              </p>
+            </div>
+          )}
         </div>
       </div>
 
@@ -223,7 +238,7 @@ export default function PrepareDocumentPage() {
           </div>
         </div>
 
-        {!isAdministrativeLetter && (
+        {hasTable && (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 mb-6">
           <div>
             <label htmlFor="patientGender" className="block text-sm font-medium text-neutral-700 mb-1">
@@ -302,6 +317,22 @@ export default function PrepareDocumentPage() {
               placeholder={language === 'ar' ? 'مثال: يمنح إجازة مرضية لمدة (28 يوما)' : 'e.g. 28 days sick leave'}
             />
           </div>
+        </div>
+        )}
+
+        {!isAdministrativeLetter && (
+        <div className="mb-6">
+          <label htmlFor="treatingPhysicianName" className="block text-sm font-medium text-neutral-700 mb-2">
+            {t('documents.treatingPhysicianName')}
+          </label>
+          <input
+            id="treatingPhysicianName"
+            type="text"
+            value={treatingPhysicianName}
+            onChange={(e) => setTreatingPhysicianName(e.target.value)}
+            className="w-full px-4 py-3 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
+            placeholder={language === 'ar' ? 'اسم الطبيب المعالج' : 'Treating physician name'}
+          />
         </div>
         )}
 

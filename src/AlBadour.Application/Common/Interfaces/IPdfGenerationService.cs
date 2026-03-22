@@ -18,7 +18,10 @@ public record DocumentGenerationData(
     string? PatientAge,
     string? AdmissionDate,
     string? DischargeDate,
-    string? LeaveGranted
+    string? LeaveGranted,
+    string? TreatingPhysicianName,
+    string? Language,
+    bool IncludeDirectorSignature = false
 );
 
 public interface IDocumentGenerationService

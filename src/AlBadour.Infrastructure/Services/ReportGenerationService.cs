@@ -2,6 +2,9 @@ using AlBadour.Application.Common.Interfaces;
 using AlBadour.Application.Features.DocumentRequests.DTOs;
 using AlBadour.Application.Features.IssuedDocuments.DTOs;
 using AlBadour.Application.Features.Reports.DTOs;
+using DocumentFormat.OpenXml;
+using DocumentFormat.OpenXml.Packaging;
+using DocumentFormat.OpenXml.Spreadsheet;
 using System.Text;
 
 namespace AlBadour.Infrastructure.Services;
@@ -109,6 +112,65 @@ public class ReportGenerationService : IReportGenerationService
         }));
 
         return BuildCsv(rows);
+    }
+
+    public byte[] GenerateDocumentsExcel(IEnumerable<DocumentDto> data)
+    {
+        using var ms = new MemoryStream();
+        using (var document = SpreadsheetDocument.Create(ms, SpreadsheetDocumentType.Workbook))
+        {
+            var workbookPart = document.AddWorkbookPart();
+            workbookPart.Workbook = new Workbook();
+
+            var worksheetPart = workbookPart.AddNewPart<WorksheetPart>();
+            var sheetData = new SheetData();
+            worksheetPart.Worksheet = new Worksheet(sheetData);
+
+            var sheets = document.WorkbookPart!.Workbook.AppendChild(new Sheets());
+            sheets.Append(new Sheet
+            {
+                Id = document.WorkbookPart.GetIdOfPart(worksheetPart),
+                SheetId = 1,
+                Name = "Documents"
+            });
+
+            // Header row
+            string[] headers = ["Document Number", "Patient Name", "Patient Name (En)", "Document Type", "Status", "Recipient Entity", "Issued By", "Issued At", "Archived At"];
+            sheetData.Append(BuildExcelRow(headers));
+
+            // Data rows
+            foreach (var item in data)
+            {
+                sheetData.Append(BuildExcelRow([
+                    item.DocumentNumber,
+                    item.PatientName ?? string.Empty,
+                    item.PatientNameEn ?? string.Empty,
+                    item.DocumentTypeNameEn,
+                    item.Status,
+                    item.RecipientEntity,
+                    item.IssuedByName,
+                    item.IssuedAt.ToString("yyyy-MM-dd HH:mm"),
+                    item.ArchivedAt?.ToString("yyyy-MM-dd HH:mm") ?? string.Empty
+                ]));
+            }
+
+            workbookPart.Workbook.Save();
+        }
+        return ms.ToArray();
+    }
+
+    private static Row BuildExcelRow(string[] values)
+    {
+        var row = new Row();
+        foreach (var value in values)
+        {
+            row.Append(new Cell
+            {
+                DataType = CellValues.InlineString,
+                InlineString = new InlineString(new Text(value))
+            });
+        }
+        return row;
     }
 
     private static byte[] BuildCsv(IEnumerable<string[]> rows)

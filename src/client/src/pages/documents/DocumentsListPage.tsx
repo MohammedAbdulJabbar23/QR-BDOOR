@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useQuery } from '@tanstack/react-query';
-import { Search, Eye, Calendar, X } from 'lucide-react';
+import { Search, Eye, Calendar, X, FileSpreadsheet } from 'lucide-react';
 import { documentsApi } from '@/api/documents.api';
 import { documentTypesApi } from '@/api/documentTypes.api';
 import { useAuthStore } from '@/stores/authStore';
@@ -41,6 +41,7 @@ export default function DocumentsListPage() {
   const [fromDate, setFromDate] = useState('');
   const [toDate, setToDate] = useState('');
   const [page, setPage] = useState(1);
+  const [isExporting, setIsExporting] = useState(false);
 
   // Debounce search input
   useEffect(() => {
@@ -79,6 +80,28 @@ export default function DocumentsListPage() {
   const documents = data?.items ?? [];
   const totalPages = data?.totalPages ?? 0;
 
+  const handleExportExcel = async () => {
+    setIsExporting(true);
+    try {
+      const res = await documentsApi.exportExcel({
+        search: debouncedSearch || undefined,
+        status: statusFilter || undefined,
+        documentTypeId: documentTypeFilter || undefined,
+        fromDate: fromDate || undefined,
+        toDate: toDate || undefined,
+      });
+      const blob = new Blob([res.data], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+      const url = URL.createObjectURL(blob);
+      const a = window.document.createElement('a');
+      a.href = url;
+      a.download = `documents_${new Date().toISOString().slice(0, 10)}.xlsx`;
+      a.click();
+      URL.revokeObjectURL(url);
+    } finally {
+      setIsExporting(false);
+    }
+  };
+
   const getPatientName = (doc: IssuedDocument) =>
     language === 'ar'
       ? (doc.patientName || '-')
@@ -89,7 +112,19 @@ export default function DocumentsListPage() {
 
   return (
     <div>
-      <PageHeader title={t('documents.title')} />
+      <PageHeader
+        title={t('documents.title')}
+        actions={
+          <button
+            onClick={handleExportExcel}
+            disabled={isExporting}
+            className="inline-flex items-center gap-2 px-4 py-2 text-sm font-medium text-neutral-700 border border-neutral-300 rounded-lg hover:bg-neutral-50 transition-colors disabled:opacity-50"
+          >
+            <FileSpreadsheet size={16} />
+            {isExporting ? t('common.loading') : t('documents.exportExcel')}
+          </button>
+        }
+      />
 
       {/* Filters */}
       <div className="space-y-3 mb-6">

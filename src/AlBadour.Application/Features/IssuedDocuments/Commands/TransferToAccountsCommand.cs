@@ -42,13 +42,13 @@ public class TransferToAccountsCommandHandler : IRequestHandler<TransferToAccoun
         if (doc.Status != DocumentStatus.Draft)
             return Result.Failure<Unit>("Document must be in Draft status to transfer.", "INVALID_STATUS");
 
-        if (string.IsNullOrEmpty(doc.PdfFilePath))
-            return Result.Failure<Unit>("PDF must be generated before transferring to Accounts.", "PDF_REQUIRED");
+        if (doc.MedicalReportUploadedAt is null)
+            return Result.Failure<Unit>("The signed medical report must be uploaded before transferring to Accounts.", "PDF_REQUIRED");
 
-        // Only "Medical Report + Account Statement" type can be transferred to Accounts
+        // Only Account Statement types can be transferred to Accounts
         var typeName = doc.Request.DocumentType.NameEn;
-        if (!typeName.Equals("Medical Report + Account Statement", StringComparison.OrdinalIgnoreCase))
-            return Result.Failure<Unit>("Only 'Medical Report + Account Statement' documents can be transferred to Accounts.", "INVALID_TYPE");
+        if (!typeName.Contains("Account Statement", StringComparison.OrdinalIgnoreCase))
+            return Result.Failure<Unit>("Only documents with Account Statement type can be transferred to Accounts.", "INVALID_TYPE");
 
         doc.Status = DocumentStatus.AwaitingAccountStatement;
         doc.UpdatedAt = DateTime.UtcNow;

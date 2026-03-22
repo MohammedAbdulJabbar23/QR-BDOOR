@@ -1,53 +1,148 @@
-# Production Deployment
+# Deployment Guide — Al-Badour Hospital Document System
 
-This deployment layout exposes only the public verification flow on the internet:
+## Server
 
-- Public host: `/verify/:documentId`
-- Public API: `/api/verify/:documentId` and `/api/verify/:documentId/pdf`
-- Internal staff app: full SPA and authenticated API, bound to `127.0.0.1` by default
+| Item | Value |
+|------|-------|
+| Host | `192.168.41.10` |
+| User | `cytech` |
+| OS   | Ubuntu 24.04 LTS |
+| Path | `/opt/QR-BDOOR-master/` |
+
+---
 
 ## Architecture
 
-- `public-web`: public Nginx gateway for the verification page only
-- `internal-web`: internal Nginx gateway for the full staff app
-- `api`: ASP.NET Core API
-- `postgres`: application database
-- `minio`: object storage for QR images and PDFs
+```
+Internet / LAN
+      │
+   nginx (host)
+      ├── budoor-hospital.com (443)         → public-web  :8081  (/verify/* only)
+      └── qrcode.budoor-hospital.local (443) → internal-web :8082 (full app)
 
-## Files
-
-- `docker-compose.prod.yml`: production stack
-- `deploy/.env.production.example`: production environment template
-- `src/client/nginx.public.conf`: public route restrictions
-- `src/client/nginx.internal.conf`: internal full app gateway
-
-## Deploy
-
-1. Copy `deploy/.env.production.example` to `.env` in the repository root.
-2. Replace every `CHANGE_ME` value.
-3. Set `PUBLIC_BASE_URL` to the public verification domain that should appear in QR codes.
-4. Set `INTERNAL_BASE_URL` to the staff-only domain or URL.
-5. Start the stack:
-
-```bash
-docker compose -f docker-compose.prod.yml up -d --build
+Docker Compose (docker-compose.prod.yml)
+  ├── public-web   — React (QR verification page only, nginx.public.conf)
+  ├── internal-web — React (full admin app, nginx.internal.conf)
+  ├── api          — .NET 9 WebApi :8080 (internal Docker network only)
+  ├── postgres     — PostgreSQL 16
+  └── minio        — MinIO object storage (PDFs, QR images)
 ```
 
-## Exposure model
+All ports except 8081/8082 are bound to 127.0.0.1 or internal Docker network only.
 
-- Public internet should point only to `PUBLIC_APP_PORT` or to a reverse proxy in front of `public-web`.
-- `internal-web` is intentionally bound to `127.0.0.1`, so it is not internet-accessible by default.
-- If staff need remote access, publish `internal-web` through a VPN, SSH tunnel, Tailscale, or a private reverse proxy.
-- `api`, `postgres`, and the MinIO S3 API are not published to the public internet.
+---
 
-## First boot behavior
+## Deploying a New Version
 
-- The API now applies pending EF Core migrations on startup.
-- The API also creates the configured MinIO bucket automatically if it does not exist.
+### 1. Sync source code from dev machine
 
-## Recommended DNS / TLS
+```bash
+sshpass -p 'PASSWORD' rsync -az \
+  --exclude='**/bin/' --exclude='**/obj/' \
+  --exclude='**/node_modules/' --exclude='**/dist/' \
+  /home/kira/Documents/freelance/bdor-hospital/src/ \
+  cytech@192.168.41.10:/tmp/bdor-src/
 
-- Public verification: `verify.your-domain.com`
-- Internal staff app: `staff.your-domain.local` or a private hostname behind VPN
+sshpass -p 'PASSWORD' ssh cytech@192.168.41.10 \
+  'echo PASSWORD | sudo -S cp -r /tmp/bdor-src/. /opt/QR-BDOOR-master/src/'
+```
 
-Terminate TLS in your outer reverse proxy or load balancer. Keep the internal app on a private network.
+### 2. Rebuild images and restart containers
+
+```bash
+ssh cytech@192.168.41.10
+cd /opt/QR-BDOOR-master
+echo PASSWORD | sudo -S docker compose -f docker-compose.prod.yml \
+  build --no-cache api internal-web public-web
+echo PASSWORD | sudo -S docker compose -f docker-compose.prod.yml \
+  up -d api internal-web public-web
+```
+
+### 3. Verify deployment
+
+```bash
+sudo docker ps
+sudo docker logs qr-bdoor-master-api-1 --tail 20
+curl -o /dev/null -w "%{http_code}" http://127.0.0.1:8082/         # 200 (internal app)
+curl -o /dev/null -w "%{http_code}" http://127.0.0.1:8081/verify/x # 200 (public QR page)
+curl -o /dev/null -w "%{http_code}" http://127.0.0.1:8081/login    # 404 (blocked - correct)
+```
+
+---
+
+## Database Migrations
+
+Migrations run automatically on API startup. To run manually:
+
+```bash
+sudo docker exec -it qr-bdoor-master-api-1 \
+  dotnet ef database update --no-build
+```
+
+Check applied migrations:
+
+```bash
+sudo docker exec qr-bdoor-master-postgres-1 \
+  psql -U albadour -d albadour \
+  -c "SELECT migration_id FROM __ef_migrations_history ORDER BY migration_id;"
+```
+
+---
+
+## Environment Variables
+
+File: `/opt/QR-BDOOR-master/.env`
+
+| Variable | Purpose |
+|----------|---------|
+| `POSTGRES_DB/USER/PASSWORD` | Database credentials |
+| `MINIO_ROOT_USER/PASSWORD` | MinIO credentials |
+| `JWT_KEY` | JWT signing secret (keep private) |
+| `PUBLIC_BASE_URL` | External URL embedded in QR codes |
+| `INTERNAL_BASE_URL` | Internal URL for CORS |
+| `PUBLIC_APP_PORT` | public-web port (default 8081) |
+
+---
+
+## nginx
+
+Config: `/etc/nginx/sites-available/qrcode`
+
+SSL certs:
+- Internal: `/etc/ssl/internal/qrcode.crt` + `qrcode.key`
+- External (Cloudflare): `/etc/ssl/bdor/cloudflare-origin.pem` + `.key`
+
+```bash
+echo PASSWORD | sudo -S nginx -t && echo PASSWORD | sudo -S systemctl reload nginx
+```
+
+---
+
+## MinIO Console
+
+Only accessible from localhost. SSH tunnel to reach it:
+
+```bash
+ssh -L 9001:127.0.0.1:9001 cytech@192.168.41.10
+# open http://localhost:9001
+```
+
+---
+
+## Logs
+
+```bash
+sudo docker logs -f qr-bdoor-master-api-1      # API (live)
+sudo tail -f /var/log/nginx/error.log           # nginx errors
+```
+
+---
+
+## Restart / Stop
+
+```bash
+cd /opt/QR-BDOOR-master
+echo PASSWORD | sudo -S docker compose -f docker-compose.prod.yml restart
+echo PASSWORD | sudo -S docker compose -f docker-compose.prod.yml down
+echo PASSWORD | sudo -S docker compose -f docker-compose.prod.yml up -d
+```

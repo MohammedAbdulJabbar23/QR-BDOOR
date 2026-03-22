@@ -16,5 +16,6 @@ public record RequestDto(
     Guid? AssignedToId,
     string? AssignedToName,
     DateTime CreatedAt,
-    DateTime UpdatedAt
+    DateTime UpdatedAt,
+    string? Language
 );

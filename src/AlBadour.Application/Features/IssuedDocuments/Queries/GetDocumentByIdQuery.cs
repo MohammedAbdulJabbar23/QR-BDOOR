@@ -66,7 +66,10 @@ public class GetDocumentByIdQueryHandler : IRequestHandler<GetDocumentByIdQuery,
             doc.IssuedAt,
             doc.ArchivedAt,
             doc.RevokedAt,
-            !string.IsNullOrEmpty(doc.AccountStatementPath)
+            !string.IsNullOrEmpty(doc.AccountStatementPath),
+            doc.MedicalReportUploadedAt.HasValue,
+            doc.TreatingPhysicianName,
+            doc.Request.Language
         );
     }
 }

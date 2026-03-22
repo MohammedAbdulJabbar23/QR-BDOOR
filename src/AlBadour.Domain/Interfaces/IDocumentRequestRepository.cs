@@ -10,7 +10,9 @@ public interface IDocumentRequestRepository
     Task<(List<DocumentRequest> Items, int TotalCount)> GetAllAsync(
         RequestStatus? status, Guid? createdById, string? search,
         Guid? documentTypeId, DateTime? fromDate, DateTime? toDate,
-        int page, int pageSize, bool? isAdministrativeLetter = null, CancellationToken ct = default);
+        int page, int pageSize, bool? isAdministrativeLetter = null,
+        string? requiredDocumentTypeName = null, bool requiresAwaitingAccountStatement = false,
+        CancellationToken ct = default);
     Task<List<DocumentRequest>> GetPendingAsync(Guid? documentTypeId = null, bool? isAdministrativeLetter = null, CancellationToken ct = default);
     Task<Dictionary<string, int>> GetStatusCountsAsync(
         DateTime? fromDate,

@@ -89,6 +89,7 @@ public class PrepareDocumentCommandHandler : IRequestHandler<PrepareDocumentComm
             AdmissionDate = isAdminLetter ? null : request.Dto.AdmissionDate,
             DischargeDate = isAdminLetter ? null : request.Dto.DischargeDate,
             LeaveGranted = isAdminLetter ? null : request.Dto.LeaveGranted,
+            TreatingPhysicianName = isAdminLetter ? null : request.Dto.TreatingPhysicianName?.Trim(),
             Status = DocumentStatus.Draft,
             IssuedById = _currentUser.UserId,
             IssuedAt = DateTime.UtcNow
@@ -139,7 +140,10 @@ public class PrepareDocumentCommandHandler : IRequestHandler<PrepareDocumentComm
             null, null,
             document.IssuedAt,
             null, null,
-            false
+            false,
+            false,
+            document.TreatingPhysicianName,
+            req.Language
         );
 
         return Result.Success(dto);
