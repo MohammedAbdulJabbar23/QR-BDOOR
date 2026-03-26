@@ -143,7 +143,7 @@ export default function CreateRequestPage() {
       recipientEntity: values.recipientEntity,
       documentTypeId: values.documentTypeId,
       notes: values.notes?.trim() || undefined,
-      language: isAdministrativeLetter ? undefined : (values.language || 'Arabic'),
+      language: values.language || 'Arabic',
     };
 
     if (isEditMode) {
@@ -184,21 +184,19 @@ export default function CreateRequestPage() {
               </div>
             )}
 
-            {/* Language (only for medical reports) */}
-            {!isAdministrativeLetter && (
-              <div>
-                <label className="block text-sm font-medium text-neutral-700 mb-1.5">
-                  {t('requests.language')}
-                </label>
-                <select
-                  {...register('language')}
-                  className="w-full px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-white"
-                >
-                  <option value="Arabic">{t('requests.languageArabic')}</option>
-                  <option value="English">{t('requests.languageEnglish')}</option>
-                </select>
-              </div>
-            )}
+            {/* Language */}
+            <div>
+              <label className="block text-sm font-medium text-neutral-700 mb-1.5">
+                {t('requests.language')}
+              </label>
+              <select
+                {...register('language')}
+                className="w-full px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-white"
+              >
+                <option value="Arabic">{t('requests.languageArabic')}</option>
+                <option value="English">{t('requests.languageEnglish')}</option>
+              </select>
+            </div>
 
             {/* Recipient Entity */}
             <div>

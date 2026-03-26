@@ -63,8 +63,7 @@ public class DocumentRequestRepository : IDocumentRequestRepository
 
         if (requiresAwaitingAccountStatement)
         {
-            query = query.Where(r => r.IssuedDocuments.Any(d =>
-                d.Status == DocumentStatus.AwaitingAccountStatement && !d.IsDeleted));
+            query = query.Where(r => r.IssuedDocuments.Any(d => !d.IsDeleted));
         }
 
         if (!string.IsNullOrWhiteSpace(search))

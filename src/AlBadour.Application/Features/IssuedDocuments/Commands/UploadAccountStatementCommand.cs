@@ -38,8 +38,8 @@ public class UploadAccountStatementCommandHandler : IRequestHandler<UploadAccoun
 
     public async Task<Result<Unit>> Handle(UploadAccountStatementCommand request, CancellationToken cancellationToken)
     {
-        if (_currentUser.Department != Department.Accounts)
-            return Result.Failure<Unit>("Only Accounts department can upload account statements.", "FORBIDDEN");
+        if (_currentUser.Department != Department.Statistics)
+            return Result.Failure<Unit>("Only Statistics department can upload account statements.", "FORBIDDEN");
 
         var doc = await _documentRepo.GetByIdWithDetailsAsync(request.DocumentId, cancellationToken);
         if (doc is null || doc.IsDeleted)

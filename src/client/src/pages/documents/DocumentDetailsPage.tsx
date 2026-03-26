@@ -9,7 +9,7 @@ import {
 import { documentsApi } from '@/api/documents.api';
 import { useAuthStore } from '@/stores/authStore';
 import { useUiStore } from '@/stores/uiStore';
-import { canUploadPdf, canRevokeDocument, canDeleteDocument, canUploadAccountStatement } from '@/utils/permissions';
+import { canUploadPdf, canRevokeDocument, canDeleteDocument } from '@/utils/permissions';
 import { formatDateTime } from '@/utils/formatters';
 import { cn } from '@/utils/cn';
 import PageHeader from '@/components/common/PageHeader';
@@ -211,13 +211,12 @@ export default function DocumentDetailsPage() {
   const isDraft = document.status === 'Draft';
   const isAdminLetter = document.documentTypeNameEn?.toLowerCase() === 'administrative letter';
   const isResponsibleDept = user && (isAdminLetter ? user.department === 'HR' : user.department === 'Statistics');
-  const isAccounts = user && canUploadAccountStatement(user.department);
   const showGenerate = isResponsibleDept && isDraft && !isRevoked;
   const isMedicalReportAccountStatement = document.documentTypeNameEn?.toLowerCase().includes('account statement');
   const showUpload = !isMedicalReportAccountStatement && isResponsibleDept && isDraft && !isRevoked && document.hasPdf;
   const showUploadMedicalReport = isMedicalReportAccountStatement && isResponsibleDept && isDraft && !isRevoked && document.hasPdf && !document.hasSignedMedicalReport;
   const isArchived = document.status === 'Archived';
-  const showUploadAccountStatement = isAccounts && isMedicalReportAccountStatement && !isArchived && !isRevoked && !document.hasAccountStatement;
+  const showUploadAccountStatement = isResponsibleDept && isMedicalReportAccountStatement && isDraft && !isRevoked && !document.hasAccountStatement;
   const showRevoke = user && canRevokeDocument(user.role) && !isRevoked;
   const showDelete = user && canDeleteDocument(user.role);
 

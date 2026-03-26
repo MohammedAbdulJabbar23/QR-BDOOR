@@ -82,7 +82,7 @@ public class PdfGenerationService : IDocumentGenerationService
                     else
                         ComposeFreeFormLetter(col.Item(), data, isEnglish);
 
-                    col.Item().PaddingTop(14).Element(c => ComposeSignatureBlock(c, data.TreatingPhysicianName, isEnglish, data.IncludeDirectorSignature ? _zaidSignatureBytes : null));
+                    col.Item().PaddingTop(8).PaddingHorizontal(12).Element(c => ComposeSignatureBlock(c, data.TreatingPhysicianName, isEnglish, data.IncludeDirectorSignature ? _zaidSignatureBytes : null, !isAdminLetter));
                 });
             });
         });
@@ -94,74 +94,80 @@ public class PdfGenerationService : IDocumentGenerationService
     // SIGNATURE BLOCK
     // ─────────────────────────────────────────────────────────────────────────
 
-    private static void ComposeSignatureBlock(IContainer container, string? treatingPhysicianName, bool isEnglish, byte[]? directorSignatureBytes)
+    private static void ComposeSignatureBlock(IContainer container, string? treatingPhysicianName, bool isEnglish, byte[]? directorSignatureBytes, bool showTreatingPhysician = true)
     {
+        string physicianLabel = isEnglish ? "Treating Physician" : "الطبيب المعالج";
+        string directorLabel = isEnglish ? "Hospital Director" : "مدير المستشفى";
+        string directorName = isEnglish ? "Dr. Zaid Saleh Yaseen" : "د.زيد صالح ياسين";
+
+        if (!showTreatingPhysician)
+        {
+            container.AlignLeft().Column(col =>
+            {
+                if (directorSignatureBytes is not null)
+                    col.Item().AlignLeft().TranslateX(-15).ScaleHorizontal(1.5f).Width(80).Image(directorSignatureBytes);
+                else
+                    col.Item().Height(45);
+                col.Item().PaddingTop(4).AlignCenter().Text(directorLabel).FontSize(10).Bold();
+                col.Item().PaddingTop(2).AlignCenter().Text(directorName).FontSize(10);
+            });
+            return;
+        }
+
         // In RTL: AutoItem order = right→left. In LTR: left→right.
         // Desired visual: Treating Physician on right, Hospital Director on far left.
         // RTL: [Physician(right)] [Spacer] [Director(left)]
         // LTR: [Director(left)] [Spacer] [Physician(right)]
 
-        string physicianLabel = isEnglish ? "Treating Physician" : "الطبيب المعالج";
-        string directorLabel = isEnglish ? "Hospital Director" : "مدير المستشفى";
-        string directorName = isEnglish ? "Dr. Zaid Saleh Yaseen" : "د.زيد صالح ياسين";
-
         container.Row(row =>
         {
             if (isEnglish)
             {
-                // LTR: Director on left, then spacer, then Physician on right
-                row.AutoItem().AlignLeft().Column(col =>
+                // LTR: Director on far left, Physician on far right
+                row.RelativeItem().Column(col =>
                 {
                     if (directorSignatureBytes is not null)
-                        col.Item().AlignCenter().Width(80).Image(directorSignatureBytes);
+                        col.Item().AlignLeft().TranslateX(-15).ScaleHorizontal(1.5f).Width(80).Image(directorSignatureBytes);
                     else
-                        col.Item().Height(45);
-                    col.Item().BorderTop(0.8f).BorderColor(Colors.Grey.Darken1)
-                        .PaddingTop(4).AlignCenter()
+                        col.Item().Height(74);
+                    col.Item().PaddingTop(4).AlignLeft()
                         .Text(directorLabel).FontSize(10).Bold();
-                    col.Item().PaddingTop(2).AlignCenter()
+                    col.Item().PaddingTop(2).AlignLeft()
                         .Text(directorName).FontSize(10);
                 });
 
-                row.RelativeItem();
-
-                row.AutoItem().AlignRight().Column(col =>
+                row.RelativeItem().Column(col =>
                 {
-                    col.Item().Height(45);
-                    col.Item().BorderTop(0.8f).BorderColor(Colors.Grey.Darken1)
-                        .PaddingTop(4).AlignCenter()
+                    col.Item().Height(74);
+                    col.Item().PaddingTop(4).AlignRight()
                         .Text(physicianLabel).FontSize(10).Bold();
                     if (!string.IsNullOrWhiteSpace(treatingPhysicianName))
-                        col.Item().PaddingTop(2).AlignCenter()
+                        col.Item().PaddingTop(2).AlignRight()
                             .Text(treatingPhysicianName).FontSize(10);
                 });
             }
             else
             {
-                // RTL: Physician on right (first item), spacer, Director on left (last item)
-                row.AutoItem().AlignRight().Column(col =>
+                // RTL: Physician on far right (first item), Director on far left (last item)
+                row.RelativeItem().Column(col =>
                 {
-                    col.Item().Height(45);
-                    col.Item().BorderTop(0.8f).BorderColor(Colors.Grey.Darken1)
-                        .PaddingTop(4).AlignCenter()
+                    col.Item().Height(74);
+                    col.Item().PaddingTop(4).AlignRight()
                         .Text(physicianLabel).FontSize(10).Bold();
                     if (!string.IsNullOrWhiteSpace(treatingPhysicianName))
-                        col.Item().PaddingTop(2).AlignCenter()
+                        col.Item().PaddingTop(2).AlignRight()
                             .Text(treatingPhysicianName).FontSize(10);
                 });
 
-                row.RelativeItem();
-
-                row.AutoItem().AlignLeft().Column(col =>
+                row.RelativeItem().Column(col =>
                 {
                     if (directorSignatureBytes is not null)
-                        col.Item().AlignCenter().Width(80).Image(directorSignatureBytes);
+                        col.Item().AlignLeft().TranslateX(-15).ScaleHorizontal(1.5f).Width(80).Image(directorSignatureBytes);
                     else
-                        col.Item().Height(45);
-                    col.Item().BorderTop(0.8f).BorderColor(Colors.Grey.Darken1)
-                        .PaddingTop(4).AlignCenter()
+                        col.Item().Height(74);
+                    col.Item().PaddingTop(4).AlignLeft()
                         .Text(directorLabel).FontSize(10).Bold();
-                    col.Item().PaddingTop(2).AlignCenter()
+                    col.Item().PaddingTop(2).AlignLeft()
                         .Text(directorName).FontSize(10);
                 });
             }
@@ -181,12 +187,10 @@ public class PdfGenerationService : IDocumentGenerationService
             {
                 row.RelativeItem().Column(info =>
                 {
-                    string numLabel = isEnglish ? "Doc No.:" : "العدد:  ";
-                    string dateLabel = isEnglish ? "Date:   " : "التاريخ:";
-                    info.Item().Text($"{numLabel}   {data.DocumentNumber}")
-                        .FontSize(12).Bold();
-                    info.Item().PaddingTop(4).Text($"{dateLabel} {data.IssuedAt:d/M/yyyy}")
-                        .FontSize(12).Bold();
+                    string numLabel = isEnglish ? "Doc No.:" : "العدد:";
+                    string dateLabel = isEnglish ? "Date:" : "التاريخ:";
+                    info.Item().Text($"{dateLabel} {data.IssuedAt:d/M/yyyy}").FontSize(12).Bold();
+                    info.Item().PaddingTop(4).Text($"{numLabel} {data.DocumentNumber}").FontSize(12).Bold();
                 });
 
                 row.AutoItem().Width(110).Height(110)
@@ -199,16 +203,16 @@ public class PdfGenerationService : IDocumentGenerationService
             foreach (var line in data.RecipientEntity.Split('\n', StringSplitOptions.RemoveEmptyEntries))
             {
                 string toPrefix = isEnglish ? "To: " : "الى / ";
-                col.Item().Text($"{toPrefix}{line.Trim()}").FontSize(11);
+                col.Item().AlignCenter().Text($"{toPrefix}{line.Trim()}").FontSize(11).Bold();
             }
 
             col.Item().PaddingTop(4);
 
             // ── Subject ──────────────────────────────────────────────────────
             string subjectPrefix = isEnglish ? "Subject: " : "م/ ";
-            col.Item().Text(string.IsNullOrWhiteSpace(data.Subject)
+            col.Item().AlignCenter().Text(string.IsNullOrWhiteSpace(data.Subject)
                 ? subjectPrefix
-                : $"{subjectPrefix}{data.Subject}").FontSize(11);
+                : $"{subjectPrefix}{data.Subject}").FontSize(11).Bold();
 
             col.Item().PaddingTop(6);
 
@@ -266,20 +270,24 @@ public class PdfGenerationService : IDocumentGenerationService
                     .Image(data.QrCodeImageBytes);
             });
 
-            col.Item().PaddingVertical(3);
+            col.Item().PaddingVertical(2);
 
-            string toText = isEnglish ? $"To/ {data.RecipientEntity}" : $"إلى/ {data.RecipientEntity}";
-            string subjectText = isEnglish ? $"Re/ {data.Subject}" : $"م/ {data.Subject}";
-            col.Item().AlignCenter().Text(toText).FontSize(12);
-            col.Item().AlignCenter().PaddingBottom(3).Text(subjectText)
-                .FontSize(12).Bold();
+            string toPrefix2 = isEnglish ? "To/ " : "إلى/ ";
+            col.Item().AlignCenter().Text(t =>
+            {
+                t.Span(toPrefix2).FontSize(11).Bold();
+                t.Span(data.RecipientEntity).FontSize(11);
+            });
+            string subjectText = isEnglish ? "Re/ Medical Report" : "م/ تقرير طبي";
+            col.Item().AlignCenter().PaddingBottom(2).Text(subjectText)
+                .FontSize(11).Bold();
 
             col.Item().Table(table =>
             {
                 table.ColumnsDefinition(columns =>
                 {
-                    columns.ConstantColumn(130);
-                    columns.RelativeColumn();
+                    columns.RelativeColumn(1);
+                    columns.RelativeColumn(2);
                 });
 
                 if (isEnglish)
@@ -352,13 +360,17 @@ public class PdfGenerationService : IDocumentGenerationService
 
             col.Item().PaddingVertical(3);
 
-            string toPrefix = isEnglish ? "To /" : "الى /";
+            string toPrefix = isEnglish ? "To / " : "الى / ";
             foreach (var line in data.RecipientEntity.Split('\n', StringSplitOptions.RemoveEmptyEntries))
-                col.Item().Text($"{toPrefix}{line.Trim()}").FontSize(11);
+                col.Item().AlignCenter().Text(t =>
+                {
+                    t.Span(toPrefix).FontSize(11).Bold();
+                    t.Span(line.Trim()).FontSize(11);
+                });
 
             col.Item().PaddingVertical(2);
-            string subjectPrefix = isEnglish ? "Re/" : "م/";
-            col.Item().Text($"{subjectPrefix}{data.Subject}").FontSize(12).Bold();
+            string subjectText2 = isEnglish ? "Re/ Medical Report" : "م/ تقرير طبي";
+            col.Item().AlignCenter().Text(subjectText2).FontSize(12).Bold();
 
             string greeting = isEnglish ? "Greetings," : "تحية طيبة...";
             col.Item().PaddingTop(2).Text(greeting).FontSize(11);
@@ -386,9 +398,9 @@ public class PdfGenerationService : IDocumentGenerationService
 
     private static void AddTableRow(TableDescriptor table, string label, string value)
     {
-        table.Cell().Border(0.5f).BorderColor(Colors.Black).Padding(3)
-            .Text(label).FontSize(11).Bold();
-        table.Cell().Border(0.5f).BorderColor(Colors.Black).Padding(3)
-            .Text(value).FontSize(11);
+        table.Cell().Border(0.5f).BorderColor(Colors.Black).Padding(2)
+            .Text(label).FontSize(10).Bold();
+        table.Cell().Border(0.5f).BorderColor(Colors.Black).Padding(2)
+            .Text(value).FontSize(10);
     }
 }
