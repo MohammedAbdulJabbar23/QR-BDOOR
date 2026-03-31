@@ -14,7 +14,7 @@ public class IssuedDocumentConfiguration : IEntityTypeConfiguration<IssuedDocume
         builder.HasKey(d => d.Id);
         builder.Property(d => d.Id).HasColumnName("id");
         builder.Property(d => d.DocumentNumber).HasColumnName("document_number").HasMaxLength(50).IsRequired();
-        builder.HasIndex(d => d.DocumentNumber).IsUnique();
+        builder.HasIndex(d => d.DocumentNumber).IsUnique().HasFilter("is_deleted = FALSE AND status != 'revoked'");
         builder.Property(d => d.RequestId).HasColumnName("request_id");
         builder.Property(d => d.QrCodeUrl).HasColumnName("qr_code_url").HasMaxLength(500).IsRequired();
         builder.HasIndex(d => d.QrCodeUrl).IsUnique();

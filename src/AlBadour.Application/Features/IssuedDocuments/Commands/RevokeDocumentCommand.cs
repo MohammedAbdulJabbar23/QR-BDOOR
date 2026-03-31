@@ -11,6 +11,7 @@ public record RevokeDocumentCommand(Guid DocumentId, string Reason) : IRequest<R
 public class RevokeDocumentCommandHandler : IRequestHandler<RevokeDocumentCommand, Result>
 {
     private readonly IIssuedDocumentRepository _documentRepo;
+    private readonly IDocumentRequestRepository _requestRepo;
     private readonly IUnitOfWork _unitOfWork;
     private readonly ICurrentUserService _currentUser;
     private readonly IAuditService _auditService;
@@ -18,12 +19,14 @@ public class RevokeDocumentCommandHandler : IRequestHandler<RevokeDocumentComman
 
     public RevokeDocumentCommandHandler(
         IIssuedDocumentRepository documentRepo,
+        IDocumentRequestRepository requestRepo,
         IUnitOfWork unitOfWork,
         ICurrentUserService currentUser,
         IAuditService auditService,
         INotificationService notificationService)
     {
         _documentRepo = documentRepo;
+        _requestRepo = requestRepo;
         _unitOfWork = unitOfWork;
         _currentUser = currentUser;
         _auditService = auditService;
@@ -54,6 +57,15 @@ public class RevokeDocumentCommandHandler : IRequestHandler<RevokeDocumentComman
         document.UpdatedAt = DateTime.UtcNow;
 
         _documentRepo.Update(document);
+
+        var req = await _requestRepo.GetByIdAsync(document.RequestId, cancellationToken);
+        if (req is not null)
+        {
+            req.Status = RequestStatus.Cancelled;
+            req.UpdatedAt = DateTime.UtcNow;
+            _requestRepo.Update(req);
+        }
+
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         await _auditService.LogAsync("document.revoked", "document", document.Id.ToString(),

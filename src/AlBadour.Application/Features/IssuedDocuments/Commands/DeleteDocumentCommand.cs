@@ -11,17 +11,20 @@ public record DeleteDocumentCommand(Guid DocumentId) : IRequest<Result>;
 public class DeleteDocumentCommandHandler : IRequestHandler<DeleteDocumentCommand, Result>
 {
     private readonly IIssuedDocumentRepository _documentRepo;
+    private readonly IDocumentRequestRepository _requestRepo;
     private readonly IUnitOfWork _unitOfWork;
     private readonly ICurrentUserService _currentUser;
     private readonly IAuditService _auditService;
 
     public DeleteDocumentCommandHandler(
         IIssuedDocumentRepository documentRepo,
+        IDocumentRequestRepository requestRepo,
         IUnitOfWork unitOfWork,
         ICurrentUserService currentUser,
         IAuditService auditService)
     {
         _documentRepo = documentRepo;
+        _requestRepo = requestRepo;
         _unitOfWork = unitOfWork;
         _currentUser = currentUser;
         _auditService = auditService;
@@ -38,8 +41,16 @@ public class DeleteDocumentCommandHandler : IRequestHandler<DeleteDocumentComman
 
         document.IsDeleted = true;
         document.UpdatedAt = DateTime.UtcNow;
-
         _documentRepo.Update(document);
+
+        var req = await _requestRepo.GetByIdAsync(document.RequestId, cancellationToken);
+        if (req is not null)
+        {
+            req.IsDeleted = true;
+            req.UpdatedAt = DateTime.UtcNow;
+            _requestRepo.Update(req);
+        }
+
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         await _auditService.LogAsync("document.deleted", "document", document.Id.ToString(),

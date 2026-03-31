@@ -32,7 +32,7 @@ public class IssuedDocumentRepository : IIssuedDocumentRepository
 
     public async Task<bool> ExistsByDocumentNumberAsync(string documentNumber, CancellationToken ct = default)
     {
-        return await _context.IssuedDocuments.AnyAsync(d => d.DocumentNumber == documentNumber, ct);
+        return await _context.IssuedDocuments.AnyAsync(d => d.DocumentNumber == documentNumber && !d.IsDeleted && d.Status != DocumentStatus.Revoked, ct);
     }
 
     public async Task<(List<IssuedDocument> Items, int TotalCount)> GetAllAsync(
