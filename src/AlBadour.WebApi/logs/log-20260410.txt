@@ -1295,3 +1295,79 @@ System.IO.IOException: Failed to bind to address http://127.0.0.1:5293: address 
 2026-04-10 17:16:32.072 +03:00 [INF] Handling GetUnreadCountQuery
 2026-04-10 17:16:32.074 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
 2026-04-10 17:16:32.074 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 3ms
+2026-04-10 17:17:02.071 +03:00 [INF] Handling GetUnreadCountQuery
+2026-04-10 17:17:02.074 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-04-10 17:17:02.074 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 3ms
+2026-04-10 17:17:04.613 +03:00 [INF] Handling GetMyNotificationsQuery
+2026-04-10 17:17:04.651 +03:00 [INF] Handled GetMyNotificationsQuery in 37ms
+2026-04-10 17:17:04.660 +03:00 [INF] HTTP GET /api/notifications responded 200 in 58ms
+2026-04-10 17:17:06.012 +03:00 [INF] Handling MarkAsReadCommand
+2026-04-10 17:17:06.032 +03:00 [INF] Handled MarkAsReadCommand in 20ms
+2026-04-10 17:17:06.033 +03:00 [INF] HTTP PUT /api/notifications/read-all responded 200 in 26ms
+2026-04-10 17:17:32.070 +03:00 [INF] Handling GetUnreadCountQuery
+2026-04-10 17:17:32.073 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-04-10 17:17:32.073 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 3ms
+2026-04-10 17:18:04.607 +03:00 [INF] Handling GetUnreadCountQuery
+2026-04-10 17:18:04.610 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-04-10 17:18:04.611 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 4ms
+2026-04-10 17:18:34.607 +03:00 [INF] Handling GetUnreadCountQuery
+2026-04-10 17:18:34.609 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-04-10 17:18:34.610 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 3ms
+2026-04-10 17:19:04.607 +03:00 [INF] Handling GetUnreadCountQuery
+2026-04-10 17:19:04.610 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-04-10 17:19:04.610 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 3ms
+2026-04-10 17:19:29.547 +03:00 [INF] Application is shutting down...
+2026-04-10 17:19:29.548 +03:00 [DBG] Hosting stopping
+2026-04-10 17:19:29.555 +03:00 [DBG] Hosting stopped
+2026-04-10 17:19:33.609 +03:00 [DBG] Hosting starting
+2026-04-10 17:19:33.658 +03:00 [WRN] The WebRootPath was not found: /home/kira/Documents/freelance/bdor-hospital/src/AlBadour.WebApi/wwwroot. Static files may be unavailable.
+2026-04-10 17:19:33.685 +03:00 [INF] Now listening on: http://localhost:5293
+2026-04-10 17:19:33.686 +03:00 [INF] Application started. Press Ctrl+C to shut down.
+2026-04-10 17:19:33.686 +03:00 [INF] Hosting environment: Development
+2026-04-10 17:19:33.686 +03:00 [INF] Content root path: /home/kira/Documents/freelance/bdor-hospital/src/AlBadour.WebApi
+2026-04-10 17:19:33.687 +03:00 [DBG] Hosting started
+2026-04-10 17:19:34.369 +03:00 [INF] Handling GeneratePdfCommand
+2026-04-10 17:19:34.619 +03:00 [INF] Handling GetUnreadCountQuery
+2026-04-10 17:19:34.675 +03:00 [INF] Handled GetUnreadCountQuery in 56ms
+2026-04-10 17:19:34.693 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 81ms
+2026-04-10 17:19:35.355 +03:00 [INF] Handled GeneratePdfCommand in 984ms
+2026-04-10 17:19:35.357 +03:00 [INF] HTTP POST /api/documents/2e85c14e-d787-4b9a-a310-d2e5fdefd31d/generate-pdf responded 200 in 1119ms
+2026-04-10 17:19:35.385 +03:00 [INF] Handling GetDocumentByIdQuery
+2026-04-10 17:19:35.396 +03:00 [INF] Handled GetDocumentByIdQuery in 10ms
+2026-04-10 17:19:35.419 +03:00 [INF] HTTP GET /api/documents/2e85c14e-d787-4b9a-a310-d2e5fdefd31d responded 200 in 51ms
+2026-04-10 17:19:36.311 +03:00 [INF] Handling GetDocumentByIdQuery
+2026-04-10 17:19:36.318 +03:00 [INF] Handled GetDocumentByIdQuery in 6ms
+2026-04-10 17:19:36.340 +03:00 [INF] HTTP GET /api/documents/2e85c14e-d787-4b9a-a310-d2e5fdefd31d/pdf responded 200 in 36ms
+2026-04-10 17:20:05.570 +03:00 [INF] Handling GetUnreadCountQuery
+2026-04-10 17:20:05.572 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-04-10 17:20:05.572 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 3ms
+2026-04-10 17:20:35.570 +03:00 [INF] Handling GetUnreadCountQuery
+2026-04-10 17:20:35.575 +03:00 [INF] Handled GetUnreadCountQuery in 4ms
+2026-04-10 17:20:35.575 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 6ms
+2026-04-10 17:21:08.070 +03:00 [INF] Handling GetUnreadCountQuery
+2026-04-10 17:21:08.072 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-04-10 17:21:08.072 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 3ms
+2026-04-10 17:21:38.067 +03:00 [INF] Handling GetUnreadCountQuery
+2026-04-10 17:21:38.069 +03:00 [INF] Handled GetUnreadCountQuery in 1ms
+2026-04-10 17:21:38.069 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 2ms
+2026-04-10 17:22:08.665 +03:00 [INF] Handling GetUnreadCountQuery
+2026-04-10 17:22:08.668 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-04-10 17:22:08.668 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 3ms
+2026-04-10 17:22:38.663 +03:00 [INF] Handling GetUnreadCountQuery
+2026-04-10 17:22:38.665 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-04-10 17:22:38.666 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 3ms
+2026-04-10 17:23:08.667 +03:00 [INF] Handling GetUnreadCountQuery
+2026-04-10 17:23:08.670 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-04-10 17:23:08.671 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 4ms
+2026-04-10 17:23:38.667 +03:00 [INF] Handling GetUnreadCountQuery
+2026-04-10 17:23:38.670 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-04-10 17:23:38.670 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 3ms
+2026-04-10 17:24:08.669 +03:00 [INF] Handling GetUnreadCountQuery
+2026-04-10 17:24:08.670 +03:00 [INF] Handled GetUnreadCountQuery in 1ms
+2026-04-10 17:24:08.671 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 2ms
+2026-04-10 17:24:38.669 +03:00 [INF] Handling GetUnreadCountQuery
+2026-04-10 17:24:38.677 +03:00 [INF] Handled GetUnreadCountQuery in 7ms
+2026-04-10 17:24:38.677 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 8ms
+2026-04-10 17:25:08.670 +03:00 [INF] Handling GetUnreadCountQuery
+2026-04-10 17:25:08.672 +03:00 [INF] Handled GetUnreadCountQuery in 2ms
+2026-04-10 17:25:08.673 +03:00 [INF] HTTP GET /api/notifications/unread-count responded 200 in 3ms

@@ -314,6 +314,8 @@ public class PdfGenerationService : IDocumentGenerationService
                 subjectSpan.FontSize(headingFontSize).Bold();
             });
 
+            col.Item().PaddingTop(10);
+
             col.Item().Table(table =>
             {
                 table.ColumnsDefinition(columns =>
