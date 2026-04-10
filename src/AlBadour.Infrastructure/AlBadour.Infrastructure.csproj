@@ -12,6 +12,7 @@
     <EmbeddedResource Include="Resources\Images\letterhead.jpg" />
     <EmbeddedResource Include="Resources\Images\phone_icon.png" />
     <EmbeddedResource Include="Resources\Images\location_icon.png" />
+    <EmbeddedResource Include="Resources\Images\documentTemplate.jpg" />
     <EmbeddedResource Include="Resources\Images\documentTemplate.png" />
     <EmbeddedResource Include="Resources\Images\zaidSignature.png" />
   </ItemGroup>

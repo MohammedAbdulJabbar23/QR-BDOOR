@@ -15,7 +15,7 @@ public class PdfGenerationService : IDocumentGenerationService
     public PdfGenerationService()
     {
         var assembly = Assembly.GetExecutingAssembly();
-        _templateBytes = LoadResource(assembly, "AlBadour.Infrastructure.Resources.Images.documentTemplate.png");
+        _templateBytes = LoadResource(assembly, "AlBadour.Infrastructure.Resources.Images.documentTemplate.jpg");
         _phoneIconBytes = LoadResource(assembly, "AlBadour.Infrastructure.Resources.Images.phone_icon.png");
         _zaidSignatureBytes = TryLoadResource(assembly, "AlBadour.Infrastructure.Resources.Images.zaidSignature.png");
     }
@@ -155,7 +155,7 @@ public class PdfGenerationService : IDocumentGenerationService
                     col.Item().PaddingTop(4).AlignRight()
                         .Text(physicianLabel).FontSize(12).Bold();
                     if (!string.IsNullOrWhiteSpace(treatingPhysicianName))
-                        col.Item().PaddingTop(2).AlignRight()
+                        col.Item().PaddingTop(2).PaddingRight(10).AlignRight()
                             .Text(treatingPhysicianName).FontSize(12).Bold();
                 });
 
@@ -165,9 +165,9 @@ public class PdfGenerationService : IDocumentGenerationService
                         col.Item().AlignLeft().TranslateX(-15).ScaleHorizontal(1.5f).Width(80).Image(directorSignatureBytes);
                     else
                         col.Item().Height(74);
-                    col.Item().PaddingTop(4).AlignLeft()
+                    col.Item().PaddingTop(4).TranslateX(10).AlignLeft()
                         .Text(directorLabel).FontSize(12).Bold();
-                    col.Item().PaddingTop(2).AlignLeft()
+                    col.Item().PaddingTop(2).TranslateX(5).AlignLeft()
                         .Text(directorName).FontSize(12).Bold();
                 });
             }
@@ -209,12 +209,12 @@ public class PdfGenerationService : IDocumentGenerationService
                 {
                     var prefixSpan = t.Span(toPrefix);
                     if (!isEnglish)
-                        prefixSpan.FontFamily("Noto Sans Arabic");
+                        prefixSpan.FontFamily("Noto Naskh Arabic");
                     prefixSpan.FontSize(headingFontSize).Bold();
 
                     var recipientSpan = t.Span(line.Trim());
                     if (!isEnglish)
-                        recipientSpan.FontFamily("Noto Sans Arabic");
+                        recipientSpan.FontFamily("Noto Naskh Arabic");
                     recipientSpan.FontSize(headingFontSize).Bold();
                 });
             }
@@ -227,14 +227,14 @@ public class PdfGenerationService : IDocumentGenerationService
             {
                 var prefixSpan = t.Span(subjectPrefix);
                 if (!isEnglish)
-                    prefixSpan.FontFamily("Noto Sans Arabic");
+                    prefixSpan.FontFamily("Noto Naskh Arabic");
                 prefixSpan.FontSize(headingFontSize).Bold();
 
                 if (!string.IsNullOrWhiteSpace(data.Subject))
                 {
                     var subjectSpan = t.Span(data.Subject.Trim());
                     if (!isEnglish)
-                        subjectSpan.FontFamily("Noto Sans Arabic");
+                        subjectSpan.FontFamily("Noto Naskh Arabic");
                     subjectSpan.FontSize(headingFontSize).Bold();
                 }
             });
@@ -289,12 +289,12 @@ public class PdfGenerationService : IDocumentGenerationService
             {
                 var prefixSpan = t.Span(toPrefix2);
                 if (!isEnglish)
-                    prefixSpan.FontFamily("Noto Sans Arabic");
+                    prefixSpan.FontFamily("Noto Naskh Arabic");
                 prefixSpan.FontSize(headingFontSize).Bold();
 
                 var recipientSpan = t.Span(data.RecipientEntity);
                 if (!isEnglish)
-                    recipientSpan.FontFamily("Noto Sans Arabic");
+                    recipientSpan.FontFamily("Noto Naskh Arabic");
                 recipientSpan.FontSize(headingFontSize).Bold();
             });
             col.Item().AlignCenter().PaddingBottom(2).Text(t =>
@@ -306,11 +306,11 @@ public class PdfGenerationService : IDocumentGenerationService
                 }
 
                 var prefixSpan = t.Span("م/ ");
-                prefixSpan.FontFamily("Noto Sans Arabic");
+                prefixSpan.FontFamily("Noto Naskh Arabic");
                 prefixSpan.FontSize(headingFontSize).Bold();
 
                 var subjectSpan = t.Span("تقرير طبي");
-                subjectSpan.FontFamily("Noto Sans Arabic");
+                subjectSpan.FontFamily("Noto Naskh Arabic");
                 subjectSpan.FontSize(headingFontSize).Bold();
             });
 
@@ -318,8 +318,8 @@ public class PdfGenerationService : IDocumentGenerationService
             {
                 table.ColumnsDefinition(columns =>
                 {
-                    columns.RelativeColumn(1);
-                    columns.RelativeColumn(2);
+                    columns.ConstantColumn(130); // label – fits widest label text
+                    columns.RelativeColumn();    // value – takes remaining space
                 });
 
                 if (isEnglish)
@@ -400,12 +400,12 @@ public class PdfGenerationService : IDocumentGenerationService
                 {
                     var prefixSpan = t.Span(toPrefix);
                     if (!isEnglish)
-                        prefixSpan.FontFamily("Noto Sans Arabic");
+                        prefixSpan.FontFamily("Noto Naskh Arabic");
                     prefixSpan.FontSize(headingFontSize).Bold();
 
                     var recipientSpan = t.Span(line.Trim());
                     if (!isEnglish)
-                        recipientSpan.FontFamily("Noto Sans Arabic");
+                        recipientSpan.FontFamily("Noto Naskh Arabic");
                     recipientSpan.FontSize(headingFontSize).Bold();
                 });
 
@@ -419,11 +419,11 @@ public class PdfGenerationService : IDocumentGenerationService
                 }
 
                 var prefixSpan = t.Span("م/ ");
-                prefixSpan.FontFamily("Noto Sans Arabic");
+                prefixSpan.FontFamily("Noto Naskh Arabic");
                 prefixSpan.FontSize(headingFontSize).Bold();
 
                 var subjectSpan = t.Span("تقرير طبي");
-                subjectSpan.FontFamily("Noto Sans Arabic");
+                subjectSpan.FontFamily("Noto Naskh Arabic");
                 subjectSpan.FontSize(headingFontSize).Bold();
             });
 
@@ -438,10 +438,10 @@ public class PdfGenerationService : IDocumentGenerationService
 
     private static void AddTableRow(TableDescriptor table, string label, string value, bool boldValue = false)
     {
-        table.Cell().Border(0.5f).BorderColor(Colors.Black).Padding(2)
-            .Text(label).FontSize(10).Bold();
-        var cell = table.Cell().Border(0.5f).BorderColor(Colors.Black).Padding(2)
-            .Text(value).FontSize(10);
+        table.Cell().Border(0.5f).BorderColor(Colors.Black).Background("#33000000").PaddingHorizontal(4).PaddingVertical(6)
+            .Text(label).FontSize(13).Bold();
+        var cell = table.Cell().Border(0.5f).BorderColor(Colors.Black).PaddingHorizontal(4).PaddingVertical(6)
+            .Text(value).FontSize(13);
         if (boldValue) cell.Bold();
     }
 }

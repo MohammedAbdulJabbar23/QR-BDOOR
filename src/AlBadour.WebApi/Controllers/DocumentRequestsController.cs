@@ -81,9 +81,9 @@ public class DocumentRequestsController : ControllerBase
     }
 
     [HttpPost("{id:guid}/accept")]
-    public async Task<IActionResult> Accept(Guid id)
+    public async Task<IActionResult> Accept(Guid id, [FromBody] AcceptRequestBody? body = null)
     {
-        var result = await _mediator.Send(new AcceptRequestCommand(id));
+        var result = await _mediator.Send(new AcceptRequestCommand(id, body?.DocumentTypeId));
         if (!result.IsSuccess) return BadRequest(new { error = result.Error, code = result.ErrorCode });
         return Ok(new { message = "Request accepted." });
     }
@@ -97,4 +97,5 @@ public class DocumentRequestsController : ControllerBase
     }
 }
 
+public record AcceptRequestBody(Guid? DocumentTypeId = null);
 public record RejectRequestBody(string Reason);

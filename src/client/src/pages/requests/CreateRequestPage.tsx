@@ -13,6 +13,7 @@ import PageHeader from '@/components/common/PageHeader';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
 import type { CreateRequestDto } from '@/types/request.types';
 import { getApiErrorMessage } from '@/utils/apiErrors';
+import { getGenericDocTypeName } from '@/utils/documentTypeFilters';
 import { filterDocumentTypesForDepartment, isAdministrativeLetterType } from '@/utils/documentTypeFilters';
 
 const requestSchema = z.object({
@@ -228,7 +229,9 @@ export default function CreateRequestPage() {
                   <option value="">--</option>
                   {availableDocumentTypes.map((dt) => (
                     <option key={dt.id} value={dt.id}>
-                      {isArabic ? dt.nameAr : dt.nameEn}
+                      {department === 'Inquiry'
+                        ? getGenericDocTypeName(dt.nameAr, dt.nameEn, isArabic)
+                        : (isArabic ? dt.nameAr : dt.nameEn)}
                     </option>
                   ))}
                 </select>

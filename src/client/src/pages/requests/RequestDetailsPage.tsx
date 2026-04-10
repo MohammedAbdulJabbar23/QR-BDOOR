@@ -1,14 +1,16 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { ArrowLeft, ArrowRight, Pencil, Trash2, Check, X, FileText } from 'lucide-react';
 import { requestsApi } from '@/api/requests.api';
 import { documentsApi } from '@/api/documents.api';
+import { documentTypesApi } from '@/api/documentTypes.api';
 import { useAuthStore } from '@/stores/authStore';
 import { useUiStore } from '@/stores/uiStore';
 import { formatDateTime } from '@/utils/formatters';
 import { canAcceptRejectRequest, canEditRequest, canPrepareDocument } from '@/utils/permissions';
+import { getTableVariantOptions } from '@/utils/documentTypeFilters';
 import PageHeader from '@/components/common/PageHeader';
 import StatusBadge from '@/components/common/StatusBadge';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
@@ -27,6 +29,8 @@ export default function RequestDetailsPage() {
   const [showDeleteDialog, setShowDeleteDialog] = useState(false);
   const [showRejectDialog, setShowRejectDialog] = useState(false);
   const [rejectionReason, setRejectionReason] = useState('');
+  const [showAcceptDialog, setShowAcceptDialog] = useState(false);
+  const [selectedDocTypeId, setSelectedDocTypeId] = useState('');
 
   // Fetch request details
   const {
@@ -56,11 +60,13 @@ export default function RequestDetailsPage() {
   });
 
   const acceptMutation = useMutation({
-    mutationFn: () => requestsApi.accept(id!),
+    mutationFn: (docTypeId?: string) => requestsApi.accept(id!, docTypeId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['request', id] });
       queryClient.invalidateQueries({ queryKey: ['requests'] });
       queryClient.invalidateQueries({ queryKey: ['pendingRequests'] });
+      setShowAcceptDialog(false);
+      setSelectedDocTypeId('');
     },
   });
 
@@ -74,6 +80,23 @@ export default function RequestDetailsPage() {
       setRejectionReason('');
     },
   });
+
+  const department = user?.department || '';
+  const isMedicalReport = request?.documentTypeNameEn?.toLowerCase().includes('medical report') ?? false;
+  const needsTableChoice = department === 'Statistics' && isMedicalReport;
+
+  const { data: allDocumentTypes } = useQuery({
+    queryKey: ['documentTypes', true],
+    queryFn: () => documentTypesApi.getAll(true),
+    enabled: needsTableChoice,
+  });
+
+  const tableVariantOptions = useMemo(
+    () => allDocumentTypes && request
+      ? getTableVariantOptions(allDocumentTypes, request.documentTypeNameEn)
+      : [],
+    [allDocumentTypes, request],
+  );
 
   if (isLoading) return <LoadingSpinner />;
 
@@ -91,7 +114,6 @@ export default function RequestDetailsPage() {
     );
   }
 
-  const department = user?.department || '';
   const userId = user?.id || '';
   const role = user?.role || '';
   const isAdminOrSupervisor = role === 'Admin' || role === 'Supervisor';
@@ -270,7 +292,14 @@ export default function RequestDetailsPage() {
             {showAcceptReject && (
               <>
                 <button
-                  onClick={() => acceptMutation.mutate()}
+                  onClick={() => {
+                    if (needsTableChoice) {
+                      setSelectedDocTypeId(request.documentTypeId);
+                      setShowAcceptDialog(true);
+                    } else {
+                      acceptMutation.mutate(undefined);
+                    }
+                  }}
                   disabled={acceptMutation.isPending}
                   className="flex items-center gap-2 px-4 py-2 text-sm font-medium bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-60"
                 >
@@ -344,6 +373,36 @@ export default function RequestDetailsPage() {
         onConfirm={() => deleteMutation.mutate()}
         onCancel={() => setShowDeleteDialog(false)}
       />
+
+      {/* Accept Dialog (Statistics picks table variant) */}
+      <ConfirmDialog
+        open={showAcceptDialog}
+        title={t('requests.accept')}
+        message={isArabic ? 'اختر نوع التقرير' : 'Select report format'}
+        variant="primary"
+        confirmLabel={t('requests.accept')}
+        onConfirm={() => {
+          if (selectedDocTypeId) {
+            acceptMutation.mutate(selectedDocTypeId);
+          }
+        }}
+        onCancel={() => {
+          setShowAcceptDialog(false);
+          setSelectedDocTypeId('');
+        }}
+      >
+        <select
+          value={selectedDocTypeId}
+          onChange={(e) => setSelectedDocTypeId(e.target.value)}
+          className="w-full px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-white"
+        >
+          {tableVariantOptions.map((dt) => (
+            <option key={dt.id} value={dt.id}>
+              {isArabic ? dt.nameAr : dt.nameEn}
+            </option>
+          ))}
+        </select>
+      </ConfirmDialog>
 
       {/* Reject Dialog */}
       <ConfirmDialog

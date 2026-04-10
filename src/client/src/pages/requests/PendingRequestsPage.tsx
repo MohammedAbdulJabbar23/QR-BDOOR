@@ -1,12 +1,14 @@
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { Check, X, Eye } from 'lucide-react';
 import { requestsApi } from '@/api/requests.api';
 import { documentTypesApi } from '@/api/documentTypes.api';
+import { useAuthStore } from '@/stores/authStore';
 import { useUiStore } from '@/stores/uiStore';
 import { formatDate } from '@/utils/formatters';
+import { getTableVariantOptions } from '@/utils/documentTypeFilters';
 import PageHeader from '@/components/common/PageHeader';
 import StatusBadge from '@/components/common/StatusBadge';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
@@ -20,9 +22,14 @@ export default function PendingRequestsPage() {
   const language = useUiStore((s) => s.language);
   const isArabic = language === 'ar';
 
+  const user = useAuthStore((s) => s.user);
+
   const [rejectTarget, setRejectTarget] = useState<string | null>(null);
   const [rejectionReason, setRejectionReason] = useState('');
   const [documentTypeFilter, setDocumentTypeFilter] = useState('');
+  const [acceptTarget, setAcceptTarget] = useState<string | null>(null);
+  const [selectedDocTypeId, setSelectedDocTypeId] = useState('');
+  const [acceptTargetDocTypeName, setAcceptTargetDocTypeName] = useState('');
 
   const { data: documentTypes } = useQuery({
     queryKey: ['documentTypes', true],
@@ -34,11 +41,22 @@ export default function PendingRequestsPage() {
     queryFn: () => requestsApi.getPending({ documentTypeId: documentTypeFilter || undefined }),
   });
 
+  const tableVariantOptions = useMemo(
+    () => documentTypes && acceptTargetDocTypeName
+      ? getTableVariantOptions(documentTypes, acceptTargetDocTypeName)
+      : [],
+    [documentTypes, acceptTargetDocTypeName],
+  );
+
   const acceptMutation = useMutation({
-    mutationFn: (id: string) => requestsApi.accept(id),
+    mutationFn: ({ id, documentTypeId }: { id: string; documentTypeId?: string }) =>
+      requestsApi.accept(id, documentTypeId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['pendingRequests'] });
       queryClient.invalidateQueries({ queryKey: ['requests'] });
+      setAcceptTarget(null);
+      setSelectedDocTypeId('');
+      setAcceptTargetDocTypeName('');
     },
   });
 
@@ -136,7 +154,16 @@ export default function PendingRequestsPage() {
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-1">
                         <button
-                          onClick={() => acceptMutation.mutate(request.id)}
+                          onClick={() => {
+                            const isMedicalReport = request.documentTypeNameEn?.toLowerCase().includes('medical report');
+                            if (user?.department === 'Statistics' && isMedicalReport) {
+                              setAcceptTarget(request.id);
+                              setSelectedDocTypeId(request.documentTypeId);
+                              setAcceptTargetDocTypeName(request.documentTypeNameEn);
+                            } else {
+                              acceptMutation.mutate({ id: request.id });
+                            }
+                          }}
                           disabled={acceptMutation.isPending}
                           className="inline-flex items-center gap-1 px-2.5 py-1.5 text-xs font-medium bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors disabled:opacity-60"
                           title={t('requests.accept')}
@@ -168,6 +195,37 @@ export default function PendingRequestsPage() {
           </div>
         </div>
       )}
+
+      {/* Accept Dialog (Statistics picks table variant) */}
+      <ConfirmDialog
+        open={!!acceptTarget}
+        title={t('requests.accept')}
+        message={isArabic ? 'اختر نوع التقرير' : 'Select report format'}
+        variant="primary"
+        confirmLabel={t('requests.accept')}
+        onConfirm={() => {
+          if (acceptTarget && selectedDocTypeId) {
+            acceptMutation.mutate({ id: acceptTarget, documentTypeId: selectedDocTypeId });
+          }
+        }}
+        onCancel={() => {
+          setAcceptTarget(null);
+          setSelectedDocTypeId('');
+          setAcceptTargetDocTypeName('');
+        }}
+      >
+        <select
+          value={selectedDocTypeId}
+          onChange={(e) => setSelectedDocTypeId(e.target.value)}
+          className="w-full px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary bg-white"
+        >
+          {tableVariantOptions.map((dt) => (
+            <option key={dt.id} value={dt.id}>
+              {isArabic ? dt.nameAr : dt.nameEn}
+            </option>
+          ))}
+        </select>
+      </ConfirmDialog>
 
       {/* Reject Dialog */}
       <ConfirmDialog

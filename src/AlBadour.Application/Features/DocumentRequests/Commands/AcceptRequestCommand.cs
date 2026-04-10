@@ -7,11 +7,12 @@ using System;
 
 namespace AlBadour.Application.Features.DocumentRequests.Commands;
 
-public record AcceptRequestCommand(Guid Id) : IRequest<Result>;
+public record AcceptRequestCommand(Guid Id, Guid? DocumentTypeId = null) : IRequest<Result>;
 
 public class AcceptRequestCommandHandler : IRequestHandler<AcceptRequestCommand, Result>
 {
     private readonly IDocumentRequestRepository _requestRepo;
+    private readonly IDocumentTypeRepository _typeRepo;
     private readonly IUnitOfWork _unitOfWork;
     private readonly ICurrentUserService _currentUser;
     private readonly IAuditService _auditService;
@@ -19,12 +20,14 @@ public class AcceptRequestCommandHandler : IRequestHandler<AcceptRequestCommand,
 
     public AcceptRequestCommandHandler(
         IDocumentRequestRepository requestRepo,
+        IDocumentTypeRepository typeRepo,
         IUnitOfWork unitOfWork,
         ICurrentUserService currentUser,
         IAuditService auditService,
         INotificationService notificationService)
     {
         _requestRepo = requestRepo;
+        _typeRepo = typeRepo;
         _unitOfWork = unitOfWork;
         _currentUser = currentUser;
         _auditService = auditService;
@@ -50,6 +53,25 @@ public class AcceptRequestCommandHandler : IRequestHandler<AcceptRequestCommand,
 
         if (entity.Status != RequestStatus.Pending)
             return Result.Failure("Only pending requests can be accepted.", "INVALID_STATUS");
+
+        // Statistics can override the document type (e.g. switch between with/without table)
+        if (request.DocumentTypeId.HasValue && _currentUser.Department == Department.Statistics)
+        {
+            var newDocType = await _typeRepo.GetByIdAsync(request.DocumentTypeId.Value, cancellationToken);
+            if (newDocType is null || !newDocType.IsActive)
+                return Result.Failure("Invalid or inactive document type.", "INVALID_DOCUMENT_TYPE");
+
+            if (newDocType.NameEn.Equals("Administrative Letter", StringComparison.OrdinalIgnoreCase))
+                return Result.Failure("Cannot change to Administrative Letter type.", "INVALID_DOCUMENT_TYPE");
+
+            var originalHasAS = entity.DocumentType.NameEn.Contains("Account Statement", StringComparison.OrdinalIgnoreCase);
+            var newHasAS = newDocType.NameEn.Contains("Account Statement", StringComparison.OrdinalIgnoreCase);
+            if (originalHasAS != newHasAS)
+                return Result.Failure("Cannot change the Account Statement status of the request.", "INVALID_DOCUMENT_TYPE");
+
+            entity.DocumentTypeId = request.DocumentTypeId.Value;
+            entity.DocumentType = newDocType;
+        }
 
         entity.Status = RequestStatus.InProgress;
         entity.AssignedToId = _currentUser.UserId;

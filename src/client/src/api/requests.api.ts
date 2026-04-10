@@ -21,8 +21,8 @@ export const requestsApi = {
   delete: (id: string) =>
     apiClient.delete(`/requests/${id}`).then(r => r.data),
 
-  accept: (id: string) =>
-    apiClient.post(`/requests/${id}/accept`).then(r => r.data),
+  accept: (id: string, documentTypeId?: string) =>
+    apiClient.post(`/requests/${id}/accept`, documentTypeId ? { documentTypeId } : {}).then(r => r.data),
 
   reject: (id: string, reason: string) =>
     apiClient.post(`/requests/${id}/reject`, { reason }).then(r => r.data),
