@@ -52,7 +52,10 @@ public class PrepareDocumentCommandHandler : IRequestHandler<PrepareDocumentComm
             return Result.Failure<DocumentDto>("Request not found.", "NOT_FOUND");
 
         var isAdminLetter = req.DocumentType.NameEn.Equals("Administrative Letter", StringComparison.OrdinalIgnoreCase);
-        var allowedDept = isAdminLetter ? Department.HR : Department.Statistics;
+        var isMoiInsuranceLetter = req.DocumentType.NameEn.Equals("MOI Insurance Letter", StringComparison.OrdinalIgnoreCase);
+        var isLetterType = isAdminLetter || isMoiInsuranceLetter;
+        var allowedDept = isMoiInsuranceLetter ? Department.MoiInsurance
+            : isAdminLetter ? Department.HR : Department.Statistics;
         if (_currentUser.Department != allowedDept)
             return Result.Failure<DocumentDto>($"Only {allowedDept} department staff can prepare this document.", "FORBIDDEN");
 
@@ -81,14 +84,14 @@ public class PrepareDocumentCommandHandler : IRequestHandler<PrepareDocumentComm
             RequestId = req.Id,
             QrCodeUrl = qrUrl,
             QrCodeImagePath = qrImagePath,
-            Subject = isAdminLetter ? request.Dto.Subject?.Trim() : null,
+            Subject = isLetterType ? request.Dto.Subject?.Trim() : null,
             DocumentBody = request.Dto.DocumentBody,
-            PatientGender = isAdminLetter ? null : request.Dto.PatientGender,
-            PatientProfession = isAdminLetter ? null : request.Dto.PatientProfession,
-            PatientAge = isAdminLetter ? null : request.Dto.PatientAge,
-            AdmissionDate = isAdminLetter ? null : request.Dto.AdmissionDate,
-            DischargeDate = isAdminLetter ? null : request.Dto.DischargeDate,
-            LeaveGranted = isAdminLetter ? null : request.Dto.LeaveGranted,
+            PatientGender = isLetterType ? null : request.Dto.PatientGender,
+            PatientProfession = isLetterType ? null : request.Dto.PatientProfession,
+            PatientAge = isLetterType ? null : request.Dto.PatientAge,
+            AdmissionDate = isLetterType ? null : request.Dto.AdmissionDate,
+            DischargeDate = isLetterType ? null : request.Dto.DischargeDate,
+            LeaveGranted = isLetterType ? null : request.Dto.LeaveGranted,
             TreatingPhysicianName = isAdminLetter ? null : request.Dto.TreatingPhysicianName?.Trim(),
             Status = DocumentStatus.Draft,
             IssuedById = _currentUser.UserId,

@@ -178,5 +178,5 @@
     "awaitingAccountStatement": "بانتظار كشف الحساب"
   },
   "roles": { "employee": "موظف", "supervisor": "مشرف", "admin": "مدير" },
-  "departments": { "inquiry": "الاستعلامات", "statistics": "الإحصاء", "management": "الإدارة", "accounts": "الحسابات", "hr": "الموارد البشرية" }
+  "departments": { "inquiry": "الاستعلامات", "statistics": "الإحصاء", "management": "الإدارة", "accounts": "الحسابات", "hr": "الموارد البشرية", "moiinsurance": "ضمان وزارة الداخلية" }
 }

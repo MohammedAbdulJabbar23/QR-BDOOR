@@ -15,11 +15,25 @@ public static class DepartmentVisibility
     public static string? GetRequiredDocumentTypeName(Department department) => department switch
     {
         Department.Accounts => "Account Statement",
+        Department.MoiInsurance => "MOI Insurance Letter",
         _ => null
+    };
+
+    // Returns a document type name to exclude, or null if nothing to exclude.
+    public static string? GetExcludedDocumentTypeName(Department department) => department switch
+    {
+        Department.MoiInsurance => null,
+        _ => "MOI Insurance Letter"
     };
 
     public static bool CanAccessDocumentType(Department department, string documentTypeNameEn)
     {
+        if (department == Department.MoiInsurance)
+            return documentTypeNameEn.Equals("MOI Insurance Letter", StringComparison.OrdinalIgnoreCase);
+
+        if (documentTypeNameEn.Equals("MOI Insurance Letter", StringComparison.OrdinalIgnoreCase))
+            return false;
+
         if (department == Department.Accounts)
             return documentTypeNameEn.Contains("Account Statement", StringComparison.OrdinalIgnoreCase);
 

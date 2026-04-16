@@ -28,7 +28,9 @@ public class GetStatusBreakdownQueryHandler : IRequestHandler<GetStatusBreakdown
             return Result.Failure<List<StatusBreakdownDto>>("Only supervisors and admins can view reports.", "FORBIDDEN");
 
         var isAdministrativeLetter = DepartmentVisibility.GetAdministrativeLetterFilter(_currentUser.Department);
-        var statusCounts = await _requestRepo.GetStatusCountsAsync(request.From, request.To, isAdministrativeLetter, cancellationToken);
+        var requiredDocTypeName = DepartmentVisibility.GetRequiredDocumentTypeName(_currentUser.Department);
+        var excludedDocTypeName = DepartmentVisibility.GetExcludedDocumentTypeName(_currentUser.Department);
+        var statusCounts = await _requestRepo.GetStatusCountsAsync(request.From, request.To, isAdministrativeLetter, requiredDocTypeName, excludedDocTypeName, cancellationToken);
 
         var breakdown = statusCounts
             .Select(kv => new StatusBreakdownDto(kv.Key, kv.Value))

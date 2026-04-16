@@ -1,9 +1,13 @@
 export function canCreateRequest(department: string): boolean {
-  return department === 'Inquiry' || department === 'HR';
+  return department === 'Inquiry' || department === 'HR' || department === 'MoiInsurance';
 }
 
 function isAdministrativeLetter(documentTypeNameEn?: string): boolean {
   return documentTypeNameEn?.toLowerCase() === 'administrative letter';
+}
+
+function isMoiInsuranceLetter(documentTypeNameEn?: string): boolean {
+  return documentTypeNameEn?.toLowerCase() === 'moi insurance letter';
 }
 
 export function canHandleRequestType(department: string, documentTypeNameEn?: string): boolean {
@@ -11,12 +15,16 @@ export function canHandleRequestType(department: string, documentTypeNameEn?: st
     return false;
   }
 
+  if (department === 'MoiInsurance') {
+    return isMoiInsuranceLetter(documentTypeNameEn);
+  }
+
   if (department === 'HR') {
     return isAdministrativeLetter(documentTypeNameEn);
   }
 
   if (department === 'Inquiry' || department === 'Statistics') {
-    return !isAdministrativeLetter(documentTypeNameEn);
+    return !isAdministrativeLetter(documentTypeNameEn) && !isMoiInsuranceLetter(documentTypeNameEn);
   }
 
   return false;
@@ -32,31 +40,31 @@ export function canEditRequest(
   const isNotFinished = status !== 'Completed' && status !== 'Rejected';
   const isCreator = createdById === userId;
   const isResponsibleDepartment =
-    (department === 'HR' || department === 'Statistics') && canHandleRequestType(department, documentTypeNameEn);
+    (department === 'HR' || department === 'Statistics' || department === 'MoiInsurance') && canHandleRequestType(department, documentTypeNameEn);
   const isAllowedCreator = isCreator && canHandleRequestType(department, documentTypeNameEn);
   return isNotFinished && (isAllowedCreator || isResponsibleDepartment);
 }
 
 export function canAcceptRejectRequest(department: string, documentTypeNameEn?: string): boolean {
   if (!documentTypeNameEn) {
-    return department === 'Statistics' || department === 'HR';
+    return department === 'Statistics' || department === 'HR' || department === 'MoiInsurance';
   }
 
-  return (department === 'Statistics' || department === 'HR')
+  return (department === 'Statistics' || department === 'HR' || department === 'MoiInsurance')
     && canHandleRequestType(department, documentTypeNameEn);
 }
 
 export function canPrepareDocument(department: string, documentTypeNameEn?: string): boolean {
   if (!documentTypeNameEn) {
-    return department === 'Statistics' || department === 'HR';
+    return department === 'Statistics' || department === 'HR' || department === 'MoiInsurance';
   }
 
-  return (department === 'Statistics' || department === 'HR')
+  return (department === 'Statistics' || department === 'HR' || department === 'MoiInsurance')
     && canHandleRequestType(department, documentTypeNameEn);
 }
 
 export function canUploadPdf(department: string): boolean {
-  return department === 'Statistics' || department === 'HR';
+  return department === 'Statistics' || department === 'HR' || department === 'MoiInsurance';
 }
 
 export function canRevokeDocument(role: string): boolean {

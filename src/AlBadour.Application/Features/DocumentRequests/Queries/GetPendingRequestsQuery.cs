@@ -1,4 +1,5 @@
 using AlBadour.Application.Common.Models;
+using AlBadour.Application.Common.Security;
 using AlBadour.Application.Features.DocumentRequests.DTOs;
 using AlBadour.Domain.Enums;
 using AlBadour.Domain.Interfaces;
@@ -28,8 +29,10 @@ public class GetPendingRequestsQueryHandler : IRequestHandler<GetPendingRequests
             Department.Statistics => false,
             _ => null
         };
+        var requiredDocTypeName = DepartmentVisibility.GetRequiredDocumentTypeName(_currentUser.Department);
+        var excludedDocTypeName = DepartmentVisibility.GetExcludedDocumentTypeName(_currentUser.Department);
 
-        var items = await _requestRepo.GetPendingAsync(request.DocumentTypeId, isAdministrativeLetter, cancellationToken);
+        var items = await _requestRepo.GetPendingAsync(request.DocumentTypeId, isAdministrativeLetter, requiredDocTypeName, excludedDocTypeName, cancellationToken);
 
         var dtos = items.Select(e => new RequestDto(
             e.Id,

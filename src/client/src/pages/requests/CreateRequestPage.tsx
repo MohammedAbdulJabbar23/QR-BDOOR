@@ -14,7 +14,7 @@ import LoadingSpinner from '@/components/common/LoadingSpinner';
 import type { CreateRequestDto } from '@/types/request.types';
 import { getApiErrorMessage } from '@/utils/apiErrors';
 import { getGenericDocTypeName } from '@/utils/documentTypeFilters';
-import { filterDocumentTypesForDepartment, isAdministrativeLetterType } from '@/utils/documentTypeFilters';
+import { filterDocumentTypesForDepartment, isAdministrativeLetterType, isMoiInsuranceLetterType } from '@/utils/documentTypeFilters';
 
 const requestSchema = z.object({
   patientName: z.string().optional(),
@@ -94,11 +94,12 @@ export default function CreateRequestPage() {
     () => filterDocumentTypesForDepartment(documentTypes, department),
     [department, documentTypes]
   );
-  const isAdministrativeLetter = isAdministrativeLetterType(selectedDocumentType)
-    || (!isEditMode && department === 'HR');
+  const isLetterType = isAdministrativeLetterType(selectedDocumentType)
+    || isMoiInsuranceLetterType(selectedDocumentType)
+    || (!isEditMode && (department === 'HR' || department === 'MoiInsurance'));
 
   useEffect(() => {
-    if (!isEditMode && department === 'HR' && availableDocumentTypes.length === 1) {
+    if (!isEditMode && (department === 'HR' || department === 'MoiInsurance') && availableDocumentTypes.length === 1) {
       setValue('documentTypeId', availableDocumentTypes[0].id, { shouldValidate: true });
     }
   }, [availableDocumentTypes, department, isEditMode, setValue]);
@@ -130,17 +131,17 @@ export default function CreateRequestPage() {
 
   const onSubmit = (values: RequestFormValues) => {
     setSubmitError('');
-    if (!isAdministrativeLetter && !(values.patientName || '').trim()) {
+    if (!isLetterType && !(values.patientName || '').trim()) {
       setSubmitError(t('requests.patientNameRequired'));
       return;
     }
-    if (isAdministrativeLetter && !(values.notes || '').trim()) {
+    if (isLetterType && !(values.notes || '').trim()) {
       setSubmitError(t('requests.topicRequired'));
       return;
     }
 
     const payload: CreateRequestDto = {
-      patientName: isAdministrativeLetter ? '' : (values.patientName || '').trim(),
+      patientName: isLetterType ? '' : (values.patientName || '').trim(),
       recipientEntity: values.recipientEntity,
       documentTypeId: values.documentTypeId,
       notes: values.notes?.trim() || undefined,
@@ -171,7 +172,7 @@ export default function CreateRequestPage() {
           )}
 
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
-            {!isAdministrativeLetter && (
+            {!isLetterType && (
               <div>
                 <label className="block text-sm font-medium text-neutral-700 mb-1.5">
                   {t('requests.patientName')} <span className="text-red-500">*</span>
@@ -244,14 +245,14 @@ export default function CreateRequestPage() {
             {/* Notes */}
             <div>
               <label className="block text-sm font-medium text-neutral-700 mb-1.5">
-                {isAdministrativeLetter ? t('requests.topic') : t('requests.notes')}
-                {isAdministrativeLetter && <span className="text-red-500"> *</span>}
+                {isLetterType ? t('requests.topic') : t('requests.notes')}
+                {isLetterType && <span className="text-red-500"> *</span>}
               </label>
               <textarea
                 {...register('notes')}
                 rows={4}
                 className="w-full px-3 py-2 border border-neutral-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary resize-none"
-                placeholder={isAdministrativeLetter ? t('requests.topic') : undefined}
+                placeholder={isLetterType ? t('requests.topic') : undefined}
               />
             </div>
 

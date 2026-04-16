@@ -6,5 +6,6 @@ public enum Department
     Statistics,
     Management,
     Accounts,
-    HR
+    HR,
+    MoiInsurance
 }

@@ -43,7 +43,8 @@ public class UpdateRequestCommandHandler : IRequestHandler<UpdateRequestCommand,
             _currentUser.Department,
             entity.DocumentType.NameEn);
         var isResponsibleDepartment = canEditExistingType
-            && (_currentUser.Department == Department.HR || _currentUser.Department == Department.Statistics);
+            && (_currentUser.Department == Department.HR || _currentUser.Department == Department.Statistics
+                || _currentUser.Department == Department.MoiInsurance);
 
         if (!isCreator && !isResponsibleDepartment)
             return Result.Failure("You do not have permission to edit this request.", "FORBIDDEN");
@@ -62,15 +63,17 @@ public class UpdateRequestCommandHandler : IRequestHandler<UpdateRequestCommand,
             return Result.Failure("You do not have permission to use the selected document type.", "FORBIDDEN");
 
         var isAdministrativeLetter = docType.NameEn.Equals("Administrative Letter", StringComparison.OrdinalIgnoreCase);
-        if (!isAdministrativeLetter && string.IsNullOrWhiteSpace(request.Dto.PatientName))
+        var isMoiInsuranceLetter = docType.NameEn.Equals("MOI Insurance Letter", StringComparison.OrdinalIgnoreCase);
+        var isLetterType = isAdministrativeLetter || isMoiInsuranceLetter;
+        if (!isLetterType && string.IsNullOrWhiteSpace(request.Dto.PatientName))
             return Result.Failure("Patient name is required.", "VALIDATION_ERROR");
-        if (isAdministrativeLetter && string.IsNullOrWhiteSpace(request.Dto.Notes))
-            return Result.Failure("Topic is required for administrative letters.", "VALIDATION_ERROR");
+        if (isLetterType && string.IsNullOrWhiteSpace(request.Dto.Notes))
+            return Result.Failure("Topic is required for letters.", "VALIDATION_ERROR");
 
         var before = new { entity.PatientName, entity.RecipientEntity, entity.DocumentTypeId, entity.Notes };
 
-        entity.PatientName = isAdministrativeLetter ? string.Empty : request.Dto.PatientName.Trim();
-        entity.PatientNameEn = isAdministrativeLetter ? null : request.Dto.PatientNameEn;
+        entity.PatientName = isLetterType ? string.Empty : request.Dto.PatientName.Trim();
+        entity.PatientNameEn = isLetterType ? null : request.Dto.PatientNameEn;
         entity.RecipientEntity = request.Dto.RecipientEntity;
         entity.DocumentTypeId = request.Dto.DocumentTypeId;
         entity.Notes = request.Dto.Notes?.Trim();

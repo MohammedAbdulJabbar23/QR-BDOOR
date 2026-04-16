@@ -40,15 +40,23 @@ public class RejectRequestCommandHandler : IRequestHandler<RejectRequestCommand,
             return Result.Failure("Request not found.", "NOT_FOUND");
 
         var isAdministrativeLetter = entity.DocumentType.NameEn.Equals("Administrative Letter", StringComparison.OrdinalIgnoreCase);
+        var isMoiInsuranceLetter = entity.DocumentType.NameEn.Equals("MOI Insurance Letter", StringComparison.OrdinalIgnoreCase);
+
+        if (_currentUser.Department == Department.MoiInsurance && !isMoiInsuranceLetter)
+            return Result.Failure("MOI Insurance department can only reject MOI Insurance Letter requests.", "FORBIDDEN");
+
+        if (_currentUser.Department != Department.MoiInsurance && isMoiInsuranceLetter)
+            return Result.Failure("Only MOI Insurance department staff can reject this request.", "FORBIDDEN");
 
         if (_currentUser.Department == Department.HR && !isAdministrativeLetter)
             return Result.Failure("HR department can only reject Administrative Letter requests.", "FORBIDDEN");
 
-        if (_currentUser.Department == Department.Statistics && isAdministrativeLetter)
-            return Result.Failure("Statistics department cannot reject Administrative Letter requests.", "FORBIDDEN");
+        if (_currentUser.Department == Department.Statistics && (isAdministrativeLetter || isMoiInsuranceLetter))
+            return Result.Failure("Statistics department cannot reject this request type.", "FORBIDDEN");
 
-        if (_currentUser.Department != Department.HR && _currentUser.Department != Department.Statistics)
-            return Result.Failure("Only HR and Statistics department staff can reject this request.", "FORBIDDEN");
+        if (_currentUser.Department != Department.HR && _currentUser.Department != Department.Statistics
+            && _currentUser.Department != Department.MoiInsurance)
+            return Result.Failure("Only HR, Statistics, and MOI Insurance department staff can reject this request.", "FORBIDDEN");
 
         if (entity.Status != RequestStatus.Pending)
             return Result.Failure("Only pending requests can be rejected.", "INVALID_STATUS");

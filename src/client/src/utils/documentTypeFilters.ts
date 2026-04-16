@@ -4,6 +4,10 @@ export function isAdministrativeLetterType(documentType?: Pick<DocumentType, 'na
   return documentType?.nameEn.toLowerCase() === 'administrative letter';
 }
 
+export function isMoiInsuranceLetterType(documentType?: Pick<DocumentType, 'nameEn'> | null): boolean {
+  return documentType?.nameEn.toLowerCase() === 'moi insurance letter';
+}
+
 function isWithTableType(documentType: Pick<DocumentType, 'nameEn'>): boolean {
   const name = documentType.nameEn.toLowerCase();
   return name.includes('with table') && !name.includes('without table');
@@ -19,6 +23,11 @@ export function filterDocumentTypesForDepartment(
 
   return documentTypes.filter((documentType) => {
     const isAdministrativeLetter = isAdministrativeLetterType(documentType);
+    const isMoiInsurance = isMoiInsuranceLetterType(documentType);
+
+    if (department === 'MoiInsurance') {
+      return isMoiInsurance;
+    }
 
     if (department === 'HR') {
       return isAdministrativeLetter;
@@ -26,14 +35,15 @@ export function filterDocumentTypesForDepartment(
 
     if (department === 'Inquiry') {
       // Inquiry only sees "with Table" variants as generic options
-      return !isAdministrativeLetter && isWithTableType(documentType);
+      return !isAdministrativeLetter && !isMoiInsurance && isWithTableType(documentType);
     }
 
     if (department === 'Statistics') {
-      return !isAdministrativeLetter;
+      return !isAdministrativeLetter && !isMoiInsurance;
     }
 
-    return true;
+    // Management and others see all except MOI Insurance
+    return !isMoiInsurance;
   });
 }
 

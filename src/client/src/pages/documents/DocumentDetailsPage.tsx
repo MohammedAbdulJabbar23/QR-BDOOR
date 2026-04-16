@@ -10,6 +10,7 @@ import { documentsApi } from '@/api/documents.api';
 import { useAuthStore } from '@/stores/authStore';
 import { useUiStore } from '@/stores/uiStore';
 import { canUploadPdf, canRevokeDocument, canDeleteDocument } from '@/utils/permissions';
+import { getGenericDocTypeName } from '@/utils/documentTypeFilters';
 import { formatDateTime } from '@/utils/formatters';
 import { cn } from '@/utils/cn';
 import PageHeader from '@/components/common/PageHeader';
@@ -203,14 +204,19 @@ export default function DocumentDetailsPage() {
     ? document.patientName
     : (document.patientNameEn || document.patientName);
 
-  const documentType = language === 'ar'
-    ? document.documentTypeNameAr
-    : document.documentTypeNameEn;
+  const documentType = user?.department === 'Inquiry'
+    ? getGenericDocTypeName(document.documentTypeNameAr, document.documentTypeNameEn, language === 'ar')
+    : (language === 'ar' ? document.documentTypeNameAr : document.documentTypeNameEn);
 
   const isRevoked = document.status === 'Revoked';
   const isDraft = document.status === 'Draft';
   const isAdminLetter = document.documentTypeNameEn?.toLowerCase() === 'administrative letter';
-  const isResponsibleDept = user && (isAdminLetter ? user.department === 'HR' : user.department === 'Statistics');
+  const isMoiInsuranceLetter = document.documentTypeNameEn?.toLowerCase() === 'moi insurance letter';
+  const isResponsibleDept = user && (
+    isMoiInsuranceLetter ? user.department === 'MoiInsurance'
+    : isAdminLetter ? user.department === 'HR'
+    : user.department === 'Statistics'
+  );
   const showGenerate = isResponsibleDept && isDraft && !isRevoked;
   const isMedicalReportAccountStatement = document.documentTypeNameEn?.toLowerCase().includes('account statement');
   const showUpload = !isMedicalReportAccountStatement && isResponsibleDept && isDraft && !isRevoked && document.hasPdf;

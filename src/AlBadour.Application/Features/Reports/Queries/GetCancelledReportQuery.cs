@@ -28,6 +28,7 @@ public class GetCancelledReportQueryHandler : IRequestHandler<GetCancelledReport
             return Result.Failure<List<CancelledDocumentDto>>("Only supervisors and admins can view reports.", "FORBIDDEN");
 
         var isAdministrativeLetter = DepartmentVisibility.GetAdministrativeLetterFilter(_currentUser.Department);
+        var excludedDocTypeName = DepartmentVisibility.GetExcludedDocumentTypeName(_currentUser.Department);
         const int pageSize = 500;
         var page = 1;
         var allDocs = new List<Domain.Entities.IssuedDocument>();
@@ -44,6 +45,7 @@ public class GetCancelledReportQueryHandler : IRequestHandler<GetCancelledReport
                 pageSize,
                 isAdministrativeLetter,
                 null,
+                excludedDocTypeName,
                 cancellationToken);
 
             if (items.Count == 0)

@@ -31,15 +31,17 @@ public class GetDailyReportQueryHandler : IRequestHandler<GetDailyReportQuery, R
 
         var date = request.Date.Date;
         var isAdministrativeLetter = DepartmentVisibility.GetAdministrativeLetterFilter(_currentUser.Department);
+        var requiredDocTypeName = DepartmentVisibility.GetRequiredDocumentTypeName(_currentUser.Department);
+        var excludedDocTypeName = DepartmentVisibility.GetExcludedDocumentTypeName(_currentUser.Department);
 
-        var statusCounts = await _requestRepo.GetStatusCountsAsync(date, date, isAdministrativeLetter, cancellationToken);
+        var statusCounts = await _requestRepo.GetStatusCountsAsync(date, date, isAdministrativeLetter, requiredDocTypeName, excludedDocTypeName, cancellationToken);
         var totalRequests = statusCounts.Values.Sum();
         var pending = statusCounts.GetValueOrDefault(RequestStatus.Pending.ToString(), 0);
         var completed = statusCounts.GetValueOrDefault(RequestStatus.Completed.ToString(), 0);
         var rejected = statusCounts.GetValueOrDefault(RequestStatus.Rejected.ToString(), 0);
 
-        var docsIssued = await _documentRepo.CountAsync(null, date, date, isAdministrativeLetter, cancellationToken);
-        var docsArchived = await _documentRepo.CountArchivedInRangeAsync(date, date, isAdministrativeLetter, cancellationToken);
+        var docsIssued = await _documentRepo.CountAsync(null, date, date, isAdministrativeLetter, requiredDocTypeName, excludedDocTypeName, cancellationToken);
+        var docsArchived = await _documentRepo.CountArchivedInRangeAsync(date, date, isAdministrativeLetter, requiredDocTypeName, excludedDocTypeName, cancellationToken);
 
         return Result.Success(new DailyReportDto(
             date,

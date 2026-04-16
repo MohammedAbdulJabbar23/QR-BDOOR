@@ -176,5 +176,5 @@
     "awaitingAccountStatement": "Awaiting Account Statement"
   },
   "roles": { "employee": "Employee", "supervisor": "Supervisor", "admin": "Manager" },
-  "departments": { "inquiry": "Inquiry", "statistics": "Statistics", "management": "Management", "accounts": "Accounts", "hr": "HR" }
+  "departments": { "inquiry": "Inquiry", "statistics": "Statistics", "management": "Management", "accounts": "Accounts", "hr": "HR", "moiinsurance": "MOI Insurance" }
 }

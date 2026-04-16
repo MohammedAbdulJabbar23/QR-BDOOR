@@ -10,7 +10,7 @@ import { useAuthStore } from '@/stores/authStore';
 import { useUiStore } from '@/stores/uiStore';
 import { formatDateTime } from '@/utils/formatters';
 import { canAcceptRejectRequest, canEditRequest, canPrepareDocument } from '@/utils/permissions';
-import { getTableVariantOptions } from '@/utils/documentTypeFilters';
+import { getTableVariantOptions, getGenericDocTypeName } from '@/utils/documentTypeFilters';
 import PageHeader from '@/components/common/PageHeader';
 import StatusBadge from '@/components/common/StatusBadge';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
@@ -191,7 +191,9 @@ export default function RequestDetailsPage() {
               {t('requests.documentType')}
             </span>
             <p className="mt-1 text-neutral-800">
-              {isArabic ? request.documentTypeNameAr : request.documentTypeNameEn}
+              {department === 'Inquiry' || request.status === 'Pending'
+                ? getGenericDocTypeName(request.documentTypeNameAr, request.documentTypeNameEn, isArabic)
+                : (isArabic ? request.documentTypeNameAr : request.documentTypeNameEn)}
             </p>
           </div>
 
@@ -352,7 +354,9 @@ export default function RequestDetailsPage() {
                   </span>
                 </div>
                 <p className="text-xs text-neutral-500">
-                  {isArabic ? doc.documentTypeNameAr : doc.documentTypeNameEn}
+                  {department === 'Inquiry'
+                    ? getGenericDocTypeName(doc.documentTypeNameAr, doc.documentTypeNameEn, isArabic)
+                    : (isArabic ? doc.documentTypeNameAr : doc.documentTypeNameEn)}
                 </p>
                 <div className="mt-2">
                   <StatusBadge status={doc.status} />

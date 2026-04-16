@@ -6,6 +6,7 @@ import { useUiStore } from '@/stores/uiStore';
 import { requestsApi } from '@/api/requests.api';
 import { documentsApi } from '@/api/documents.api';
 import { canCreateRequest, canAcceptRejectRequest } from '@/utils/permissions';
+import { getGenericDocTypeName } from '@/utils/documentTypeFilters';
 import { formatDate } from '@/utils/formatters';
 import PageHeader from '@/components/common/PageHeader';
 import StatusBadge from '@/components/common/StatusBadge';
@@ -196,7 +197,9 @@ export default function DashboardPage() {
                             </Link>
                           </td>
                           <td className="py-2.5 px-3 text-neutral-600">
-                            {language === 'ar' ? req.documentTypeNameAr : req.documentTypeNameEn}
+                            {user?.department === 'Inquiry'
+                              ? getGenericDocTypeName(req.documentTypeNameAr, req.documentTypeNameEn, language === 'ar')
+                              : (language === 'ar' ? req.documentTypeNameAr : req.documentTypeNameEn)}
                           </td>
                           <td className="py-2.5 px-3">
                             <StatusBadge status={req.status} />

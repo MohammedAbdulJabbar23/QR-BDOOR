@@ -33,13 +33,14 @@ public class GetAllRequestsQueryHandler : IRequestHandler<GetAllRequestsQuery, R
         Guid? createdById = null;
         bool? isAdministrativeLetter = DepartmentVisibility.GetAdministrativeLetterFilter(_currentUser.Department);
         var requiredDocumentTypeName = DepartmentVisibility.GetRequiredDocumentTypeName(_currentUser.Department);
+        var excludedDocTypeName = DepartmentVisibility.GetExcludedDocumentTypeName(_currentUser.Department);
         var requiresAwaitingAccountStatement = _currentUser.Department == Department.Accounts;
 
         var (items, totalCount) = await _requestRepo.GetAllAsync(
             request.Status, createdById, request.Search, request.DocumentTypeId,
             request.FromDate, request.ToDate,
             request.Page, request.PageSize, isAdministrativeLetter, requiredDocumentTypeName,
-            requiresAwaitingAccountStatement, cancellationToken);
+            requiresAwaitingAccountStatement, excludedDocTypeName, cancellationToken);
 
         var dtos = items.Select(e => new RequestDto(
             e.Id,

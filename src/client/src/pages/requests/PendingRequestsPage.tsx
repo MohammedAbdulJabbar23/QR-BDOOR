@@ -8,7 +8,7 @@ import { documentTypesApi } from '@/api/documentTypes.api';
 import { useAuthStore } from '@/stores/authStore';
 import { useUiStore } from '@/stores/uiStore';
 import { formatDate } from '@/utils/formatters';
-import { getTableVariantOptions } from '@/utils/documentTypeFilters';
+import { getTableVariantOptions, getGenericDocTypeName } from '@/utils/documentTypeFilters';
 import PageHeader from '@/components/common/PageHeader';
 import StatusBadge from '@/components/common/StatusBadge';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
@@ -138,9 +138,7 @@ export default function PendingRequestsPage() {
                         : request.patientNameEn || request.patientName || '-'}
                     </td>
                     <td className="px-4 py-3 text-neutral-600">
-                      {isArabic
-                        ? request.documentTypeNameAr
-                        : request.documentTypeNameEn}
+                      {getGenericDocTypeName(request.documentTypeNameAr, request.documentTypeNameEn, isArabic)}
                     </td>
                     <td className="px-4 py-3 text-neutral-600">
                       {request.createdByName}

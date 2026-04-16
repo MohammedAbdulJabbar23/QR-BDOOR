@@ -33,6 +33,7 @@ public class DocumentRequestRepository : IDocumentRequestRepository
         Guid? documentTypeId, DateTime? fromDate, DateTime? toDate,
         int page, int pageSize, bool? isAdministrativeLetter = null,
         string? requiredDocumentTypeName = null, bool requiresAwaitingAccountStatement = false,
+        string? excludedDocumentTypeName = null,
         CancellationToken ct = default)
     {
         var query = _context.DocumentRequests
@@ -60,6 +61,9 @@ public class DocumentRequestRepository : IDocumentRequestRepository
                 ? query.Where(r => r.DocumentType.NameEn == "Administrative Letter")
                 : query.Where(r => r.DocumentType.NameEn != "Administrative Letter");
         }
+
+        if (excludedDocumentTypeName != null)
+            query = query.Where(r => r.DocumentType.NameEn != excludedDocumentTypeName);
 
         if (requiresAwaitingAccountStatement)
         {
@@ -95,7 +99,9 @@ public class DocumentRequestRepository : IDocumentRequestRepository
         return (items, totalCount);
     }
 
-    public async Task<List<DocumentRequest>> GetPendingAsync(Guid? documentTypeId = null, bool? isAdministrativeLetter = null, CancellationToken ct = default)
+    public async Task<List<DocumentRequest>> GetPendingAsync(Guid? documentTypeId = null, bool? isAdministrativeLetter = null,
+        string? requiredDocumentTypeName = null, string? excludedDocumentTypeName = null,
+        CancellationToken ct = default)
     {
         var query = _context.DocumentRequests
             .Include(r => r.DocumentType)
@@ -107,12 +113,19 @@ public class DocumentRequestRepository : IDocumentRequestRepository
         if (documentTypeId.HasValue)
             query = query.Where(r => r.DocumentTypeId == documentTypeId.Value);
 
-        if (isAdministrativeLetter.HasValue)
+        if (requiredDocumentTypeName != null)
+        {
+            query = query.Where(r => r.DocumentType.NameEn.Contains(requiredDocumentTypeName));
+        }
+        else if (isAdministrativeLetter.HasValue)
         {
             query = isAdministrativeLetter.Value
                 ? query.Where(r => r.DocumentType.NameEn == "Administrative Letter")
                 : query.Where(r => r.DocumentType.NameEn != "Administrative Letter");
         }
+
+        if (excludedDocumentTypeName != null)
+            query = query.Where(r => r.DocumentType.NameEn != excludedDocumentTypeName);
 
         return await query
             .OrderByDescending(r => r.CreatedAt)
@@ -123,18 +136,27 @@ public class DocumentRequestRepository : IDocumentRequestRepository
         DateTime? fromDate,
         DateTime? toDate,
         bool? isAdministrativeLetter = null,
+        string? requiredDocumentTypeName = null,
+        string? excludedDocumentTypeName = null,
         CancellationToken ct = default)
     {
         var query = _context.DocumentRequests
             .Include(r => r.DocumentType)
             .AsQueryable();
 
-        if (isAdministrativeLetter.HasValue)
+        if (requiredDocumentTypeName != null)
+        {
+            query = query.Where(r => r.DocumentType.NameEn.Contains(requiredDocumentTypeName));
+        }
+        else if (isAdministrativeLetter.HasValue)
         {
             query = isAdministrativeLetter.Value
                 ? query.Where(r => r.DocumentType.NameEn == "Administrative Letter")
                 : query.Where(r => r.DocumentType.NameEn != "Administrative Letter");
         }
+
+        if (excludedDocumentTypeName != null)
+            query = query.Where(r => r.DocumentType.NameEn != excludedDocumentTypeName);
 
         if (fromDate.HasValue)
         {

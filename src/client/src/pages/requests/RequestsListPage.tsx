@@ -9,7 +9,7 @@ import { useAuthStore } from '@/stores/authStore';
 import { useUiStore } from '@/stores/uiStore';
 import { canCreateRequest } from '@/utils/permissions';
 import { formatDate } from '@/utils/formatters';
-import { filterDocumentTypesForDepartment } from '@/utils/documentTypeFilters';
+import { filterDocumentTypesForDepartment, getGenericDocTypeName } from '@/utils/documentTypeFilters';
 import PageHeader from '@/components/common/PageHeader';
 import StatusBadge from '@/components/common/StatusBadge';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
@@ -138,7 +138,9 @@ export default function RequestsListPage() {
             <option value="">{t('common.all')} {t('requests.documentType')}</option>
             {visibleDocumentTypes.map((documentType) => (
               <option key={documentType.id} value={documentType.id}>
-                {isArabic ? documentType.nameAr : documentType.nameEn}
+                {user?.department === 'Inquiry'
+                  ? getGenericDocTypeName(documentType.nameAr, documentType.nameEn, isArabic)
+                  : (isArabic ? documentType.nameAr : documentType.nameEn)}
               </option>
             ))}
           </select>
@@ -240,9 +242,9 @@ export default function RequestsListPage() {
                           : request.patientNameEn || request.patientName || '-'}
                       </td>
                       <td className="px-4 py-3 text-neutral-600">
-                        {isArabic
-                          ? request.documentTypeNameAr
-                          : request.documentTypeNameEn}
+                        {user?.department === 'Inquiry' || request.status === 'Pending'
+                          ? getGenericDocTypeName(request.documentTypeNameAr, request.documentTypeNameEn, isArabic)
+                          : (isArabic ? request.documentTypeNameAr : request.documentTypeNameEn)}
                       </td>
                       <td className="px-4 py-3 text-neutral-600">
                         {request.recipientEntity}

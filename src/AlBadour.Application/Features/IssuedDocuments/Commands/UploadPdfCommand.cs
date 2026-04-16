@@ -44,7 +44,9 @@ public class UploadPdfCommandHandler : IRequestHandler<UploadPdfCommand, Result>
             return Result.Failure("Document not found.", "NOT_FOUND");
 
         var isAdminLetter = document.Request.DocumentType.NameEn.Equals("Administrative Letter", StringComparison.OrdinalIgnoreCase);
-        var allowedDept = isAdminLetter ? Department.HR : Department.Statistics;
+        var isMoiInsuranceLetter = document.Request.DocumentType.NameEn.Equals("MOI Insurance Letter", StringComparison.OrdinalIgnoreCase);
+        var allowedDept = isMoiInsuranceLetter ? Department.MoiInsurance
+            : isAdminLetter ? Department.HR : Department.Statistics;
         if (_currentUser.Department != allowedDept)
             return Result.Failure($"Only {allowedDept} department staff can upload PDFs for this document.", "FORBIDDEN");
 

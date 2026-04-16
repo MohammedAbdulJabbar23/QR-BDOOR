@@ -40,7 +40,9 @@ public class PdfGenerationService : IDocumentGenerationService
 
     public byte[] GenerateDocument(DocumentGenerationData data)
     {
-        bool isAdminLetter = data.DocumentTypeNameEn
+        bool isMoiInsurance = data.DocumentTypeNameEn
+            .Equals("MOI Insurance Letter", StringComparison.OrdinalIgnoreCase);
+        bool isAdminLetter = isMoiInsurance || data.DocumentTypeNameEn
             .Equals("Administrative Letter", StringComparison.OrdinalIgnoreCase);
         bool hasTable = data.DocumentTypeNameEn
             .Contains("with Table", StringComparison.OrdinalIgnoreCase);
@@ -82,7 +84,7 @@ public class PdfGenerationService : IDocumentGenerationService
                     else
                         ComposeFreeFormLetter(col.Item(), data, isEnglish);
 
-                    col.Item().PaddingTop(8).PaddingHorizontal(12).Element(c => ComposeSignatureBlock(c, data.TreatingPhysicianName, isEnglish, data.IncludeDirectorSignature ? _zaidSignatureBytes : null, !isAdminLetter));
+                    col.Item().PaddingTop(8).PaddingHorizontal(12).Element(c => ComposeSignatureBlock(c, data.TreatingPhysicianName, isEnglish, data.IncludeDirectorSignature ? _zaidSignatureBytes : null, !isAdminLetter, isMoiInsurance));
                 });
             });
         });
@@ -94,11 +96,67 @@ public class PdfGenerationService : IDocumentGenerationService
     // SIGNATURE BLOCK
     // ─────────────────────────────────────────────────────────────────────────
 
-    private static void ComposeSignatureBlock(IContainer container, string? treatingPhysicianName, bool isEnglish, byte[]? directorSignatureBytes, bool showTreatingPhysician = true)
+    private static void ComposeSignatureBlock(IContainer container, string? treatingPhysicianName, bool isEnglish, byte[]? directorSignatureBytes, bool showTreatingPhysician = true, bool isMoiInsurance = false)
     {
         string physicianLabel = isEnglish ? "Treating Physician" : "الطبيب المعالج";
         string directorLabel = isEnglish ? "Hospital Director" : "مدير المستشفى";
         string directorName = isEnglish ? "Dr. Zaid Saleh Yaseen" : "د.زيد صالح ياسين";
+
+        if (isMoiInsurance)
+        {
+            bool hasPhysician = !string.IsNullOrWhiteSpace(treatingPhysicianName);
+            string hospitalLabel = isEnglish ? "Al Badour Hospital" : "مستشفى البدور";
+
+            if (!hasPhysician)
+            {
+                container.AlignLeft().Column(col =>
+                {
+                    col.Item().Height(45);
+                    col.Item().PaddingTop(4).AlignCenter()
+                        .Text(hospitalLabel).FontSize(12).Bold();
+                });
+                return;
+            }
+
+            container.Row(row =>
+            {
+                if (isEnglish)
+                {
+                    row.RelativeItem().Column(col =>
+                    {
+                        col.Item().Height(45);
+                        col.Item().PaddingTop(4).AlignLeft()
+                            .Text(hospitalLabel).FontSize(12).Bold();
+                    });
+                    row.RelativeItem().Column(col =>
+                    {
+                        col.Item().Height(45);
+                        col.Item().PaddingTop(4).AlignRight()
+                            .Text(physicianLabel).FontSize(12).Bold();
+                        col.Item().PaddingTop(2).AlignRight()
+                            .Text(treatingPhysicianName!).FontSize(12).Bold();
+                    });
+                }
+                else
+                {
+                    row.RelativeItem().Column(col =>
+                    {
+                        col.Item().Height(45);
+                        col.Item().PaddingTop(4).AlignRight()
+                            .Text(physicianLabel).FontSize(12).Bold();
+                        col.Item().PaddingTop(2).PaddingRight(10).AlignRight()
+                            .Text(treatingPhysicianName!).FontSize(12).Bold();
+                    });
+                    row.RelativeItem().Column(col =>
+                    {
+                        col.Item().Height(45);
+                        col.Item().PaddingTop(4).TranslateX(10).AlignLeft()
+                            .Text(hospitalLabel).FontSize(12).Bold();
+                    });
+                }
+            });
+            return;
+        }
 
         if (!showTreatingPhysician)
         {

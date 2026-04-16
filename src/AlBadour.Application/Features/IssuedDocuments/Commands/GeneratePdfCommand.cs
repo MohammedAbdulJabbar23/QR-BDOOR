@@ -40,7 +40,10 @@ public class GeneratePdfCommandHandler : IRequestHandler<GeneratePdfCommand, Res
             return Result.Failure("Document not found.", "NOT_FOUND");
 
         var isAdminLetter = document.Request.DocumentType.NameEn.Equals("Administrative Letter", StringComparison.OrdinalIgnoreCase);
-        var allowedDept = isAdminLetter ? Department.HR : Department.Statistics;
+        var isMoiInsuranceLetter = document.Request.DocumentType.NameEn.Equals("MOI Insurance Letter", StringComparison.OrdinalIgnoreCase);
+        var isLetterType = isAdminLetter || isMoiInsuranceLetter;
+        var allowedDept = isMoiInsuranceLetter ? Department.MoiInsurance
+            : isAdminLetter ? Department.HR : Department.Statistics;
         if (_currentUser.Department != allowedDept)
             return Result.Failure($"Only {allowedDept} department staff can generate this document.", "FORBIDDEN");
 
@@ -69,7 +72,7 @@ public class GeneratePdfCommandHandler : IRequestHandler<GeneratePdfCommand, Res
             PatientName: document.Request.PatientName,
             PatientNameEn: document.Request.PatientNameEn,
             RecipientEntity: document.Request.RecipientEntity,
-            Subject: isAdminLetter
+            Subject: isLetterType
                 ? (document.Subject ?? document.Request.Notes ?? string.Empty).Trim()
                 : document.Request.DocumentType.NameAr,
             DocumentTypeNameAr: document.Request.DocumentType.NameAr,
@@ -79,12 +82,12 @@ public class GeneratePdfCommandHandler : IRequestHandler<GeneratePdfCommand, Res
             QrCodeImageBytes: qrImageBytes,
             IssuedByName: document.IssuedBy.FullName,
             IssuedAt: document.IssuedAt,
-            PatientGender: isAdminLetter ? null : document.PatientGender,
-            PatientProfession: isAdminLetter ? null : document.PatientProfession,
-            PatientAge: isAdminLetter ? null : document.PatientAge,
-            AdmissionDate: isAdminLetter ? null : document.AdmissionDate,
-            DischargeDate: isAdminLetter ? null : document.DischargeDate,
-            LeaveGranted: isAdminLetter ? null : document.LeaveGranted,
+            PatientGender: isLetterType ? null : document.PatientGender,
+            PatientProfession: isLetterType ? null : document.PatientProfession,
+            PatientAge: isLetterType ? null : document.PatientAge,
+            AdmissionDate: isLetterType ? null : document.AdmissionDate,
+            DischargeDate: isLetterType ? null : document.DischargeDate,
+            LeaveGranted: isLetterType ? null : document.LeaveGranted,
             TreatingPhysicianName: isAdminLetter ? null : document.TreatingPhysicianName,
             Language: document.Request.Language,
             IncludeDirectorSignature: request.IncludeDirectorSignature

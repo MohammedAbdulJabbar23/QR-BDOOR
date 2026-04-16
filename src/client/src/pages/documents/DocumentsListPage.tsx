@@ -9,7 +9,7 @@ import { useAuthStore } from '@/stores/authStore';
 import { useUiStore } from '@/stores/uiStore';
 import { formatDate } from '@/utils/formatters';
 import { DOCUMENT_STATUSES } from '@/utils/constants';
-import { filterDocumentTypesForDepartment } from '@/utils/documentTypeFilters';
+import { filterDocumentTypesForDepartment, getGenericDocTypeName } from '@/utils/documentTypeFilters';
 import PageHeader from '@/components/common/PageHeader';
 import StatusBadge from '@/components/common/StatusBadge';
 import LoadingSpinner from '@/components/common/LoadingSpinner';
@@ -108,7 +108,9 @@ export default function DocumentsListPage() {
       : (doc.patientNameEn || doc.patientName || '-');
 
   const getDocumentType = (doc: IssuedDocument) =>
-    language === 'ar' ? doc.documentTypeNameAr : doc.documentTypeNameEn;
+    user?.department === 'Inquiry'
+      ? getGenericDocTypeName(doc.documentTypeNameAr, doc.documentTypeNameEn, language === 'ar')
+      : (language === 'ar' ? doc.documentTypeNameAr : doc.documentTypeNameEn);
 
   return (
     <div>
@@ -169,7 +171,9 @@ export default function DocumentsListPage() {
             <option value="">{t('common.all')} {t('requests.documentType')}</option>
             {visibleDocumentTypes.map((documentType) => (
               <option key={documentType.id} value={documentType.id}>
-                {language === 'ar' ? documentType.nameAr : documentType.nameEn}
+                {user?.department === 'Inquiry'
+                  ? getGenericDocTypeName(documentType.nameAr, documentType.nameEn, language === 'ar')
+                  : (language === 'ar' ? documentType.nameAr : documentType.nameEn)}
               </option>
             ))}
           </select>

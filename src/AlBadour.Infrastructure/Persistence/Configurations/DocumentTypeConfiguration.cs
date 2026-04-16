@@ -66,6 +66,15 @@ public class DocumentTypeConfiguration : IEntityTypeConfiguration<DocumentType>
                 IsActive = true,
                 CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc),
                 UpdatedAt = new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc)
+            },
+            new DocumentType
+            {
+                Id = Guid.Parse("00000000-0000-0000-0000-000000000015"),
+                NameAr = "كتاب ضمان وزارة الداخلية",
+                NameEn = "MOI Insurance Letter",
+                IsActive = true,
+                CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc),
+                UpdatedAt = new DateTime(2026, 1, 1, 0, 0, 0, DateTimeKind.Utc)
             }
         );
     }
